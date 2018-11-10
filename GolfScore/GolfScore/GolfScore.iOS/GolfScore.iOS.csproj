@@ -92,6 +92,12 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Services\AppStarter.cs" />
+    <Compile Include="Services\CalendarService.cs" />
+    <Compile Include="Services\DatabaseConnection.cs" />
+    <Compile Include="Services\Localize.cs" />
+    <Compile Include="Services\MapService.cs" />
+    <Compile Include="Services\VersionInfoService.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />

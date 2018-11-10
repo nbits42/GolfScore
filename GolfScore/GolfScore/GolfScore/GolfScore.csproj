@@ -21,10 +21,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\" />
     <Folder Include="Styling\Themes\Default\Images\" />
     <Folder Include="Styling\Themes\Default\Stylesheets\" />
     <Folder Include="Pages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="GlobalContracts">
+      <HintPath>..\..\..\..\TeeScoreReferencedAssemblies\GlobalContracts.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

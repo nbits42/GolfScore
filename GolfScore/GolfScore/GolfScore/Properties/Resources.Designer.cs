@@ -61,11 +61,20 @@ namespace GolfScore.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to http://nbits1/teescoreservice.
+        /// </summary>
+        internal static string DebugServiceUrl {
+            get {
+                return ResourceManager.GetString("DebugServiceUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://teescore.azurewebsites.net.
         /// </summary>
-        internal static string ServiceUrl {
+        internal static string ReleaseServiceUrl {
             get {
-                return ResourceManager.GetString("ServiceUrl", resourceCulture);
+                return ResourceManager.GetString("ReleaseServiceUrl", resourceCulture);
             }
         }
     }
