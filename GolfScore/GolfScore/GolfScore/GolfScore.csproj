@@ -13,22 +13,28 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Mobile.Client" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore" Version="3.1.0" />
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Azure.Mobile.Client" Version="4.0.2" />
+    <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore" Version="4.0.2" />
     <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
     <PackageReference Include="MvvmLightStd10" Version="5.4.1.2" />
+    <PackageReference Include="Plugin.Share" Version="7.1.1" />
+    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="16.3.0.29" />
+    <PackageReference Include="Syncfusion.Xamarin.SfNumericUpDown" Version="16.3.0.29" />
+    <PackageReference Include="Syncfusion.Xamarin.SfProgressBar" Version="16.3.0.29" />
+    <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
+    <PackageReference Include="Xamarin.Essentials" Version="0.11.0-preview" />
+    <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.3.840" />
     <PackageReference Include="Xamarin.Forms" Version="3.3.0.967583" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Styling\Themes\Default\Images\" />
     <Folder Include="Styling\Themes\Default\Stylesheets\" />
-    <Folder Include="Pages\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="GlobalContracts">
-      <HintPath>..\..\..\..\TeeScoreReferencedAssemblies\GlobalContracts.dll</HintPath>
+    <Reference Include="GlobalContracts.NetStandard">
+      <HintPath>..\..\..\..\TeeScoreReferencedAssemblies\GlobalContracts.NetStandard.dll</HintPath>
     </Reference>
   </ItemGroup>
 
@@ -51,6 +57,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Pages\SettingsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -2,13 +2,26 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:GolfScore"
-             x:Class="GolfScore.MainPage">
+             xmlns:xForms="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+             x:Class="GolfScore.MainPage"
+             Title="TeeScore">
 
     <StackLayout>
-        <!-- Place new controls here -->
-        <Label Text="Welcome to Xamarin.Forms!" 
-           HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
+        <xForms:SfListView ItemsSource="{Binding Games}" ItemSize="60">
+<xForms:SfListView.ItemTemplate>
+    <DataTemplate>
+        <Grid Padding="2" Margin="2">
+            <Frame HasShadow="True" Padding="2" Margin="2">
+                <StackLayout>
+                    <Label Text="{Binding Game.Date}"></Label>
+                    <Label Text="{Binding Game.GameType}"></Label>
+                    <Label Text="{Binding Venue.Name}"></Label>
+                </StackLayout>
+            </Frame>
+        </Grid>
+    </DataTemplate>
+</xForms:SfListView.ItemTemplate>
+        </xForms:SfListView>
     </StackLayout>
 
 </ContentPage>

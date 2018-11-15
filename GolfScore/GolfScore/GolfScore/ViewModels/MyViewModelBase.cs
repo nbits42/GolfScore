@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
+using GolfScore.Contracts;
 using GolfScore.Services;
 using INavigationService = GolfScore.Contracts.INavigationService;
 

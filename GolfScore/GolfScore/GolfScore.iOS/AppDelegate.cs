@@ -4,6 +4,7 @@ using System.Linq;
 
 using Foundation;
 using Microsoft.WindowsAzure.MobileServices;
+using Syncfusion.ListView.XForms.iOS;
 using UIKit;
 
 namespace GolfScore.iOS
@@ -25,6 +26,7 @@ namespace GolfScore.iOS
         {
             CurrentPlatform.Init();
             global::Xamarin.Forms.Forms.Init();
+            SfListViewRenderer.Init();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

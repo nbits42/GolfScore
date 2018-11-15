@@ -29,7 +29,7 @@ namespace GolfScore.Droid.Services
                 }
                 catch (Exception e)
                 {
-                    Crashes.TrackError(e);
+                    //Crashes.TrackError(e);
                     return false;
                 }
             }

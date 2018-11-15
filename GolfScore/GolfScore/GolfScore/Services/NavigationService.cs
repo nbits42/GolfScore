@@ -19,8 +19,8 @@ namespace GolfScore.Services
         {
             Pages = new Dictionary<string, Type>
             {
-                {"RalliesPage", typeof(Pages.RalliesPage)},
-                {"RallyDetails", typeof(Pages.DetailsPage)},
+                //                {"RalliesPage", typeof(Pages.RalliesPage)},
+                {nameof(MainPage), typeof(MainPage) }
             };
 
         }
