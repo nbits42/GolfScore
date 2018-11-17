@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
 using GlobalContracts.Enumerations;
 using GlobalContracts.Interfaces;
 
-namespace GolfScore.Domain
+namespace TeeScore.Domain
 {
     public class Game: DomainBase, IGame
     {

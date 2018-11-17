@@ -3,25 +3,39 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:GolfScore"
              xmlns:xForms="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
-             x:Class="GolfScore.MainPage"
+             xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl"
+             x:Class="TeeScore.MainPage"
+             BackgroundColor="{StaticResource PageBackgroundColor}"
              Title="TeeScore">
 
-    <StackLayout>
-        <xForms:SfListView ItemsSource="{Binding Games}" ItemSize="60">
-<xForms:SfListView.ItemTemplate>
-    <DataTemplate>
-        <Grid Padding="2" Margin="2">
-            <Frame HasShadow="True" Padding="2" Margin="2">
-                <StackLayout>
-                    <Label Text="{Binding Game.Date}"></Label>
-                    <Label Text="{Binding Game.GameType}"></Label>
-                    <Label Text="{Binding Venue.Name}"></Label>
-                </StackLayout>
-            </Frame>
-        </Grid>
-    </DataTemplate>
-</xForms:SfListView.ItemTemplate>
+    <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+        <xForms:SfListView ItemsSource="{Binding Games}" ItemSize="60" 
+                           AbsoluteLayout.LayoutFlags="All"
+                           AbsoluteLayout.LayoutBounds="0,0,1,1">
+            <xForms:SfListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="2" Margin="2">
+                        <Frame HasShadow="True" Padding="2" Margin="2">
+                            <StackLayout>
+                                <Label Text="{Binding Game.Date}"></Label>
+                                <Label Text="{Binding Game.GameType}"></Label>
+                                <Label Text="{Binding Venue.Name}"></Label>
+                            </StackLayout>
+                        </Frame>
+                    </Grid>
+                </DataTemplate>
+            </xForms:SfListView.ItemTemplate>
         </xForms:SfListView>
-    </StackLayout>
+        <fab:FloatingActionButtonView
+            ImageName="plus.png"
+            ColorNormal="{StaticResource ButtonBackgroundColor}"
+            ColorPressed="{StaticResource ButtonPressedBackgroundColor}"
+            ColorRipple="{StaticResource ButtonRippleBackgroundColor}"
+            x:Name="FloatingActionButtonAdd"
+            IsVisible="True"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
+            HasShadow="True"/>
+    </AbsoluteLayout>
 
 </ContentPage>

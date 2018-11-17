@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GolfScore.Android", "GolfScore\GolfScore.Android\GolfScore.Android.csproj", "{DF854B10-0F1B-489B-B247-4002C4598009}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeeScore.Android", "GolfScore\GolfScore.Android\TeeScore.Android.csproj", "{DF854B10-0F1B-489B-B247-4002C4598009}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GolfScore.iOS", "GolfScore\GolfScore.iOS\GolfScore.iOS.csproj", "{C19EE32A-7931-49A5-8039-5F63266F663D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeeScore.iOS", "GolfScore\GolfScore.iOS\TeeScore.iOS.csproj", "{C19EE32A-7931-49A5-8039-5F63266F663D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GolfScore.UWP", "GolfScore\GolfScore.UWP\GolfScore.UWP.csproj", "{7B4768B5-8330-4241-885A-BC561CA3D17E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeeScore.UWP", "GolfScore\GolfScore.UWP\TeeScore.UWP.csproj", "{7B4768B5-8330-4241-885A-BC561CA3D17E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GolfScore", "GolfScore\GolfScore\GolfScore.csproj", "{AB08CDF1-4857-481C-8CD2-633CB6DBFE46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeeScore", "GolfScore\GolfScore\TeeScore.csproj", "{AB08CDF1-4857-481C-8CD2-633CB6DBFE46}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

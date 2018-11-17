@@ -1,6 +1,6 @@
 ﻿using GlobalContracts.Interfaces;
 
-namespace GolfScore.Domain
+namespace TeeScore.Domain
 {
     public class VenueAvailabilityPeriod : DomainBase, IVenueAvailabilityPeriod
     {

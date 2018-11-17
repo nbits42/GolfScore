@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GolfScore.Helpers
+namespace TeeScore.Helpers
 {
     public class PlatformCulture
     {

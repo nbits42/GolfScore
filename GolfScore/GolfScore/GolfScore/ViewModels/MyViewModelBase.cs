@@ -2,11 +2,10 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
-using GolfScore.Contracts;
-using GolfScore.Services;
-using INavigationService = GolfScore.Contracts.INavigationService;
+using TeeScore.Contracts;
+using INavigationService = TeeScore.Contracts.INavigationService;
 
-namespace GolfScore.ViewModels
+namespace TeeScore.ViewModels
 {
     public class MyViewModelBase: ViewModelBase
     {
@@ -15,9 +14,9 @@ namespace GolfScore.ViewModels
         protected IDataService DataService;
         protected INavigationService NavigationService;
 
-        public MyViewModelBase(IDataService dataservice, INavigationService navigationService)
+        public MyViewModelBase(IDataService dataService, INavigationService navigationService)
         {
-            DataService = dataservice;
+            DataService = dataService;
             NavigationService = navigationService;
         }
 

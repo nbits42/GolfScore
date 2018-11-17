@@ -2,13 +2,13 @@
 using System.Globalization;
 using Android.Content;
 using Android.Provider;
-using GolfScore.Contracts;
-using GolfScore.Droid.Services;
+using TeeScore.Contracts;
+using TeeScore.Droid.Services;
 using GregorianCalendar = Java.Util.GregorianCalendar;
 
 [assembly: Xamarin.Forms.Dependency(typeof(CalendarService))]
 
-namespace GolfScore.Droid.Services
+namespace TeeScore.Droid.Services
 {
     public class CalendarService: ICalendarService
     {

@@ -1,41 +1,20 @@
-﻿using GolfScore.Contracts;
-using GolfScore.Domain;
-using GolfScore.DTO;
-using GolfScore.Helpers;
-using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using TeeScore.Contracts;
+using TeeScore.Domain;
+using TeeScore.DTO;
+using TeeScore.Helpers;
 
-namespace GolfScore.ViewModels
+namespace TeeScore.ViewModels
 {
     public class MainViewModel : MyViewModelBase
     {
-        private Player _player;
+        private Player _player = new Player();
         private bool _isInitialized;
 
         public MainViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
         {
-            MyPlayer = new Player();
-        }
-
-        public async Task SavePlayer()
-        {
-            if (MyPlayer.IsNew)
-            {
-                var player = await DataService.NewPlayer(MyPlayer);
-                Settings.MyPlayerId = player.Id;
-                MyPlayer = player;
-            }
-            else
-            {
-                await DataService.SavePlayer(MyPlayer);
-            }
-
-        }
-
-        internal void ClearMyPlayer()
-        {
-            MyPlayer.Clear();
+          
         }
 
         /* =========================================== property: Player ====================================== */
@@ -76,11 +55,7 @@ namespace GolfScore.ViewModels
             {
                 return;
             }
-            var player = await DataService.GetPlayer(Settings.MyPlayerId);
-            if (player != null)
-            {
-                MyPlayer = player;
-            }
+            MyPlayer = await DataService.GetPlayer(Settings.MyPlayerId);
         }
 
         private async Task LoadGames()

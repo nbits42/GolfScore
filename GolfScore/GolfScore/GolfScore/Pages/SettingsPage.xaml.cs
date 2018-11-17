@@ -1,37 +1,34 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GolfScore.ViewModels;
+using TeeScore.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace GolfScore.Pages
+namespace TeeScore.Pages
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SettingsPage : ContentPage
 	{
-	    private MainViewModel _vm;
+	    private SettingsViewModel _vm;
 		public SettingsPage ()
 		{
 			InitializeComponent ();
-		    _vm = App.IOC.Main;
+		    _vm = App.IOC.Settings;
 		    BindingContext = _vm;
 		}
 
-	    private async void OK_Clicked(object sender, EventArgs e)
+	    protected override async void OnAppearing()
 	    {
-	        await _vm.SavePlayer();
+	        await _vm.LoadAsync();
+	    }
+
+        private async void OK_Clicked(object sender, EventArgs e)
+	    {
+	        await _vm.SaveAsync();
 	        await Navigation.PopModalAsync(true);
 	    }
 
 	    private async void Cancel_Clicked(object sender, EventArgs e)
 	    {
-	        if (string.IsNullOrEmpty(_vm.MyPlayer.Id))
-	        {
-	            _vm.ClearMyPlayer();
-	        }
 	        await Navigation.PopModalAsync(true);
 	    }
 	}

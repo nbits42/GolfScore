@@ -2,18 +2,18 @@
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
-using GolfScore.Contracts;
+using TeeScore.Contracts;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace GolfScore.Extensions
+namespace TeeScore.Extensions
 {
     // You exclude the 'Extension' suffix when using in Xaml markup
     [ContentProperty("Text")]
     public class TranslateExtension : IMarkupExtension
     {
         private readonly CultureInfo _ci;
-        private const string ResourceId = "XRallyResults.Strings.Strings";
+        private const string ResourceId = "TeeScore.Translations.Labels";
 
         public TranslateExtension()
         {

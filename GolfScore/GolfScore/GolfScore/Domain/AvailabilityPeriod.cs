@@ -1,7 +1,7 @@
 ﻿using System;
 using GlobalContracts.Interfaces;
 
-namespace GolfScore.Domain
+namespace TeeScore.Domain
 {
     public class AvailabilityPeriod : DomainBase, IAvailabilityPeriod
     {

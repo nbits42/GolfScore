@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using GolfScore.Contracts;
+using TeeScore.Contracts;
 using Xamarin.Forms;
 
-namespace GolfScore.Services
+namespace TeeScore.Services
 {
     public class NavigationService : INavigationService
     {

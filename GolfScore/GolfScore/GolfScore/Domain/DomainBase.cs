@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using GlobalContracts.Interfaces;
+﻿using GlobalContracts.Interfaces;
 
-namespace GolfScore.Domain
+namespace TeeScore.Domain
 {
     public abstract class DomainBase: IEntityData
     {

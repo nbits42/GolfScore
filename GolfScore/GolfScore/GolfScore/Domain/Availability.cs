@@ -2,7 +2,7 @@
 using GlobalContracts.Enumerations;
 using GlobalContracts.Interfaces;
 
-namespace GolfScore.Domain
+namespace TeeScore.Domain
 {
     public class Availability : DomainBase, IAvailability
     {

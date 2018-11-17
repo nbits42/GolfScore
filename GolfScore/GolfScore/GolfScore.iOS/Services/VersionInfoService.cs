@@ -1,6 +1,6 @@
 ﻿using Foundation;
-using GolfScore.Contracts;
 using GolfScore.iOS.Services;
+using TeeScore.Contracts;
 
 [assembly: Xamarin.Forms.Dependency(typeof(VersionInfoService))]
 namespace GolfScore.iOS.Services

@@ -1,10 +1,9 @@
-﻿using System.IO;
-using GolfScore.Contracts;
-using GolfScore.Droid.Services;
+﻿using TeeScore.Contracts;
+using TeeScore.Droid.Services;
 
 [assembly: Xamarin.Forms.Dependency(typeof(DatabaseConnection))]
 
-namespace GolfScore.Droid.Services
+namespace TeeScore.Droid.Services
 {
     public class DatabaseConnection: IDatabaseConnection
     {

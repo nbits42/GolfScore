@@ -3,8 +3,8 @@ using System.Globalization;
 using EventKit;
 using EventKitUI;
 using Foundation;
-using GolfScore.Contracts;
 using GolfScore.iOS.Services;
+using TeeScore.Contracts;
 using UIKit;
 using Xamarin.Forms;
 

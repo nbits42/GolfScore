@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using GolfScore.Domain;
+﻿using System.Collections.Generic;
+using TeeScore.Domain;
 
-namespace GolfScore.DTO
+namespace TeeScore.DTO
 {
     public class GameDto
     {

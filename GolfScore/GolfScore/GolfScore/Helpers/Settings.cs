@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Plugin.Settings;
+﻿using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
-namespace GolfScore.Helpers
+namespace TeeScore.Helpers
 {
     public static class Settings
     {

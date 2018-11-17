@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using GolfScore.Contracts;
 using GolfScore.iOS.Services;
+using TeeScore.Contracts;
 
 [assembly: Xamarin.Forms.Dependency(typeof(DatabaseConnection))]
 namespace GolfScore.iOS.Services

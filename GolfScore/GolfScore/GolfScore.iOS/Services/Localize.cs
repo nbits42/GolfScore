@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using System.Threading;
 using Foundation;
-using GolfScore.Contracts;
-using GolfScore.Helpers;
 using GolfScore.iOS.Services;
+using TeeScore.Contracts;
+using TeeScore.Helpers;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(Localize))]

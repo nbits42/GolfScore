@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using GalaSoft.MvvmLight.Ioc;
+﻿using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
-using GolfScore.Contracts;
-using GolfScore.ViewModels;
-using INavigationService = GolfScore.Contracts.INavigationService;
+using TeeScore.Contracts;
+using TeeScore.ViewModels;
+using INavigationService = TeeScore.Contracts.INavigationService;
 
-namespace GolfScore.Services
+namespace TeeScore.Services
 {
     public class Ioc
     {
         public MainViewModel Main => SimpleIoc.Default.GetInstance<MainViewModel>();
+        public SettingsViewModel Settings => SimpleIoc.Default.GetInstance<SettingsViewModel>();
 
         public Ioc()
         {
@@ -22,6 +20,7 @@ namespace GolfScore.Services
             SimpleIoc.Default.Register<IDialogService, DialogService>();
             SimpleIoc.Default.Register<IDataService, DataService>();
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<SettingsViewModel>();
         }
 
         static INavigationService CreateNavigationService()

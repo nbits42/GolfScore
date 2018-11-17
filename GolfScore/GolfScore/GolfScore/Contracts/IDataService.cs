@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using GolfScore.Domain;
+using TeeScore.Domain;
 
-namespace GolfScore.Contracts
+namespace TeeScore.Contracts
 {
     public interface IDataService
     {
@@ -14,5 +14,6 @@ namespace GolfScore.Contracts
         Task InitializeAsync();
         Task<Player> GetPlayer(string myPlayerId);
         Task SavePlayer(Player myPlayer);
+        Task<List<Venue>> GetVenues();
     }
 }

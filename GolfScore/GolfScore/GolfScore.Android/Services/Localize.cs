@@ -1,13 +1,13 @@
 using System.Globalization;
 using System.Threading;
-using GolfScore.Contracts;
-using GolfScore.Droid.Services;
-using GolfScore.Helpers;
+using TeeScore.Contracts;
+using TeeScore.Droid.Services;
+using TeeScore.Helpers;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(Localize))]
 
-namespace GolfScore.Droid.Services
+namespace TeeScore.Droid.Services
 {
     public class Localize : ILocalize
     {

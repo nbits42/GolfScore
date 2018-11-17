@@ -2,11 +2,11 @@
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
-using GolfScore.Contracts;
-using GolfScore.Extensions;
+using TeeScore.Contracts;
+using TeeScore.Extensions;
 using Xamarin.Forms;
 
-namespace GolfScore.Services
+namespace TeeScore.Services
 {
     public class TranslationService
     {

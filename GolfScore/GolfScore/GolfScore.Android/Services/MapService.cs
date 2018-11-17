@@ -2,13 +2,13 @@ using System;
 using Android;
 using Android.Content.PM;
 using Android.Support.V4.Content;
-using GolfScore.Contracts;
-using GolfScore.Droid.Services;
+using TeeScore.Contracts;
+using TeeScore.Droid.Services;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(MapService))]
 
-namespace GolfScore.Droid.Services
+namespace TeeScore.Droid.Services
 {
     public class MapService : IMapService
     {

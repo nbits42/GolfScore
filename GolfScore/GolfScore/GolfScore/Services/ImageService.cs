@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
 
-namespace GolfScore.Services
+namespace TeeScore.Services
 {
 
     public static class ImageService

@@ -1,17 +1,15 @@
 ﻿using System.Globalization;
 using AutoMapper;
-using GolfScore.Contracts;
-using GolfScore.Mapping;
-using GolfScore.Services;
 using Microsoft.WindowsAzure.MobileServices;
+using TeeScore.Contracts;
+using TeeScore.Mapping;
+using TeeScore.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
-namespace GolfScore
+namespace TeeScore
 {
-
-
     public partial class App : Application
     {
         private static MobileServiceClient _mobileServiceClient;
@@ -64,8 +62,8 @@ namespace GolfScore
             InitializeComponent();
 
             MainPage = new NavigationPage(new MainPage());
-            ((NavigationPage) MainPage).BarBackgroundColor = Color.DarkGreen;
-            ((NavigationPage) MainPage).BarTextColor = Color.White;
+            ((NavigationPage) MainPage).BarBackgroundColor = (Color)Resources["PageHeadingBackgroundColor"];
+            ((NavigationPage) MainPage).BarTextColor = (Color)Resources["PageHeadingTextColor"];
         }
 
         protected override void OnStart()
@@ -92,7 +90,7 @@ namespace GolfScore
 //#if DEBUG
 //                    var url = GolfScore.Properties.Resources.DebugServiceUrl;
 //#else
-                var url = GolfScore.Properties.Resources.ReleaseServiceUrl;
+                var url = TeeScore.Properties.Resources.ReleaseServiceUrl;
 //#endif
                     _mobileServiceClient = new MobileServiceClient(url);
                 }

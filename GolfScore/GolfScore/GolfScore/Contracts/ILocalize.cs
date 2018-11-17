@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace GolfScore.Contracts
+namespace TeeScore.Contracts
 {
     public interface ILocalize
     {

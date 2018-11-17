@@ -21,7 +21,7 @@ namespace GolfScore.UWP
         {
             this.InitializeComponent();
 
-            LoadApplication(new GolfScore.App());
+            LoadApplication(new TeeScore.App());
         }
     }
 }

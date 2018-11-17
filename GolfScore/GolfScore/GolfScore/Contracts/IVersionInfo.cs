@@ -1,4 +1,4 @@
-﻿namespace GolfScore.Contracts
+﻿namespace TeeScore.Contracts
 {
     public interface IVersionInfo
     {

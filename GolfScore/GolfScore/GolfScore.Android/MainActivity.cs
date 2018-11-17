@@ -1,16 +1,12 @@
-﻿using System;
-
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+using Android.Graphics;
 using Android.OS;
 using Microsoft.WindowsAzure.MobileServices;
 
-namespace GolfScore.Droid
+namespace TeeScore.Droid
 {
-    [Activity(Label = "GolfScore", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "TeeScore", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         internal static MainActivity Instance { get; private set; }
@@ -21,6 +17,7 @@ namespace GolfScore.Droid
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
+            Window.SetStatusBarColor(Color.ParseColor("#003D00"));
 
             base.OnCreate(savedInstanceState);
             CurrentPlatform.Init();

@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TeeScore.Styling.Themes.Default.Styling">
+    <Color x:Key="PageBackgroundColor">White</Color>
+    <Color x:Key="PageHeadingBackgroundColor">#3C7202</Color>
+    <Color x:Key="PageHeadingTextColor">White</Color>
+    <Color x:Key="ButtonTextColor">White</Color>
+    <Color x:Key="NormalTextColor">#3C7202</Color>
+    <Color x:Key="ButtonBackgroundColor">DarkGreen</Color>
+    <Color x:Key="ButtonPressedBackgroundColor">ForestGreen</Color>
+    <Color x:Key="ButtonRippleBackgroundColor">SeaGreen</Color>
+    <Color x:Key="StatusBarBackgroundColor">#003D00</Color>
+    <Color x:Key="EditorBackgroundColor">#E0E0E0</Color>
+
+    <Style x:Key="PageHeadingLabelStyle" TargetType="Label">
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="Roboto" />
+        <Setter Property="FontSize" Value="Large" />
+        <Setter Property="HorizontalOptions" Value="Start" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Margin" Value="8" />
+        <Setter Property="TextColor" Value="{StaticResource PageHeadingTextColor}" />
+    </Style>
+    <Style x:Key="TinyLabelStyle" TargetType="Label">
+        <Setter Property="FontAttributes" Value="None" />
+        <Setter Property="FontFamily" Value="Roboto" />
+        <Setter Property="FontSize" Value="Micro" />
+        <Setter Property="HorizontalOptions" Value="Start" />
+        <Setter Property="VerticalOptions" Value="End" />
+        <Setter Property="Margin" Value="5,0,0,0" />
+        <Setter Property="TextColor" Value="{StaticResource NormalTextColor}" />
+    </Style>
+    <Style x:Key="EditorStyle" TargetType="Editor">
+        <Setter Property="FontFamily" Value="Roboto"></Setter>
+        <Setter Property="FontSize" Value="Small"></Setter>
+    </Style>
+    <Style x:Key="PageHeadingStyle" TargetType="StackLayout">
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        <Setter Property="VerticalOptions" Value="Start" />
+        <Setter Property="Orientation" Value="Horizontal" />
+        <Setter Property="BackgroundColor" Value="{StaticResource PageHeadingBackgroundColor}" />
+    </Style>
+    <Style x:Key="WizardButtonBarStyle" TargetType="StackLayout">
+        <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+        <Setter Property="VerticalOptions" Value="End" />
+        <Setter Property="Orientation" Value="Horizontal" />
+        <Setter Property="BackgroundColor" Value="{StaticResource PageBackgroundColor}" />
+    </Style>
+    <Style x:Key="WizardButtonStyle" TargetType="Button">
+        <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="CornerRadius" Value="15" />
+        <Setter Property="Margin" Value="8,3,8,3" />
+        <Setter Property="FontFamily" Value="Roboto" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource ButtonBackgroundColor}" />
+    </Style>
+    <Style x:Key="DialogButtonStyle" TargetType="Button">
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="Margin" Value="8,3,8,3" />
+        <Setter Property="FontFamily" Value="Roboto" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource ButtonBackgroundColor}" />
+    </Style>
+    <Style x:Key="RoundButtonStyle" TargetType="ImageButton">
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="CornerRadius" Value="25" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="BackgroundColor" Value="{StaticResource ButtonBackgroundColor}" />
+    </Style>
+</ResourceDictionary>

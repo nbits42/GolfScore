@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace GolfScore.Mapping
+namespace TeeScore.Mapping
 {
     public class DefaultProfile: Profile
     {

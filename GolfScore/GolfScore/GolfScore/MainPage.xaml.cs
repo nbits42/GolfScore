@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.XPath;
-using GolfScore.Pages;
-using GolfScore.ViewModels;
+using TeeScore.Pages;
+using TeeScore.ViewModels;
 using Xamarin.Forms;
 
-namespace GolfScore
+namespace TeeScore
 {
     public partial class MainPage : ContentPage
     {
@@ -21,7 +16,7 @@ namespace GolfScore
 
             BindingContext = _viewModel;
             ToolbarItems.Add(new ToolbarItem("Settings","settings.png",()=> ShowSettingsPage()));
-            
+            FloatingActionButtonAdd.Clicked = (o, args) => AddButtonClicked(o, args);
         }
 
         private async void ShowSettingsPage()
@@ -38,6 +33,12 @@ namespace GolfScore
             {
                 ShowSettingsPage();
             }
+        }
+
+        private async void AddButtonClicked(object sender, EventArgs e)
+        {
+            var newGamePage = new NewGamePage();
+            await Navigation.PushAsync(newGamePage);
         }
     }
 }

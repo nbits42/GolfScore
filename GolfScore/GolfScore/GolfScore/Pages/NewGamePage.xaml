@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:tabView="clr-namespace:Syncfusion.XForms.TabView;assembly=Syncfusion.SfTabView.XForms"
+             xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl"
+             xmlns:xforms="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+             x:Class="TeeScore.Pages.NewGamePage"
+             BackgroundColor="{StaticResource PageBackgroundColor}"
+             Title="New game!">
+    <ContentPage.Content>
+        <Grid  Margin="8,3,8,3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+            </Grid.RowDefinitions>
+            <tabView:SfTabView Grid.Row="0" DisplayMode="NoHeader" TabWidth="0">
+                <tabView:SfTabItem Title="1">
+                    <tabView:SfTabItem.Content>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <StackLayout Grid.Row="0">
+                                <Label Style="{StaticResource TinyLabelStyle}" Text="Choose or add venue"></Label>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="54"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Editor Grid.Column="0" Style="{StaticResource EditorStyle}"></Editor>
+                                    <ImageButton Grid.Column="1" Source="plus.png" Style="{StaticResource RoundButtonStyle}">
+                                    </ImageButton>
+                                </Grid>
+                                
+                            </StackLayout>
+                                <xforms:SfListView ItemsSource="{Binding Venues}" ItemSize="60">
+                                   <xforms:SfListView.ItemTemplate>
+                                       <DataTemplate>
+                                           <Grid Padding="2" Margin="2">
+                                               <Frame HasShadow="True" Padding="2" Margin="2">
+                                                   <StackLayout>
+                                                       <Label Text="{Binding Game.Date}"></Label>
+                                                       <Label Text="{Binding Game.GameType}"></Label>
+                                                       <Label Text="{Binding Venue.Name}"></Label>
+                                                   </StackLayout>
+                                               </Frame>
+                                           </Grid>
+                                       </DataTemplate>
+                                    </xforms:SfListView.ItemTemplate>
+                                </xforms:SfListView>
+
+                        </Grid>
+                    </tabView:SfTabItem.Content>
+                </tabView:SfTabItem>
+                <tabView:SfTabItem Title="2"></tabView:SfTabItem>
+                <tabView:SfTabItem Title="3"></tabView:SfTabItem>
+                <tabView:SfTabItem Title="4"></tabView:SfTabItem>
+            </tabView:SfTabView>
+            <StackLayout Grid.Row="1"  Style="{StaticResource WizardButtonBarStyle}">
+                <Button  Text="Back" Style="{StaticResource WizardButtonStyle}"></Button>
+                <Button Text="Next" Style="{StaticResource WizardButtonStyle}"></Button>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

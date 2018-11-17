@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace GolfScore.Contracts
+namespace TeeScore.Contracts
 {
     public interface INavigationService
     {

@@ -1,11 +1,11 @@
 using Android.Content.PM;
-using GolfScore.Contracts;
-using GolfScore.Droid.Services;
+using TeeScore.Contracts;
+using TeeScore.Droid.Services;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(VersionInfoService))]
 
-namespace GolfScore.Droid.Services
+namespace TeeScore.Droid.Services
 {
     public class VersionInfoService : IVersionInfo
     {

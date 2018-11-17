@@ -2,7 +2,7 @@
 using GalaSoft.MvvmLight.Views;
 using Xamarin.Forms;
 
-namespace GolfScore.Services
+namespace TeeScore.Services
 {
     public class DialogService : IDialogService
     {

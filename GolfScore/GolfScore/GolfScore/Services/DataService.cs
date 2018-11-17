@@ -4,25 +4,26 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using GlobalContracts.Enumerations;
-using GolfScore.Contracts;
 using Microsoft.WindowsAzure.MobileServices;
-using GolfScore.Domain;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using Microsoft.WindowsAzure.MobileServices.Sync;
+using TeeScore.Contracts;
+using TeeScore.Domain;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace GolfScore.Services
+namespace TeeScore.Services
 {
     public class DataService : IDataService
     {
         private MobileServiceSQLiteStore _store;
 
         public DataService()
+        {
+        }
+
+        public  async Task InitializeAsync()
         {
             var path = DependencyService.Get<IDatabaseConnection>().DbConnection("0.0");
             var file = "teescore.sl3";
@@ -36,10 +37,7 @@ namespace GolfScore.Services
             _store.DefineTable<Facility>();
             _store.DefineTable<Availability>();
             _store.DefineTable<AvailabilityPeriod>();
-        }
 
-        public  async Task InitializeAsync()
-        {
 #if OFFLINE_SYNC_ENABLED
 
             await App.MobileService.SyncContext.InitializeAsync(_store);
@@ -71,6 +69,10 @@ namespace GolfScore.Services
 
         public async Task<List<Game>> GetGames(string playerId)
         {
+            if (string.IsNullOrEmpty(playerId))
+            {
+                return new List<Game>();
+            }
             var gameIds = await GamePlayersTable.Where(x => x.PlayerId == playerId).ToListAsync();
             var result = new List<Game>();
             foreach (var gameId in gameIds)
@@ -164,6 +166,11 @@ namespace GolfScore.Services
         {
             await PlayersTable.UpdateAsync(myPlayer);
             await SyncAsync();
+        }
+
+        public async Task<List<Venue>> GetVenues()
+        {
+            return await VenuesTable.ToListAsync();
         }
 
 #if OFFLINE_SYNC_ENABLED
