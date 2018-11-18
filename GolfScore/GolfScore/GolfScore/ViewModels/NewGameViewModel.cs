@@ -1,11 +1,14 @@
-﻿using Syncfusion.DataSource.Extensions;
+﻿using GalaSoft.MvvmLight.Command;
+using Syncfusion.DataSource.Extensions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using TeeScore.Contracts;
 using TeeScore.Domain;
+using TeeScore.DTO;
 using TeeScore.Helpers;
+using TeeScore.Services;
 
 namespace TeeScore.ViewModels
 {
@@ -13,14 +16,36 @@ namespace TeeScore.ViewModels
     {
         private List<Venue> _allVenues;
         private ObservableCollection<Venue> _venues;
-        private Game _game = new Game();
+        private GameDto _game = new GameDto();
         private Player _myPlayer;
         private Venue _seletedVenue;
         private string _venueSearch;
+        private bool _nextPageEnabled;
+        private bool _previousPageEnabled;
+        private CreateGamePage _currentPage;
+        private CreateGamePage _nextPage;
+        private RelayCommand _nextPageCommand;
+        private RelayCommand _previousPageCommand;
 
         public NewGameViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
         {
             PropertyChanged += NewGameViewModel_PropertyChanged;
+
+            _game.Game.PropertyChanged += Game_PropertyChanged;
+        }
+
+        private void Game_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(_game.Game.ConnectedPlayersCount):
+                case nameof(_game.Game.InvitedPlayersCount):
+                case nameof(_game.Game.TeeCount):
+                case nameof(_game.Game.GameType):
+                case nameof(_game.Game.InvitationNumber):
+                    CheckNextPage();
+                    break;
+            }
         }
 
         private void NewGameViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -30,7 +55,17 @@ namespace TeeScore.ViewModels
                 case nameof(VenueSearch):
                     FilterVenues();
                     break;
+                case nameof(SeletedVenue):
+                    CheckNextPage();
+                    break;
             }
+        }
+
+        private void CheckNextPage()
+        {
+            _nextPage = GameStateService.GetNextNewGamePage(Game, _currentPage);
+            NextPageEnabled = _nextPage > _currentPage;
+            PreviousPageEnabled = _currentPage > CreateGamePage.VenueSelection && _currentPage < CreateGamePage.Ready;
         }
 
         private void FilterVenues()
@@ -79,7 +114,7 @@ namespace TeeScore.ViewModels
         /// <summary>
         /// Sets and gets the Game property.
         /// </summary>
-        public Game Game
+        public GameDto Game
         {
             get => _game;
             set
@@ -153,8 +188,92 @@ namespace TeeScore.ViewModels
             }
         }
 
+        /* =========================================== property: NextPageEnabled ====================================== */
+        /// <summary>
+        /// Sets and gets the NextPageEnabled property.
+        /// </summary>
+        public bool NextPageEnabled
+        {
+            get => _nextPageEnabled;
+            set
+            {
+                if (value == _nextPageEnabled)
+                {
+                    return;
+                }
+
+                _nextPageEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /* =========================================== property: PreviousPageEnabled ====================================== */
+        /// <summary>
+        /// Sets and gets the PreviousPageEnabled property.
+        /// </summary>
+        public bool PreviousPageEnabled
+        {
+            get => _previousPageEnabled;
+            set
+            {
+                if (value == _previousPageEnabled)
+                {
+                    return;
+                }
+
+                _previousPageEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
 
 
+        /* =========================================== property: CurrentPage ====================================== */
+        /// <summary>
+        /// Sets and gets the CurrentPage property.
+        /// </summary>
+        public CreateGamePage CurrentPage
+        {
+            get => _currentPage;
+            set
+            {
+                if (value == _currentPage)
+                {
+                    return;
+                }
 
+                _currentPage = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        /* =========================================== RelayCommand: NextPageCommand ====================================== */
+        /// <summary>
+        /// Executes the NextPage command.
+        /// </summary>
+        public RelayCommand NextPageCommand => _nextPageCommand ?? (_nextPageCommand = new RelayCommand(NextPage));
+
+        private void NextPage()
+        {
+            if (NextPageEnabled)
+            {
+                CurrentPage = _nextPage;
+            }
+        }
+
+
+        /* =========================================== RelayCommand: PreviousPageCommand ====================================== */
+        /// <summary>
+        /// Executes the PreviousPage command.
+        /// </summary>
+        public RelayCommand PreviousPageCommand => _previousPageCommand ?? (_previousPageCommand = new RelayCommand(PreviousPage));
+
+        private void PreviousPage()
+        {
+            if (PreviousPageEnabled)
+            {
+                CurrentPage = _currentPage--;
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="30"></RowDefinition>
             </Grid.RowDefinitions>
-            <tabView:SfTabView Grid.Row="0" DisplayMode="NoHeader" TabWidth="0">
+            <tabView:SfTabView Grid.Row="0" DisplayMode="NoHeader" TabWidth="0" EnableSwiping="False" SelectedIndex="{Binding CurrentPage}">
                 <tabView:SfTabItem Title="1">
                     <tabView:SfTabItem.Content>
                         <Grid>
@@ -29,20 +29,19 @@
                                         <ColumnDefinition Width="54"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <Editor Grid.Column="0" Style="{StaticResource EditorStyle}"></Editor>
-                                    <ImageButton Grid.Column="1" Source="plus.png" Style="{StaticResource RoundButtonStyle}">
+                                    <ImageButton x:Name="AddVenueButton" Grid.Column="1" Source="plus.png" Style="{StaticResource RoundButtonStyle}" Clicked="AddVenueButton_OnClicked">
                                     </ImageButton>
                                 </Grid>
                                 
                             </StackLayout>
-                                <xforms:SfListView ItemsSource="{Binding Venues}" ItemSize="60">
+                                <xforms:SfListView Grid.Row="1" ItemsSource="{Binding Venues}" ItemSize="60">
                                    <xforms:SfListView.ItemTemplate>
                                        <DataTemplate>
                                            <Grid Padding="2" Margin="2">
                                                <Frame HasShadow="True" Padding="2" Margin="2">
                                                    <StackLayout>
-                                                       <Label Text="{Binding Game.Date}"></Label>
-                                                       <Label Text="{Binding Game.GameType}"></Label>
-                                                       <Label Text="{Binding Venue.Name}"></Label>
+                                                       <Label Text="{Binding Name}" Style="{StaticResource ListItemTextStyle}"></Label>
+                                                       <Label Text="{Binding Location}" Style="{StaticResource ListItemDetailTextStyle}"></Label>
                                                    </StackLayout>
                                                </Frame>
                                            </Grid>
@@ -58,8 +57,8 @@
                 <tabView:SfTabItem Title="4"></tabView:SfTabItem>
             </tabView:SfTabView>
             <StackLayout Grid.Row="1"  Style="{StaticResource WizardButtonBarStyle}">
-                <Button  Text="Back" Style="{StaticResource WizardButtonStyle}"></Button>
-                <Button Text="Next" Style="{StaticResource WizardButtonStyle}"></Button>
+                <Button  Text="Back" Style="{StaticResource WizardButtonStyle}" IsEnabled="{Binding PreviousPageEnabled}" Command="{Binding PreviousPageCommand}"></Button>
+                <Button Text="Next" Style="{StaticResource WizardButtonStyle}" IsEnabled="{Binding NextpageEnabled}" Command="{Binding NextPageCommand}"></Button>
             </StackLayout>
         </Grid>
     </ContentPage.Content>

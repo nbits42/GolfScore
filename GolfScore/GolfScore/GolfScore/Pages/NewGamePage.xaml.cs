@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace TeeScore.Pages
@@ -10,5 +11,10 @@ namespace TeeScore.Pages
 		{
 			InitializeComponent ();
 		}
+
+	    private void AddVenueButton_OnClicked(object sender, EventArgs e)
+	    {
+	        
+	    }
 	}
 }
