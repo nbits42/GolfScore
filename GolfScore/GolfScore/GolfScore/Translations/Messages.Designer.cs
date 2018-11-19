@@ -9,6 +9,9 @@
 //------------------------------------------------------------------------------
 
 namespace TeeScore.Translations {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -36,7 +39,7 @@ namespace TeeScore.Translations {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GolfScore.Translations.Messages", typeof(Messages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TeeScore.Translations.Messages", typeof(Messages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -54,6 +57,24 @@ namespace TeeScore.Translations {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location is required.
+        /// </summary>
+        internal static string LocationIsRequired {
+            get {
+                return ResourceManager.GetString("LocationIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name is required.
+        /// </summary>
+        internal static string NameIsRequired {
+            get {
+                return ResourceManager.GetString("NameIsRequired", resourceCulture);
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:validation="clr-namespace:TeeScore.Validation;assembly=TeeScore"
              x:Class="TeeScore.Styling.Themes.Default.Styling">
     <Color x:Key="PageBackgroundColor">White</Color>
     <Color x:Key="PageHeadingBackgroundColor">#3C7202</Color>
@@ -12,6 +13,8 @@
     <Color x:Key="ButtonRippleBackgroundColor">SeaGreen</Color>
     <Color x:Key="StatusBarBackgroundColor">#003D00</Color>
     <Color x:Key="EditorBackgroundColor">#E0E0E0</Color>
+    <Color x:Key="EntryLineColor">Black</Color>
+    <Color x:Key="EntryErrorColor">Red</Color>
 
     <Style x:Key="PageHeadingLabelStyle" TargetType="Label">
         <Setter Property="FontAttributes" Value="Bold" />
@@ -74,5 +77,11 @@
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="BackgroundColor" Value="{StaticResource ButtonBackgroundColor}" />
+    </Style>
+    <Style x:Key="EntryStyle" TargetType="{x:Type Entry}">
+        <Setter Property="FontFamily" Value="Roboto"></Setter>
+        <Setter Property="FontSize" Value="Small"></Setter>
+        <Setter Property="validation:BackgroundColorBehavior.ApplyBackgroundColor"  Value="True" />
+        <Setter Property="validation:BackgroundColorBehavior.BackgroundColor" Value="{StaticResource EntryLineColor}" />
     </Style>
 </ResourceDictionary>

@@ -1,8 +1,9 @@
 ﻿using GlobalContracts.Interfaces;
+using System.ComponentModel;
 
 namespace TeeScore.Domain
 {
-    public class Venue : DomainBase, IVenue
+    public class Venue : DomainBase, IVenue, IDataErrorInfo
     {
         private string _name;
         private string _location;
@@ -49,6 +50,26 @@ namespace TeeScore.Domain
             }
         }
 
+        public string Error { get; set; }
 
+        public string this[string columnName]
+        {
+            get
+            {
+                var msg = string.Empty;
+                switch (columnName)
+                {
+                    case nameof(Name):
+                        if (string.IsNullOrEmpty(Name))
+                            msg = Translations.Messages.NameIsRequired;
+                        break;
+                    case nameof(Location):
+                        if (string.IsNullOrEmpty(Location))
+                            msg = Translations.Messages.LocationIsRequired;
+                        break;
+                }
+                return msg;
+            }
+        }
     }
 }
