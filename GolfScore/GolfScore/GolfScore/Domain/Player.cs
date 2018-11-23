@@ -16,7 +16,5 @@ namespace TeeScore.Domain
             AvatarUrl = string.Empty;
             Abbreviation = string.Empty;
         }
-
-        public bool IsNew => string.IsNullOrEmpty(Id);
     }
 }

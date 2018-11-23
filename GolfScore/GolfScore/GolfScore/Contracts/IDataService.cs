@@ -6,14 +6,16 @@ namespace TeeScore.Contracts
 {
     public interface IDataService
     {
-        Task<Game> NewGame(Game item);
         Task<List<Game>> GetGames(string playerId);
-        Task<Player> NewPlayer(Player newPlayer);
         Task<Venue> GetVenue(string venueId);
         Task<List<Player>> GetPlayersForGame(string gameId);
         Task InitializeAsync();
-        Task<Player> GetPlayer(string myPlayerId);
-        Task SavePlayer(Player myPlayer);
+        Task<Player> GetPlayer(string playerId);
+        Task<Player> SavePlayer(Player player);
+        Task<Game> SaveGame(Game game);
+        Task<Venue> SaveVenue(Venue venue);
         Task<List<Venue>> GetVenues();
+
+        
     }
 }

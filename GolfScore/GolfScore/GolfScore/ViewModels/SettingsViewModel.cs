@@ -51,15 +51,8 @@ namespace TeeScore.ViewModels
 
         public async Task SaveAsync()
         {
-            if (Player.IsNew)
-            {
-                var player = await DataService.NewPlayer(Player);
-                Settings.MyPlayerId = player.Id;
-            }
-            else
-            {
-                await DataService.SavePlayer(Player);
-            }
+            Player = await DataService.SavePlayer(Player);
+            Settings.MyPlayerId = Player.Id;
         }
     }
 }

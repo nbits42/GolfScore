@@ -10,7 +10,8 @@ namespace TeeScore.Services
 {
     public class TranslationService
     {
-        private const string ResourceId = "XRallyResults.Strings.Strings";
+        private const string ResourceId = "TeeScore.Translations.Labels";
+
         private static CultureInfo _ci = null;
 
         public static string Translate(string text)

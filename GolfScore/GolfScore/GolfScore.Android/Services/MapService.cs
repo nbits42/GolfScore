@@ -27,7 +27,7 @@ namespace TeeScore.Droid.Services
                     return granted;
 
                 }
-                catch (Exception e)
+                catch (Exception )
                 {
                     //Crashes.TrackError(e);
                     return false;

@@ -1,4 +1,5 @@
-﻿using TeeScore.Contracts;
+﻿using Android.Graphics;
+using TeeScore.Contracts;
 using TeeScore.Droid.Services;
 
 [assembly: Xamarin.Forms.Dependency(typeof(DatabaseConnection))]
@@ -9,7 +10,8 @@ namespace TeeScore.Droid.Services
     {
         public string DbConnection(string dbVersion)
         {
-            return System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            var path= System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            return $@"{path}\teescore_v{dbVersion}.sqlite3";
         }
     }
 }

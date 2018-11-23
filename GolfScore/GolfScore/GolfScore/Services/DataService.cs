@@ -1,13 +1,13 @@
 ﻿#define OFFLINE_SYNC_ENABLED
+using Microsoft.WindowsAzure.MobileServices;
+using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
+using Microsoft.WindowsAzure.MobileServices.Sync;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.MobileServices;
-using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
-using Microsoft.WindowsAzure.MobileServices.Sync;
 using TeeScore.Contracts;
 using TeeScore.Domain;
 using Xamarin.Essentials;
@@ -18,16 +18,17 @@ namespace TeeScore.Services
     public class DataService : IDataService
     {
         private MobileServiceSQLiteStore _store;
+        private const string dbVersion = "0.1";
 
         public DataService()
         {
         }
 
-        public  async Task InitializeAsync()
+        public async Task InitializeAsync()
         {
-            var path = DependencyService.Get<IDatabaseConnection>().DbConnection("0.0");
-            var file = "teescore.sl3";
-            _store = new MobileServiceSQLiteStore(Path.Combine(path, file));
+            var file = DependencyService.Get<IDatabaseConnection>().DbConnection(dbVersion);
+
+            _store = new MobileServiceSQLiteStore(file);
             _store.DefineTable<Game>();
             _store.DefineTable<Player>();
             _store.DefineTable<GamePlayer>();
@@ -47,19 +48,13 @@ namespace TeeScore.Services
             MessagingCenter.Send(this, ServiceMessage.DataServiceInitialized);
         }
 
-        public bool IsOnline {
+        public bool IsOnline
+        {
             get
             {
                 var current = Connectivity.NetworkAccess;
                 return current == NetworkAccess.Internet;
             }
-        }
-
-        public async Task<Game> NewGame(Game item)
-        {
-            item.Id = NewId();
-            await GamesTable.InsertAsync(item);
-            return await GamesTable.LookupAsync(item.Id);
         }
 
         private static string NewId()
@@ -85,15 +80,6 @@ namespace TeeScore.Services
             }
 
             return result;
-        }
-
-        public async Task<Player> NewPlayer(Player newPlayer)
-        {
-            newPlayer.Id = NewId();
-            await PlayersTable.InsertAsync(newPlayer);
-            await SyncAsync();
-            return await PlayersTable.LookupAsync(newPlayer.Id);
-
         }
 
         public async Task<Venue> GetVenue(string venueId)
@@ -124,8 +110,9 @@ namespace TeeScore.Services
             try
             {
                 await App.MobileService.SyncContext.PushAsync();
-                await GamesTable.PullAsync("AllGames",this.GamesTable.CreateQuery());
-                await PlayersTable.PullAsync("AllPlayers",this.PlayersTable.CreateQuery());
+                await GamesTable.PullAsync("AllGames", this.GamesTable.CreateQuery());
+                await PlayersTable.PullAsync("AllPlayers", this.PlayersTable.CreateQuery());
+                await VenuesTable.PullAsync("AllVenues", this.PlayersTable.CreateQuery());
             }
             catch (MobileServicePushFailedException exc)
             {
@@ -162,16 +149,85 @@ namespace TeeScore.Services
             return await PlayersTable.LookupAsync(myPlayerId);
         }
 
-        public async Task SavePlayer(Player myPlayer)
+        public async Task<Player> SavePlayer(Player player)
         {
-            await PlayersTable.UpdateAsync(myPlayer);
-            await SyncAsync();
+            //if (player.IsNew)
+            //{
+            //    player.Id = NewId();
+            //    await PlayersTable.InsertAsync(player);
+            //}
+            //else
+            //{
+            //    await PlayersTable.UpdateAsync(player);
+            //}
+
+            //await SyncAsync();
+            return await SaveAsync<Player>(player);
+        }
+
+        public async Task<Game> SaveGame(Game game)
+        {
+            return await SaveAsync<Game>(game);
+        }
+
+        public async Task<Venue> SaveVenue(Venue venue)
+        {
+            return await SaveAsync<Venue>(venue);
+            //if (venue.IsNew)
+            //{
+            //    venue.Id = NewId();
+            //    await VenuesTable.InsertAsync(venue);
+            //}
+            //else
+            //{
+            //    await VenuesTable.UpdateAsync(venue);
+            //}
+
+            //return await VenuesTable.LookupAsync(venue.Id);
+        }
+
+        private async Task<T> SaveAsync<T>(DomainBase entity) where T : DomainBase
+        {
+#if OFFLINE_SYNC_ENABLED
+            var table = App.MobileService.GetSyncTable<T>();
+#else
+            var table = App.MobileService.GetTable<T>();
+#endif
+            var action = "init";
+            try
+            {
+                
+                if (entity.IsNew)
+                {
+                    entity.Id = NewId();
+                    action = "insert";
+                    await table.InsertAsync((T)entity);
+                }
+                else
+                {
+                    action = "update";
+                    await table.UpdateAsync((T)entity);
+                }
+                action = "sync";
+                await SyncAsync();
+                action = "lookup";
+
+                return await table.LookupAsync(entity.Id);
+            }
+            catch (Exception e)
+            {
+
+                Debug.WriteLine($"Error executing {action} operation. Item: {typeof(T).Name} ({entity.Id}). Operation discarded. Error: {e.Message}");
+                throw;
+            }
         }
 
         public async Task<List<Venue>> GetVenues()
         {
             return await VenuesTable.ToListAsync();
         }
+
+
 
 #if OFFLINE_SYNC_ENABLED
         private IMobileServiceSyncTable<Game> GamesTable => App.MobileService.GetSyncTable<Game>();
@@ -181,6 +237,7 @@ namespace TeeScore.Services
         private IMobileServiceSyncTable<VenueAvailabilityPeriod> VenueAvailPeriods => App.MobileService.GetSyncTable<VenueAvailabilityPeriod>();
         private IMobileServiceSyncTable<VenueFacilities> VenueFacilitiesTable => App.MobileService.GetSyncTable<VenueFacilities>();
         private IMobileServiceSyncTable<Facility> FacilitiesTable => App.MobileService.GetSyncTable<Facility>();
+
 #else
         private IMobileServiceTable<Game> GamesTable => App.MobileService.GetTable<Game>();
         private IMobileServiceTable<Player> PlayersTable => App.MobileService.GetTable<Player>();

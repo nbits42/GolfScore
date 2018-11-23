@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using GlobalContracts.Enumerations;
 using Syncfusion.DataSource.Extensions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,16 +10,17 @@ using TeeScore.Domain;
 using TeeScore.DTO;
 using TeeScore.Helpers;
 using TeeScore.Services;
+using TeeScore.Validation;
 
 namespace TeeScore.ViewModels
 {
-    public class NewGameViewModel : MyViewModelBase
+    public class NewGameViewModel : ValidatableViewModelBase
     {
-        private List<Venue> _allVenues;
-        private ObservableCollection<Venue> _venues;
+        private List<Venue> _allVenues = new List<Venue>();
+        private ObservableCollection<Venue> _venues = new ObservableCollection<Venue>();
         private GameDto _game = new GameDto();
-        private Player _myPlayer;
-        private Venue _seletedVenue;
+        private Player _myPlayer = new Player();
+        private Venue _selectedVenue = null;
         private string _venueSearch;
         private bool _nextPageEnabled;
         private bool _previousPageEnabled;
@@ -26,26 +28,16 @@ namespace TeeScore.ViewModels
         private CreateGamePage _nextPage;
         private RelayCommand _nextPageCommand;
         private RelayCommand _previousPageCommand;
+        private ValidatableObject<int> _invitationNumber = new ValidatableObject<int>();
+        private ValidatableObject<int> _invitedPlayersCount = new ValidatableObject<int>();
+        private ValidatableObject<int> _teeCount = new ValidatableObject<int>();
+        private ValidatableObject<int> _startTee = new ValidatableObject<int>();
+        private ValidatableObject<GameType> _gameType = new ValidatableObject<GameType>();
+        private bool _doCheck = false;
 
         public NewGameViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
         {
             PropertyChanged += NewGameViewModel_PropertyChanged;
-
-            _game.Game.PropertyChanged += Game_PropertyChanged;
-        }
-
-        private void Game_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case nameof(_game.Game.ConnectedPlayersCount):
-                case nameof(_game.Game.InvitedPlayersCount):
-                case nameof(_game.Game.TeeCount):
-                case nameof(_game.Game.GameType):
-                case nameof(_game.Game.InvitationNumber):
-                    CheckNextPage();
-                    break;
-            }
         }
 
         private void NewGameViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -55,7 +47,12 @@ namespace TeeScore.ViewModels
                 case nameof(VenueSearch):
                     FilterVenues();
                     break;
-                case nameof(SeletedVenue):
+                case nameof(SelectedVenue):
+                case nameof(GameType):
+                case nameof(StartTee):
+                case nameof(TeeCount):
+                case nameof(InvitationNumber):
+                case nameof(InvitedPlayersCount):
                     CheckNextPage();
                     break;
             }
@@ -63,9 +60,24 @@ namespace TeeScore.ViewModels
 
         private void CheckNextPage()
         {
+            if (!_doCheck)
+            {
+                return;
+            }
+            UpdateGame();
             _nextPage = GameStateService.GetNextNewGamePage(Game, _currentPage);
             NextPageEnabled = _nextPage > _currentPage;
             PreviousPageEnabled = _currentPage > CreateGamePage.VenueSelection && _currentPage < CreateGamePage.Ready;
+        }
+
+        private void UpdateGame()
+        {
+            Game.Venue = SelectedVenue;
+            Game.Game.GameType = GameType.Value;
+            Game.Game.InvitationNumber = InvitationNumber.Value;
+            Game.Game.InvitedPlayersCount = InvitedPlayersCount.Value;
+            Game.Game.StartTee = StartTee.Value;
+            Game.Game.TeeCount = TeeCount.Value;
         }
 
         private void FilterVenues()
@@ -79,11 +91,25 @@ namespace TeeScore.ViewModels
         {
             await LoadPlayer();
             await LoadVenues();
+            LoadGameTypes();
+            _doCheck = true;
+            CheckNextPage();
+
+        }
+
+        private void LoadGameTypes()
+        {
+            if (!GameTypes.Any())
+            {
+                GameTypes.AddRange(EnumHelper<GameType>.GetNames());
+                RaisePropertyChanged(() => GameTypes);
+            }
         }
 
         private async Task LoadVenues()
         {
             _allVenues = await DataService.GetVenues();
+            FilterVenues();
         }
 
         private async Task LoadPlayer()
@@ -149,21 +175,21 @@ namespace TeeScore.ViewModels
         }
 
 
-        /* =========================================== property: SeletedVenue ====================================== */
+        /* =========================================== property: SelectedVenue ====================================== */
         /// <summary>
-        /// Sets and gets the SeletedVenue property.
+        /// Sets and gets the SelectedVenue property.
         /// </summary>
-        public Venue SeletedVenue
+        public Venue SelectedVenue
         {
-            get => _seletedVenue;
+            get => _selectedVenue;
             set
             {
-                if (value == _seletedVenue)
+                if (value == _selectedVenue)
                 {
                     return;
                 }
 
-                _seletedVenue = value;
+                _selectedVenue = value;
                 RaisePropertyChanged();
             }
         }
@@ -275,5 +301,88 @@ namespace TeeScore.ViewModels
                 CurrentPage = _currentPage--;
             }
         }
+
+
+        protected override void AddValidations()
+        {
+
+        }
+
+        public override bool Validate()
+        {
+            var validateTeeCount = ValidateStartTeeCommand();
+            return validateTeeCount && SelectedVenue != null;
+        }
+
+        private bool ValidateStartTeeCommand()
+        {
+            return StartTee.Value <= TeeCount.Value;
+        }
+
+
+        /* =========================================== validatable property: InvitedPlayersCount ====================================== */
+
+        public ValidatableObject<int> InvitedPlayersCount
+        {
+            get => _invitedPlayersCount;
+            set
+            {
+                _invitedPlayersCount = value;
+                RaisePropertyChanged(() => InvitedPlayersCount);
+            }
+        }
+
+        /* =========================================== validatable property: TeeCount ====================================== */
+
+        public ValidatableObject<int> TeeCount
+        {
+            get => _teeCount;
+            set
+            {
+                _teeCount = value;
+                RaisePropertyChanged(() => TeeCount);
+            }
+        }
+
+        /* =========================================== validatable property: StartTee ====================================== */
+
+        public ValidatableObject<int> StartTee
+        {
+            get => _startTee;
+            set
+            {
+                _startTee = value;
+                RaisePropertyChanged(() => StartTee);
+            }
+        }
+
+        /* =========================================== validatable property: InvitationNumber ====================================== */
+
+        public ValidatableObject<int> InvitationNumber
+        {
+            get => _invitationNumber;
+            set
+            {
+                _invitationNumber = value;
+                RaisePropertyChanged(() => InvitationNumber);
+            }
+        }
+
+
+
+        /* =========================================== validatable property: GameType ====================================== */
+
+        public ValidatableObject<GameType> GameType
+        {
+            get => _gameType;
+            set
+            {
+                _gameType = value;
+                RaisePropertyChanged(() => GameType);
+            }
+        }
+
+        public List<EnumNameValue<GameType>> GameTypes { get; set; } = new List<EnumNameValue<GameType>>();
+
     }
 }
