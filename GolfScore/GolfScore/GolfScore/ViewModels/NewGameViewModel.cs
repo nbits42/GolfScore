@@ -1,6 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using GlobalContracts.Enumerations;
-using Syncfusion.DataSource.Extensions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -32,12 +31,28 @@ namespace TeeScore.ViewModels
         private ValidatableObject<int> _invitedPlayersCount = new ValidatableObject<int>();
         private ValidatableObject<int> _teeCount = new ValidatableObject<int>();
         private ValidatableObject<int> _startTee = new ValidatableObject<int>();
-        private ValidatableObject<GameType> _gameType = new ValidatableObject<GameType>();
+        private GameType _gameType = GameType.Golf;
         private bool _doCheck = false;
+        private List<EnumNameValue<GameType>> _gameTypesList;
+        private int _selectedGameTypeIndex;
+        private int _currentPageIndex;
 
         public NewGameViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
         {
             PropertyChanged += NewGameViewModel_PropertyChanged;
+            LoadGameTypes();
+        }
+
+        public void NewGame()
+        {
+            CurrentPage = CreateGamePage.VenueSelection;
+            CurrentPageIndex = (int) CurrentPage;
+            Game = new GameDto();
+            SelectedVenue = null;
+            GameType = Settings.LastGameType;
+            TeeCount.Value = Settings.LastTeeCount;
+            StartTee.Value = 1;
+            InvitedPlayersCount.Value = Settings.LastPlayersCount;
         }
 
         private void NewGameViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -48,11 +63,18 @@ namespace TeeScore.ViewModels
                     FilterVenues();
                     break;
                 case nameof(SelectedVenue):
-                case nameof(GameType):
                 case nameof(StartTee):
                 case nameof(TeeCount):
                 case nameof(InvitationNumber):
                 case nameof(InvitedPlayersCount):
+                    CheckNextPage();
+                    break;
+                case nameof(GameType):
+                    CheckNextPage();
+                    SelectedGameTypeIndex = _gameTypesList.FindIndex(x => x.Value == GameType);
+                    break;
+                case nameof(SelectedGameTypeIndex):
+                    _gameType = _gameTypesList[SelectedGameTypeIndex].Value;
                     CheckNextPage();
                     break;
             }
@@ -73,7 +95,7 @@ namespace TeeScore.ViewModels
         private void UpdateGame()
         {
             Game.Venue = SelectedVenue;
-            Game.Game.GameType = GameType.Value;
+            Game.Game.GameType = GameType;
             Game.Game.InvitationNumber = InvitationNumber.Value;
             Game.Game.InvitedPlayersCount = InvitedPlayersCount.Value;
             Game.Game.StartTee = StartTee.Value;
@@ -82,16 +104,13 @@ namespace TeeScore.ViewModels
 
         private void FilterVenues()
         {
-            Venues = string.IsNullOrEmpty(_venueSearch)
-                ? new ObservableCollection<Venue>(_allVenues.OrderBy(x => x.Name))
-                : new ObservableCollection<Venue>(_allVenues.Where(x => x.Name.Contains(VenueSearch)).OrderBy(x => x.Name));
+            Venues = new ObservableCollection<Venue>(_allVenues.OrderBy(x => x.Name));
         }
 
         public async Task LoadAsync()
         {
             await LoadPlayer();
             await LoadVenues();
-            LoadGameTypes();
             _doCheck = true;
             CheckNextPage();
 
@@ -99,9 +118,11 @@ namespace TeeScore.ViewModels
 
         private void LoadGameTypes()
         {
-            if (!GameTypes.Any())
+            
+            if (_gameTypesList == null)
             {
-                GameTypes.AddRange(EnumHelper<GameType>.GetNames());
+                _gameTypesList = EnumHelper<GameType>.GetNames();
+                GameTypes.AddRange(_gameTypesList.Select(x=>x.Name));
                 RaisePropertyChanged(() => GameTypes);
             }
         }
@@ -269,8 +290,30 @@ namespace TeeScore.ViewModels
 
                 _currentPage = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(() => CurrentPageIndex);
             }
         }
+
+        /* =========================================== property: CurrentPageIndex ====================================== */
+        /// <summary>
+        /// Sets and gets the CurrentPageIndex property.
+        /// </summary>
+        public int CurrentPageIndex
+        {
+            get => _currentPageIndex;
+            set
+            {
+                if (value == _currentPageIndex)
+                {
+                    return;
+                }
+
+                _currentPageIndex = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
 
 
         /* =========================================== RelayCommand: NextPageCommand ====================================== */
@@ -284,6 +327,8 @@ namespace TeeScore.ViewModels
             if (NextPageEnabled)
             {
                 CurrentPage = _nextPage;
+                CurrentPageIndex = (int)CurrentPage;
+                CheckNextPage();
             }
         }
 
@@ -298,7 +343,9 @@ namespace TeeScore.ViewModels
         {
             if (PreviousPageEnabled)
             {
-                CurrentPage = _currentPage--;
+                CurrentPage = (CreateGamePage) (int)CurrentPage - 1;
+                CurrentPageIndex = (int) CurrentPage;
+                CheckNextPage();
             }
         }
 
@@ -369,20 +416,47 @@ namespace TeeScore.ViewModels
         }
 
 
-
-        /* =========================================== validatable property: GameType ====================================== */
-
-        public ValidatableObject<GameType> GameType
+/* =========================================== property: GameType ====================================== */
+        /// <summary>
+        /// Sets and gets the GameType property.
+        /// </summary>
+        public GameType GameType
         {
             get => _gameType;
             set
             {
+                if (value == _gameType)
+                {
+                    return;
+                }
+
                 _gameType = value;
-                RaisePropertyChanged(() => GameType);
+                RaisePropertyChanged();
             }
         }
 
-        public List<EnumNameValue<GameType>> GameTypes { get; set; } = new List<EnumNameValue<GameType>>();
+        /* =========================================== property: SelectedGameTypeIndex ====================================== */
+        /// <summary>
+        /// Sets and gets the SelectedGameTypeIndex property.
+        /// </summary>
+        public int SelectedGameTypeIndex
+        {
+            get => _selectedGameTypeIndex;
+            set
+            {
+                if (value == _selectedGameTypeIndex)
+                {
+                    return;
+                }
+
+                _selectedGameTypeIndex = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+        public List<string> GameTypes { get; set; } = new List<string>();
 
     }
 }

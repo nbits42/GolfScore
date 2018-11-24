@@ -13,13 +13,14 @@ namespace TeeScore.Pages
 	public partial class NewGamePage : ContentPage
 	{
 	    private readonly NewGameViewModel _vm;
-        private string _searchtext;
+        private string _searchText;
 
         public NewGamePage ()
 		{
 			InitializeComponent ();
 		    _vm = App.IOC.NewGame;
 		    BindingContext = _vm;
+            _vm.NewGame();
 		}
 
 	    protected override async void OnAppearing()
@@ -36,10 +37,9 @@ namespace TeeScore.Pages
 
 	    private void Editor_OnTextChanged(object sender, TextChangedEventArgs e)
 	    {
-	        var searchBox = sender as Entry;
-	        if (searchBox != null && VenuesView.DataSource != null)
+	        if (sender is Entry searchBox && VenuesView.DataSource != null)
 	        {
-	            _searchtext = searchBox.Text;
+	            _searchText = searchBox.Text;
 	            VenuesView.DataSource.Filter = FilterVenues;
                 VenuesView.DataSource.RefreshFilter();
 	        }
@@ -47,13 +47,12 @@ namespace TeeScore.Pages
 
         private bool FilterVenues(object obj)
         {
-            if (string.IsNullOrEmpty(_searchtext))
+            if (string.IsNullOrEmpty(_searchText))
             {
                 return true;
             }
 
-            var venue = obj as Venue;
-            return (venue.Name.ToLower().Contains(_searchtext.ToLower()));
+            return obj is Venue venue && (venue.Name.ToLower().Contains(_searchText.ToLower()));
         }
 
 	    private void VenuesView_OnSelectionChanged(object sender, ItemSelectionChangedEventArgs e)

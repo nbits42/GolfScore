@@ -19,24 +19,29 @@ namespace TeeScore.Services
                 return nextPage;
             }
             nextPage = CreateGamePage.PropertySelection;
-            if (game.Game.TeeCount <= 0)
+            if (game.Game.TeeCount <= 0 || ProceedOnePage(nextPage, currentPage))
             {
                 return nextPage;
             }
             nextPage = CreateGamePage.InvitationSelection;
-            if (game.Game.InvitedPlayersCount <= 0)
+            if (game.Game.InvitedPlayersCount <= 0 || ProceedOnePage(nextPage, currentPage))
             {
                 return nextPage;
             }
             game.Game.GameStatus = GameStatus.ConfirmationsReceiving;
             nextPage = CreateGamePage.InvitationWaiting;
 
-            if (game.Game.ConnectedPlayersCount < game.Game.InvitedPlayersCount)
+            if (game.Game.ConnectedPlayersCount < game.Game.InvitedPlayersCount || ProceedOnePage(nextPage, currentPage))
             {
                 return nextPage;
             }
             game.Game.GameStatus = GameStatus.ConfirmationsComplete;
             return CreateGamePage.Ready;
+        }
+
+        private static bool ProceedOnePage(CreateGamePage nextPage, CreateGamePage currentPage)
+        {
+            return (int) nextPage == (int)currentPage + 1;
         }
     }
 }

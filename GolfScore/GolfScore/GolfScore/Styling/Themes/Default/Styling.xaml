@@ -64,16 +64,15 @@
         <Setter Property="BackgroundColor" Value="{StaticResource PageHeadingBackgroundColor}" />
     </Style>
     <Style x:Key="WizardButtonBarStyle" TargetType="StackLayout">
-        <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
         <Setter Property="VerticalOptions" Value="End" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
         <Setter Property="Orientation" Value="Horizontal" />
         <Setter Property="BackgroundColor" Value="{StaticResource PageBackgroundColor}" />
     </Style>
     <Style x:Key="WizardButtonStyle" TargetType="Button">
-        <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
-        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="CenterAndExpand" />
         <Setter Property="CornerRadius" Value="15" />
-        <Setter Property="Margin" Value="8,3,8,3" />
+        <Setter Property="Margin" Value="10,1,10,1" />
         <Setter Property="FontFamily" Value="Roboto" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
