@@ -26,7 +26,7 @@ namespace TeeScore.Pages
 	    protected override async void OnAppearing()
 	    {
 	        base.OnAppearing();
-	        await _vm.LoadAsync();
+	        await _vm.LoadAsync().ConfigureAwait(true);
 	    }
 
 	    private async void AddVenueButton_OnClicked(object sender, EventArgs e)
@@ -35,7 +35,7 @@ namespace TeeScore.Pages
 	        await Navigation.PushModalAsync(venuePage);
 	    }
 
-	    private void Editor_OnTextChanged(object sender, TextChangedEventArgs e)
+	    private void VenueSearch_OnTextChanged(object sender, TextChangedEventArgs e)
 	    {
 	        if (sender is Entry searchBox && VenuesView.DataSource != null)
 	        {
@@ -59,6 +59,16 @@ namespace TeeScore.Pages
 	    {
 	        var item = e.AddedItems.FirstOrDefault();
 	        _vm.SelectedVenue = item as Venue;
+	    }
+
+	    private void AddPlayerButton_OnClicked(object sender, EventArgs e)
+	    {
+	        
+	    }
+
+	    private void PlayerSearch_OnTextChanged(object sender, TextChangedEventArgs e)
+	    {
+	        
 	    }
 	}
 }

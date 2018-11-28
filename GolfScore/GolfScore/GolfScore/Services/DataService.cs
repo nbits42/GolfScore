@@ -41,8 +41,8 @@ namespace TeeScore.Services
 
 #if OFFLINE_SYNC_ENABLED
 
-            await App.MobileService.SyncContext.InitializeAsync(_store);
-            await SyncAsync();
+            await App.MobileService.SyncContext.InitializeAsync(_store).ConfigureAwait(false);
+            await SyncAsync().ConfigureAwait(false);
 #endif
 
             MessagingCenter.Send(this, ServiceMessage.DataServiceInitialized);
@@ -68,11 +68,11 @@ namespace TeeScore.Services
             {
                 return new List<Game>();
             }
-            var gameIds = await GamePlayersTable.Where(x => x.PlayerId == playerId).ToListAsync();
+            var gameIds = await GamePlayersTable.Where(x => x.PlayerId == playerId).ToListAsync().ConfigureAwait(false);
             var result = new List<Game>();
             foreach (var gameId in gameIds)
             {
-                var game = await GamesTable.LookupAsync(gameId.GameId);
+                var game = await GamesTable.LookupAsync(gameId.GameId).ConfigureAwait(false);
                 if (game != null)
                 {
                     result.Add(game);
@@ -84,16 +84,16 @@ namespace TeeScore.Services
 
         public async Task<Venue> GetVenue(string venueId)
         {
-            return await VenuesTable.LookupAsync(venueId);
+            return await VenuesTable.LookupAsync(venueId).ConfigureAwait(false);
         }
 
         public async Task<List<Player>> GetPlayersForGame(string gameId)
         {
-            var gamePlayers = await GamePlayersTable.Where(x => x.GameId == gameId).ToListAsync();
+            var gamePlayers = await GamePlayersTable.Where(x => x.GameId == gameId).ToListAsync().ConfigureAwait(false);
             var result = new List<Player>();
             foreach (var gamePlayer in gamePlayers)
             {
-                result.Add(await PlayersTable.LookupAsync(gamePlayer.PlayerId));
+                result.Add(await PlayersTable.LookupAsync(gamePlayer.PlayerId).ConfigureAwait(false));
             }
 
             return result;
@@ -109,10 +109,10 @@ namespace TeeScore.Services
 
             try
             {
-                await App.MobileService.SyncContext.PushAsync();
-                await GamesTable.PullAsync("AllGames", this.GamesTable.CreateQuery());
-                await PlayersTable.PullAsync("AllPlayers", this.PlayersTable.CreateQuery());
-                await VenuesTable.PullAsync("AllVenues", this.PlayersTable.CreateQuery());
+                await App.MobileService.SyncContext.PushAsync().ConfigureAwait(false);
+                await GamesTable.PullAsync("AllGames", this.GamesTable.CreateQuery()).ConfigureAwait(false);
+                await PlayersTable.PullAsync("AllPlayers", this.PlayersTable.CreateQuery()).ConfigureAwait(false);
+                await VenuesTable.PullAsync("AllVenues", this.PlayersTable.CreateQuery()).ConfigureAwait(false);
             }
             catch (MobileServicePushFailedException exc)
             {
@@ -130,12 +130,12 @@ namespace TeeScore.Services
                     if (error.OperationKind == MobileServiceTableOperationKind.Update && error.Result != null)
                     {
                         //Update failed, reverting to server's copy.
-                        await error.CancelAndUpdateItemAsync(error.Result);
+                        await error.CancelAndUpdateItemAsync(error.Result).ConfigureAwait(false);
                     }
                     else
                     {
                         // Discard local change.
-                        await error.CancelAndDiscardItemAsync();
+                        await error.CancelAndDiscardItemAsync().ConfigureAwait(false);
                     }
 
                     Debug.WriteLine(@"Error executing sync operation. Item: {0} ({1}). Operation discarded.",
@@ -146,7 +146,7 @@ namespace TeeScore.Services
 
         public async Task<Player> GetPlayer(string myPlayerId)
         {
-            return await PlayersTable.LookupAsync(myPlayerId);
+            return await PlayersTable.LookupAsync(myPlayerId).ConfigureAwait(false);
         }
 
         public async Task<Player> SavePlayer(Player player)
@@ -162,17 +162,17 @@ namespace TeeScore.Services
             //}
 
             //await SyncAsync();
-            return await SaveAsync<Player>(player);
+            return await SaveAsync<Player>(player).ConfigureAwait(false);
         }
 
         public async Task<Game> SaveGame(Game game)
         {
-            return await SaveAsync<Game>(game);
+            return await SaveAsync<Game>(game).ConfigureAwait(false);
         }
 
         public async Task<Venue> SaveVenue(Venue venue)
         {
-            return await SaveAsync<Venue>(venue);
+            return await SaveAsync<Venue>(venue).ConfigureAwait(false);
             //if (venue.IsNew)
             //{
             //    venue.Id = NewId();
@@ -201,18 +201,18 @@ namespace TeeScore.Services
                 {
                     entity.Id = NewId();
                     action = "insert";
-                    await table.InsertAsync((T)entity);
+                    await table.InsertAsync((T)entity).ConfigureAwait(false);
                 }
                 else
                 {
                     action = "update";
-                    await table.UpdateAsync((T)entity);
+                    await table.UpdateAsync((T)entity).ConfigureAwait(false);
                 }
                 action = "sync";
                 await SyncAsync();
                 action = "lookup";
 
-                return await table.LookupAsync(entity.Id);
+                return await table.LookupAsync(entity.Id).ConfigureAwait(false);
             }
             catch (Exception e)
             {
@@ -224,7 +224,7 @@ namespace TeeScore.Services
 
         public async Task<List<Venue>> GetVenues()
         {
-            return await VenuesTable.ToListAsync();
+            return await VenuesTable.ToListAsync().ConfigureAwait(false);
         }
 
 

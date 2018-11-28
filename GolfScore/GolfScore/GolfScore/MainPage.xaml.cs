@@ -15,21 +15,21 @@ namespace TeeScore
             InitializeComponent();
 
             BindingContext = _viewModel;
-            ToolbarItems.Add(new ToolbarItem("Settings","settings.png",()=> ShowSettingsPage()));
-            FloatingActionButtonAdd.Clicked = (o, args) => AddButtonClicked(o, args);
+            ToolbarItems.Add(new ToolbarItem("Settings", "settings.png", ShowSettingsPage));
+            FloatingActionButtonAdd.Clicked = AddButtonClicked;
         }
 
         private async void ShowSettingsPage()
         {
             var settingsPage = new SettingsPage();
-            await Navigation.PushModalAsync(settingsPage,true);
+            await Navigation.PushModalAsync(settingsPage, true);
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await _viewModel.Load();
-            if (string.IsNullOrEmpty(_viewModel.MyPlayer.Id))
+            await _viewModel.LoadAsync().ConfigureAwait(true);
+            if (string.IsNullOrEmpty(_viewModel.MyPlayer?.Id))
             {
                 ShowSettingsPage();
             }

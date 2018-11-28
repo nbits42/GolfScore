@@ -1,9 +1,13 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using System;
+using GalaSoft.MvvmLight.Command;
 using GlobalContracts.Enumerations;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using TeeScore.Contracts;
 using TeeScore.Domain;
 using TeeScore.DTO;
@@ -36,23 +40,32 @@ namespace TeeScore.ViewModels
         private List<EnumNameValue<GameType>> _gameTypesList;
         private int _selectedGameTypeIndex;
         private int _currentPageIndex;
+        private int _selectedPlayerSelectionIndex;
+        private PlayerSelection _playerSelection = PlayerSelection.Manual;
+        private List<EnumNameValue<PlayerSelection>> _playerSelectionList;
+        private RelayCommand _inviteCommand;
+        private bool _invitationRunning = false;
+        private ObservableCollection<Player> _players = new ObservableCollection<Player>();
 
         public NewGameViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
         {
             PropertyChanged += NewGameViewModel_PropertyChanged;
             LoadGameTypes();
+            LoadPlayerSelections();
         }
+
 
         public void NewGame()
         {
             CurrentPage = CreateGamePage.VenueSelection;
-            CurrentPageIndex = (int) CurrentPage;
+            CurrentPageIndex = (int)CurrentPage;
             Game = new GameDto();
             SelectedVenue = null;
             GameType = Settings.LastGameType;
             TeeCount.Value = Settings.LastTeeCount;
             StartTee.Value = 1;
             InvitedPlayersCount.Value = Settings.LastPlayersCount;
+            Players.Clear();
         }
 
         private void NewGameViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -65,7 +78,6 @@ namespace TeeScore.ViewModels
                 case nameof(SelectedVenue):
                 case nameof(StartTee):
                 case nameof(TeeCount):
-                case nameof(InvitationNumber):
                 case nameof(InvitedPlayersCount):
                     CheckNextPage();
                     break;
@@ -77,7 +89,26 @@ namespace TeeScore.ViewModels
                     _gameType = _gameTypesList[SelectedGameTypeIndex].Value;
                     CheckNextPage();
                     break;
+                case nameof(PlayerSelection):
+                    CheckNextPage();
+                    SelectedPlayerSelectionIndex = _playerSelectionList.FindIndex(x => x.Value == PlayerSelection);
+                    break;
+                case nameof(SelectedPlayerSelectionIndex):
+                    _playerSelection = _playerSelectionList[SelectedPlayerSelectionIndex].Value;
+
+                    if (_playerSelection == PlayerSelection.ByInvitationNumber)
+                    {
+                        InvitationNumber.Value = GenerateInvitationNumber();
+                    }
+                    CheckNextPage();
+                    break;
             }
+        }
+
+        private int GenerateInvitationNumber()
+        {
+            var r = new Random();
+            return r.Next(1000, 9999); 
         }
 
         private void CheckNextPage()
@@ -100,42 +131,64 @@ namespace TeeScore.ViewModels
             Game.Game.InvitedPlayersCount = InvitedPlayersCount.Value;
             Game.Game.StartTee = StartTee.Value;
             Game.Game.TeeCount = TeeCount.Value;
+            Game.Game.VenueId = SelectedVenue?.Id;
         }
 
         private void FilterVenues()
         {
-            Venues = new ObservableCollection<Venue>(_allVenues.OrderBy(x => x.Name));
+            Venues = new ObservableCollection<Venue>(_allVenues.OrderBy(x => x.Name).ToList());
         }
 
         public async Task LoadAsync()
         {
-            await LoadPlayer();
-            await LoadVenues();
-            _doCheck = true;
-            CheckNextPage();
+            try
+            {
+                await LoadPlayerAsync().ConfigureAwait(true);
+                await LoadVenuesAsync().ConfigureAwait(true);
+                _doCheck = true;
+                CheckNextPage();
+            }
+            catch (Exception e)
+            {
+                ErrorReportingService.ReportError(this, e);
+            }
 
         }
 
         private void LoadGameTypes()
         {
-            
+
             if (_gameTypesList == null)
             {
                 _gameTypesList = EnumHelper<GameType>.GetNames();
-                GameTypes.AddRange(_gameTypesList.Select(x=>x.Name));
+                GameTypes.AddRange(_gameTypesList.Select(x => x.Name));
                 RaisePropertyChanged(() => GameTypes);
             }
         }
-
-        private async Task LoadVenues()
+        private void LoadPlayerSelections()
         {
-            _allVenues = await DataService.GetVenues();
+
+            if (_playerSelectionList == null)
+            {
+                _playerSelectionList = EnumHelper<PlayerSelection>.GetNames();
+                PlayerSelections.AddRange(_playerSelectionList.Select(x => x.Name));
+                RaisePropertyChanged(() => PlayerSelections);
+            }
+        }
+
+        private async Task LoadVenuesAsync()
+        {
+            _allVenues = await DataService.GetVenues().ConfigureAwait(false);
             FilterVenues();
         }
 
-        private async Task LoadPlayer()
+        private async Task LoadPlayerAsync()
         {
             MyPlayer = await DataService.GetPlayer(Settings.MyPlayerId).ConfigureAwait(false);
+            if (MyPlayer != null && !Players.Any())
+            {
+                //Players.Add(MyPlayer);
+            }
         }
 
         /* =========================================== property: Venues ====================================== */
@@ -343,8 +396,8 @@ namespace TeeScore.ViewModels
         {
             if (PreviousPageEnabled)
             {
-                CurrentPage = (CreateGamePage) (int)CurrentPage - 1;
-                CurrentPageIndex = (int) CurrentPage;
+                CurrentPage = (CreateGamePage)CurrentPage - 1;
+                CurrentPageIndex = (int)CurrentPage;
                 CheckNextPage();
             }
         }
@@ -416,7 +469,7 @@ namespace TeeScore.ViewModels
         }
 
 
-/* =========================================== property: GameType ====================================== */
+        /* =========================================== property: GameType ====================================== */
         /// <summary>
         /// Sets and gets the GameType property.
         /// </summary>
@@ -454,9 +507,133 @@ namespace TeeScore.ViewModels
             }
         }
 
+        public List<string> PlayerSelections { get; set; } = new List<string>();
 
+        /* =========================================== property: PlayerSelection ====================================== */
+        /// <summary>
+        /// Sets and gets the PlayerSelection property.
+        /// </summary>
+        public PlayerSelection PlayerSelection
+        {
+            get => _playerSelection;
+            set
+            {
+                if (value == _playerSelection)
+                {
+                    return;
+                }
+
+                _playerSelection = value;
+                RaisePropertyChanged();
+
+            }
+        }
+
+        /* =========================================== property: SelectedPlayerSelectionIndex ====================================== */
+        /// <summary>
+        /// Sets and gets the SelectedPlayerSelectionIndex property.
+        /// </summary>
+        public int SelectedPlayerSelectionIndex
+        {
+            get => _selectedPlayerSelectionIndex;
+            set
+            {
+                if (value == _selectedPlayerSelectionIndex)
+                {
+                    return;
+                }
+
+                _selectedPlayerSelectionIndex = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => HasAutomaticPlayerSelection);
+                RaisePropertyChanged(() => HasManualPlayerSelection);
+            }
+        }
 
         public List<string> GameTypes { get; set; } = new List<string>();
 
+        /* =========================================== property: Players ====================================== */
+        /// <summary>
+        /// Sets and gets the Players property.
+        /// </summary>
+        public ObservableCollection<Player> Players
+        {
+            get => _players;
+            set
+            {
+                if (value == _players)
+                {
+                    return;
+                }
+
+                _players = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+        public bool HasAutomaticPlayerSelection => _playerSelection != PlayerSelection.Manual;
+        public bool HasManualPlayerSelection => _playerSelection == PlayerSelection.Manual;
+
+
+        /* =========================================== RelayCommand: InviteCommand ====================================== */
+        /// <summary>
+        /// Executes the Invite command.
+        /// </summary>
+        public RelayCommand InviteCommand
+        {
+            get
+            {
+                return _inviteCommand
+                       ?? (_inviteCommand = new RelayCommand(
+                           async () => { await Invite(); }));
+            }
+        }
+
+        private async Task Invite()
+        {
+            await SaveGame();
+            if (_invitationRunning)
+            {
+                _invitationRunning = false;
+                return;
+            }
+
+            await ContinuousPlayerPolling();
+        }
+
+        private async Task SaveGame()
+        {
+            UpdateGame();
+        }
+
+        private async Task ContinuousPlayerPolling()
+        {
+            var startTime = DateTime.Now;
+            var maxWaitMinutes = 10;
+            while (_invitationRunning)
+            {
+                var players = await DataService.GetPlayersForGame(Game.Game.Id);
+                if (players.Count == InvitedPlayersCount.Value)
+                {
+                    _invitationRunning = false;
+                }
+
+                if (_invitationRunning)
+                {
+                    if (DateTime.Now.Subtract(startTime).Minutes > maxWaitMinutes)
+                    {
+                        _invitationRunning = false;
+                    }
+                }
+                // Update the UI (because of async/await magic, this is still in the UI thread!)
+                if (_invitationRunning)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(5));
+                }
+            }
+        }
+      
     }
 }

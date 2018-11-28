@@ -38,15 +38,15 @@ namespace TeeScore.ViewModels
 
         public ObservableCollection<GameDto> Games { get; set; } = new ObservableCollection<GameDto>();
 
-        public async Task Load()
+        public async Task LoadAsync()
         {
             if (!_isInitialized)
             {
-                await DataService.InitializeAsync();
+                await DataService.InitializeAsync().ConfigureAwait(false);
                 _isInitialized = true;
             }
-            await LoadMyPlayerAsync();
-            await LoadGames();
+            await LoadMyPlayerAsync().ConfigureAwait(false);
+            await LoadGamesAsync().ConfigureAwait(false);
         }
 
         private async Task LoadMyPlayerAsync()
@@ -58,19 +58,19 @@ namespace TeeScore.ViewModels
             MyPlayer = await DataService.GetPlayer(Settings.MyPlayerId);
         }
 
-        private async Task LoadGames()
+        private async Task LoadGamesAsync()
         {
             var playerId = Settings.MyPlayerId;
 
-            var games = await DataService.GetGames(playerId);
+            var games = await DataService.GetGames(playerId).ConfigureAwait(false);
             Games.Clear();
             foreach (var game in games)
             {
                 Games.Add(new GameDto
                 {
                     Game = game,
-                    Venue = await DataService.GetVenue(game.VenueId),
-                    Players = await DataService.GetPlayersForGame(game.Id),
+                    Venue = await DataService.GetVenue(game.VenueId).ConfigureAwait(false),
+                    Players = await DataService.GetPlayersForGame(game.Id).ConfigureAwait(false),
                 });
             }
 

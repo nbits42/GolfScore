@@ -18,7 +18,7 @@
          which is used to tint widgets -->
     <item name="colorAccent">#20B2AA</item>
     <item name="colorControlNormal">#3C7202</item>
-    <item name="colorControlActivated">#20B2AA</item>
+    <item name="colorControlActivated">#228822</item>
     <item name="colorSwitchThumbNormal">#3C7202</item>
     <!-- You can also set colorControlNormal, colorControlActivated
          colorControlHighlight and colorSwitchThumbNormal. -->

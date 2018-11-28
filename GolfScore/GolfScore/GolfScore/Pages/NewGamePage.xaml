@@ -29,7 +29,7 @@
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                         <ColumnDefinition Width="54"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <Entry Grid.Column="0" x:Name="SearchVenue" Style="{StaticResource EditorStyle}" TextChanged="Editor_OnTextChanged"></Entry>
+                                    <Entry Grid.Column="0" x:Name="SearchVenue" Style="{StaticResource EditorStyle}" TextChanged="VenueSearch_OnTextChanged"></Entry>
                                     <ImageButton x:Name="AddVenueButton" Grid.Column="1" Source="plus.png" Style="{StaticResource RoundButtonStyle}" Clicked="AddVenueButton_OnClicked">
                                     </ImageButton>
                                 </Grid>
@@ -72,7 +72,61 @@
                         </Grid>
                     </tabView:SfTabItem.Content>
                 </tabView:SfTabItem>
-                <tabView:SfTabItem Title="3"></tabView:SfTabItem>
+                <tabView:SfTabItem Title="3">
+                    <tabView:SfTabItem.Content>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <StackLayout Grid.Row="0">
+                                <Label Text="Select other players" Style="{StaticResource TinyLabelStyle}"></Label>
+                                <Picker ItemsSource="{Binding PlayerSelections}" SelectedIndex="{Binding SelectedPlayerSelectionIndex, Mode=TwoWay}"></Picker>
+                            </StackLayout>
+                            <StackLayout Grid.Row="1" Orientation="Horizontal" IsVisible="{Binding HasAutomaticPlayerSelection, Mode=TwoWay}">
+                                <Frame  IsClippedToBounds="True" Style="{StaticResource BorderedFrameStyle}" HorizontalOptions="CenterAndExpand" >
+                                    <Label Text="{Binding InvitationNumber.Value, Mode=TwoWay}" Style="{StaticResource LargeLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" WidthRequest="150"></Label>
+                                </Frame>
+                                <Label Text="Pass this number to the other players. They can enter this number at the 'Join Game' page." Style="{StaticResource TinyLabelStyle}" VerticalOptions="CenterAndExpand"></Label>
+                            </StackLayout>
+                            <StackLayout Grid.Row="2" Orientation="Horizontal" IsVisible="{Binding HasAutomaticPlayerSelection, Mode=TwoWay}">
+                                <Button Text="Start" Style="{StaticResource DialogButtonStyle}" WidthRequest="120"></Button>
+                                <ActivityIndicator  HorizontalOptions="Center" VerticalOptions="CenterAndExpand" IsRunning="True" HeightRequest="100" ></ActivityIndicator>
+                            </StackLayout>
+                            
+                            <StackLayout Grid.Row="3" IsVisible="{Binding HasManualPlayerSelection, Mode=TwoWay}">
+                                <Label Style="{StaticResource TinyLabelStyle}" Text="Find or add players"></Label>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="54"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Entry Grid.Column="0" x:Name="SearchPlayer" Style="{StaticResource EditorStyle}" TextChanged="PlayerSearch_OnTextChanged"></Entry>
+                                    <ImageButton x:Name="AddPlayerButton" Grid.Column="1" Source="plus.png" Style="{StaticResource RoundButtonStyle}" Clicked="AddPlayerButton_OnClicked">
+                                    </ImageButton>
+                                </Grid>
+
+                            </StackLayout>
+                            <xforms:SfListView Grid.Row="4" x:Name="PlayersView" ItemsSource="{Binding Players}" ItemSize="60" SelectionBackgroundColor="{StaticResource PageHeadingBackgroundColor}">
+                                <xforms:SfListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Padding="1" Margin="2">
+                                            <Frame HasShadow="True" Padding="1" Margin="2">
+                                                <StackLayout>
+                                                    <Label Text="{Binding Name}" Style="{StaticResource ListItemTextStyle}"></Label>
+                                                    <Label Text="{Binding Abbreviation}" Style="{StaticResource ListItemDetailTextStyle}"></Label>
+                                                </StackLayout>
+                                            </Frame>
+                                        </Grid>
+                                    </DataTemplate>
+                                </xforms:SfListView.ItemTemplate>
+                            </xforms:SfListView>
+                        </Grid>
+                    </tabView:SfTabItem.Content>
+                </tabView:SfTabItem>
                 <tabView:SfTabItem Title="4"></tabView:SfTabItem>
             </tabView:SfTabView>
             <Grid Grid.Row="1">

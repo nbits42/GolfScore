@@ -8,13 +8,13 @@
     <Color x:Key="PageHeadingTextColor">White</Color>
     <Color x:Key="ButtonTextColor">White</Color>
     <Color x:Key="NormalTextColor">#3C7202</Color>
-    <Color x:Key="ButtonBackgroundColor">DarkGreen</Color>
+    <Color x:Key="ButtonBackgroundColor">#3C7202</Color>
     <Color x:Key="ButtonPressedBackgroundColor">ForestGreen</Color>
     <Color x:Key="ButtonRippleBackgroundColor">SeaGreen</Color>
     <Color x:Key="StatusBarBackgroundColor">#003D00</Color>
     <Color x:Key="EditorBackgroundColor">#E0E0E0</Color>
     <Color x:Key="EntryLineColor">#3C7202</Color>
-    <Color x:Key="EntryLineAccentColor">#20B2AA</Color>
+    <Color x:Key="EntryLineAccentColor">ForestGreen</Color>
     <Color x:Key="EntryLineErrorColor">Red</Color>
 
     <Style x:Key="PageHeadingLabelStyle" TargetType="Label">
@@ -34,6 +34,31 @@
         <Setter Property="VerticalOptions" Value="End" />
         <Setter Property="Margin" Value="5,0,0,0" />
         <Setter Property="TextColor" Value="{StaticResource NormalTextColor}" />
+    </Style>
+    <Style x:Key="InvertedLargeLabelStyle" TargetType="Label">
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="Roboto" />
+        <Setter Property="FontSize" Value="Large" />
+        <Setter Property="HorizontalOptions" Value="StartAndExpand" />
+        <Setter Property="VerticalOptions" Value="End" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
+    </Style>
+    <Style x:Key="LargeLabelStyle" TargetType="Label">
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="Roboto" />
+        <Setter Property="FontSize" Value="Large" />
+        <Setter Property="HorizontalOptions" Value="StartAndExpand" />
+        <Setter Property="VerticalOptions" Value="End" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="TextColor" Value="{StaticResource NormalTextColor}" />
+    </Style>
+    <Style x:Key="BorderedFrameStyle" TargetType="Frame">
+        <Setter Property="BackgroundColor" Value="{StaticResource PageBackgroundColor}" />
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="Margin" Value="8,3,8,3" />
+        <Setter Property="Padding" Value="8,0,0,0" />
+        <Setter Property="BorderColor" Value="{StaticResource PageHeadingBackgroundColor}"></Setter>
     </Style>
     <Style x:Key="ListItemTextStyle" TargetType="Label">
         <Setter Property="FontAttributes" Value="Bold" />

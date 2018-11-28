@@ -9,6 +9,9 @@
 //------------------------------------------------------------------------------
 
 namespace TeeScore.Translations {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -36,7 +39,7 @@ namespace TeeScore.Translations {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("GolfScore.Translations.Labels", typeof(Labels).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TeeScore.Translations.Labels", typeof(Labels).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -54,6 +57,87 @@ namespace TeeScore.Translations {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disc golf.
+        /// </summary>
+        internal static string GameType_DiskGolf {
+            get {
+                return ResourceManager.GetString("GameType_DiskGolf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Farmers golf.
+        /// </summary>
+        internal static string GameType_FarmersGolf {
+            get {
+                return ResourceManager.GetString("GameType_FarmersGolf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Foot golf.
+        /// </summary>
+        internal static string GameType_FootGolf {
+            get {
+                return ResourceManager.GetString("GameType_FootGolf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Golf.
+        /// </summary>
+        internal static string GameType_Golf {
+            get {
+                return ResourceManager.GetString("GameType_Golf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Midget golf.
+        /// </summary>
+        internal static string GameType_MidgetGolf {
+            get {
+                return ResourceManager.GetString("GameType_MidgetGolf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Short golf.
+        /// </summary>
+        internal static string GameType_ShortGolf {
+            get {
+                return ResourceManager.GetString("GameType_ShortGolf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By invitation number.
+        /// </summary>
+        internal static string PlayerSelection_ByInvitationNumber {
+            get {
+                return ResourceManager.GetString("PlayerSelection_ByInvitationNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By NFC.
+        /// </summary>
+        internal static string PlayerSelection_ByNfc {
+            get {
+                return ResourceManager.GetString("PlayerSelection_ByNfc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manual.
+        /// </summary>
+        internal static string PlayerSelection_Manual {
+            get {
+                return ResourceManager.GetString("PlayerSelection_Manual", resourceCulture);
             }
         }
     }

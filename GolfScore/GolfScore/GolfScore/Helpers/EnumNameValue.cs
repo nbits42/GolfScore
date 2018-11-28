@@ -10,7 +10,7 @@ namespace TeeScore.Helpers
     {
         public EnumNameValue(T value)
         {
-            var key = $"{typeof(T).Name}-{value}";
+            var key = $"{typeof(T).Name}_{value}";
             Name = TranslationService.Translate(key);
             Value = value;
         }

@@ -20,6 +20,7 @@ namespace TeeScore.Domain
         public int StartTee { get; set; }
         public int CurrentTee { get; set; }
         public int InvitationNumber { get; set; }
+        public PlayerSelection PlayerSelection { get; set; }
         #endregion
 
 
