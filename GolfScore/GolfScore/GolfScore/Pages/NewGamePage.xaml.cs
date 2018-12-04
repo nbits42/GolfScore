@@ -13,7 +13,8 @@ namespace TeeScore.Pages
 	public partial class NewGamePage : ContentPage
 	{
 	    private readonly NewGameViewModel _vm;
-        private string _searchText;
+        private string _searchVenueText;
+        private string _searchPlayerText;
 
         public NewGamePage ()
 		{
@@ -39,7 +40,7 @@ namespace TeeScore.Pages
 	    {
 	        if (sender is Entry searchBox && VenuesView.DataSource != null)
 	        {
-	            _searchText = searchBox.Text;
+	            _searchVenueText = searchBox.Text;
 	            VenuesView.DataSource.Filter = FilterVenues;
                 VenuesView.DataSource.RefreshFilter();
 	        }
@@ -47,12 +48,22 @@ namespace TeeScore.Pages
 
         private bool FilterVenues(object obj)
         {
-            if (string.IsNullOrEmpty(_searchText))
+            if (string.IsNullOrEmpty(_searchVenueText))
             {
                 return true;
             }
 
-            return obj is Venue venue && (venue.Name.ToLower().Contains(_searchText.ToLower()));
+            return obj is Venue venue && (venue.Name.ToLower().Contains(_searchVenueText.ToLower()));
+        }
+
+	    private bool FilterPlayers(object obj)
+        {
+            if (string.IsNullOrEmpty(_searchPlayerText))
+            {
+                return true;
+            }
+
+            return obj is Player player && (player.Name.ToLower().Contains(_searchPlayerText.ToLower()));
         }
 
 	    private void VenuesView_OnSelectionChanged(object sender, ItemSelectionChangedEventArgs e)
@@ -61,14 +72,22 @@ namespace TeeScore.Pages
 	        _vm.SelectedVenue = item as Venue;
 	    }
 
-	    private void AddPlayerButton_OnClicked(object sender, EventArgs e)
+	    private async void AddPlayerButton_OnClicked(object sender, EventArgs e)
 	    {
-	        
+	        _vm.SelectedPlayer = new Player();
+            var playerPage = new PlayerPage();
+	        await Navigation.PushModalAsync(playerPage);
 	    }
 
 	    private void PlayerSearch_OnTextChanged(object sender, TextChangedEventArgs e)
 	    {
-	        
-	    }
-	}
+	        if (sender is Entry searchPlayer && PlayersView.DataSource != null)
+	        {
+	            _searchPlayerText = searchPlayer.Text;
+	            PlayersView.DataSource.Filter = FilterPlayers;
+	            PlayersView.DataSource.RefreshFilter();
+	        }
+
+        }
+    }
 }

@@ -30,8 +30,8 @@
                                         <ColumnDefinition Width="54"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <Entry Grid.Column="0" x:Name="SearchVenue" Style="{StaticResource EditorStyle}" TextChanged="VenueSearch_OnTextChanged"></Entry>
-                                    <ImageButton x:Name="AddVenueButton" Grid.Column="1" Source="plus.png" Style="{StaticResource RoundButtonStyle}" Clicked="AddVenueButton_OnClicked">
-                                    </ImageButton>
+                                    <Button x:Name="AddVenueButton" Grid.Column="1" Text="+" FontSize="30" Style="{StaticResource RoundButtonStyle}" Clicked="AddVenueButton_OnClicked">
+                                    </Button>
                                 </Grid>
 
                             </StackLayout>
@@ -66,8 +66,8 @@
                                 <xForms:SfNumericUpDown Value="{Binding TeeCount.Value, Mode=TwoWay}" StepValue="1" Minimum="3" MaximumDecimalDigits="0"></xForms:SfNumericUpDown>
                                 <Label Text="Start Tee" Style="{StaticResource TinyLabelStyle}"></Label>
                                 <xForms:SfNumericUpDown Value="{Binding StartTee.Value, Mode=TwoWay}" StepValue="1" Minimum="1" MaximumDecimalDigits="0"></xForms:SfNumericUpDown>
-                                <Label Text="Number of players to invite" Style="{StaticResource TinyLabelStyle}"></Label>
-                                <xForms:SfNumericUpDown Value="{Binding InvitedPlayersCount.Value, Mode=TwoWay}" Minimum="0" Maximum="3" StepValue="1" MaximumDecimalDigits="0"></xForms:SfNumericUpDown>
+                                <Label Text="Number of players" Style="{StaticResource TinyLabelStyle}"></Label>
+                                <xForms:SfNumericUpDown Value="{Binding InvitedPlayersCount.Value, Mode=TwoWay}" Minimum="1" Maximum="8" StepValue="1" MaximumDecimalDigits="0"></xForms:SfNumericUpDown>
                             </StackLayout>
                         </Grid>
                     </tabView:SfTabItem.Content>
@@ -92,10 +92,10 @@
                                 </Frame>
                                 <Label Text="Pass this number to the other players. They can enter this number at the 'Join Game' page." Style="{StaticResource TinyLabelStyle}" VerticalOptions="CenterAndExpand"></Label>
                             </StackLayout>
-                            <StackLayout Grid.Row="2" Orientation="Horizontal" IsVisible="{Binding HasAutomaticPlayerSelection, Mode=TwoWay}">
-                                <Button Text="Start" Style="{StaticResource DialogButtonStyle}" WidthRequest="120"></Button>
-                                <ActivityIndicator  HorizontalOptions="Center" VerticalOptions="CenterAndExpand" IsRunning="True" HeightRequest="100" ></ActivityIndicator>
-                            </StackLayout>
+                            <!--<StackLayout Grid.Row="2" Orientation="Horizontal" IsVisible="{Binding HasAutomaticPlayerSelection, Mode=TwoWay}" HorizontalOptions="FillAndExpand">-->
+                            <Button  Grid.Row="2" Text="Start" BackgroundColor="{StaticResource ButtonBackgroundColor}" CornerRadius="25" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" Margin="20,3,20,3" TextColor="{StaticResource ButtonTextColor}" IsVisible="{Binding HasAutomaticPlayerSelection, Mode=TwoWay}" Command="{Binding InviteCommand}" IsEnabled="{Binding NewPlayersCanBeAdded, Mode=TwoWay}"></Button>
+                            <ActivityIndicator  Grid.Row="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" IsRunning="{Binding InvitationIsRunning}" Margin="8,4,8,4"  Color="GreenYellow"  IsVisible="{Binding HasAutomaticPlayerSelection, Mode=TwoWay}"></ActivityIndicator>
+                            <!--</StackLayout>-->
                             
                             <StackLayout Grid.Row="3" IsVisible="{Binding HasManualPlayerSelection, Mode=TwoWay}">
                                 <Label Style="{StaticResource TinyLabelStyle}" Text="Find or add players"></Label>
@@ -104,9 +104,12 @@
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                         <ColumnDefinition Width="54"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <Entry Grid.Column="0" x:Name="SearchPlayer" Style="{StaticResource EditorStyle}" TextChanged="PlayerSearch_OnTextChanged"></Entry>
-                                    <ImageButton x:Name="AddPlayerButton" Grid.Column="1" Source="plus.png" Style="{StaticResource RoundButtonStyle}" Clicked="AddPlayerButton_OnClicked">
-                                    </ImageButton>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="54"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <Entry Grid.Column="0" Grid.Row="0" x:Name="SearchPlayer" Style="{StaticResource EditorStyle}" TextChanged="PlayerSearch_OnTextChanged"></Entry>
+                                    <Button x:Name="AddPlayerButton" Grid.Column="1" Grid.Row="0" Text="+" Style="{StaticResource RoundButtonStyle}" Clicked="AddPlayerButton_OnClicked" IsEnabled="{Binding NewPlayersCanBeAdded, Mode=TwoWay}">
+                                    </Button>
                                 </Grid>
 
                             </StackLayout>
@@ -127,7 +130,13 @@
                         </Grid>
                     </tabView:SfTabItem.Content>
                 </tabView:SfTabItem>
-                <tabView:SfTabItem Title="4"></tabView:SfTabItem>
+                <tabView:SfTabItem Title="4">
+                    <tabView:SfTabItem.Content>
+                        <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                            <Label Text="Ready"></Label>
+                        </StackLayout>
+                    </tabView:SfTabItem.Content>
+                </tabView:SfTabItem>
             </tabView:SfTabView>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>

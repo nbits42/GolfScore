@@ -113,13 +113,17 @@
         <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
         <Setter Property="BackgroundColor" Value="{StaticResource ButtonBackgroundColor}" />
     </Style>
-    <Style x:Key="RoundButtonStyle" TargetType="ImageButton">
+    <Style x:Key="RoundButtonStyle" TargetType="Button">
         <Setter Property="HorizontalOptions" Value="Center" />
         <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="CornerRadius" Value="25" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="BackgroundColor" Value="{StaticResource ButtonBackgroundColor}" />
+        <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
+        <Setter Property="WidthRequest" Value="50" />
+        <Setter Property="HeightRequest" Value="50" />
+        <Setter Property="FontSize" Value="40" />
     </Style>
     <Style x:Key="EntryStyle" TargetType="{x:Type Entry}">
         <Setter Property="FontFamily" Value="Roboto"></Setter>

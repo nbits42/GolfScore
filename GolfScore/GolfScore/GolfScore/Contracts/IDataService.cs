@@ -15,7 +15,6 @@ namespace TeeScore.Contracts
         Task<Game> SaveGame(Game game);
         Task<Venue> SaveVenue(Venue venue);
         Task<List<Venue>> GetVenues();
-
-        
+        Task<GamePlayer> SaveGamePlayer(GamePlayer gamePlayer);
     }
 }

@@ -8,10 +8,10 @@ namespace TeeScore.Domain
     {
         #region Properties          =====================================================
 
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.Now;
         public GameStatus GameStatus { get; set; }
-        public DateTime? FinishedAt { get; set; }
-        public DateTime? StartedAt { get; set; }
+        public DateTime? FinishedAt { get; set; } = EmptyDate;
+        public DateTime? StartedAt { get; set; } = EmptyDate;
         public string VenueId { get; set; }
         public GameType GameType { get; set; }
         public int InvitedPlayersCount { get; set; }

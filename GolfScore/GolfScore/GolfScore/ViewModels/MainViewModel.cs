@@ -1,9 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using TeeScore.Contracts;
 using TeeScore.Domain;
 using TeeScore.DTO;
 using TeeScore.Helpers;
+using TeeScore.Services;
 
 namespace TeeScore.ViewModels
 {
@@ -40,13 +42,20 @@ namespace TeeScore.ViewModels
 
         public async Task LoadAsync()
         {
-            if (!_isInitialized)
+            try
             {
-                await DataService.InitializeAsync().ConfigureAwait(false);
-                _isInitialized = true;
+                if (!_isInitialized)
+                {
+                    await DataService.InitializeAsync().ConfigureAwait(true);
+                    _isInitialized = true;
+                }
+                await LoadMyPlayerAsync().ConfigureAwait(true);
+                await LoadGamesAsync().ConfigureAwait(true);
             }
-            await LoadMyPlayerAsync().ConfigureAwait(false);
-            await LoadGamesAsync().ConfigureAwait(false);
+            catch (Exception e)
+            {
+                ErrorReportingService.ReportError(this, e);
+            }
         }
 
         private async Task LoadMyPlayerAsync()
@@ -62,15 +71,17 @@ namespace TeeScore.ViewModels
         {
             var playerId = Settings.MyPlayerId;
 
-            var games = await DataService.GetGames(playerId).ConfigureAwait(false);
+            var games = await DataService.GetGames(playerId).ConfigureAwait(true);
             Games.Clear();
             foreach (var game in games)
             {
+                var venue = await DataService.GetVenue(game.VenueId).ConfigureAwait(true);
+                var players = await DataService.GetPlayersForGame(game.Id).ConfigureAwait(true);
                 Games.Add(new GameDto
                 {
                     Game = game,
-                    Venue = await DataService.GetVenue(game.VenueId).ConfigureAwait(false),
-                    Players = await DataService.GetPlayersForGame(game.Id).ConfigureAwait(false),
+                    Venue = venue,
+                    Players = players,
                 });
             }
 

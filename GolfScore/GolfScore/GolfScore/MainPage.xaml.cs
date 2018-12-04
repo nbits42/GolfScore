@@ -22,7 +22,7 @@ namespace TeeScore
         private async void ShowSettingsPage()
         {
             var settingsPage = new SettingsPage();
-            await Navigation.PushModalAsync(settingsPage, true);
+            await Navigation.PushModalAsync(settingsPage, true).ConfigureAwait(true);
         }
 
         protected override async void OnAppearing()
@@ -38,7 +38,7 @@ namespace TeeScore
         private async void AddButtonClicked(object sender, EventArgs e)
         {
             var newGamePage = new NewGamePage();
-            await Navigation.PushAsync(newGamePage);
+            await Navigation.PushAsync(newGamePage).ConfigureAwait(true);
         }
     }
 }

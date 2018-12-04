@@ -1,13 +1,10 @@
-﻿using System;
-using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.Command;
 using GlobalContracts.Enumerations;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using TeeScore.Contracts;
 using TeeScore.Domain;
 using TeeScore.DTO;
@@ -46,6 +43,8 @@ namespace TeeScore.ViewModels
         private RelayCommand _inviteCommand;
         private bool _invitationRunning = false;
         private ObservableCollection<Player> _players = new ObservableCollection<Player>();
+        private Player _selectedPlayer;
+        private bool _newPlayersCanBeAdded;
 
         public NewGameViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
         {
@@ -102,13 +101,16 @@ namespace TeeScore.ViewModels
                     }
                     CheckNextPage();
                     break;
+                case nameof(Players):
+                    CheckNextPage();
+                    break;
             }
         }
 
         private int GenerateInvitationNumber()
         {
             var r = new Random();
-            return r.Next(1000, 9999); 
+            return r.Next(1000, 9999);
         }
 
         private void CheckNextPage()
@@ -132,6 +134,8 @@ namespace TeeScore.ViewModels
             Game.Game.StartTee = StartTee.Value;
             Game.Game.TeeCount = TeeCount.Value;
             Game.Game.VenueId = SelectedVenue?.Id;
+            Game.Game.PlayerSelection = PlayerSelection;
+            Game.Players = new List<Player>(_players);
         }
 
         private void FilterVenues()
@@ -146,6 +150,10 @@ namespace TeeScore.ViewModels
                 await LoadPlayerAsync().ConfigureAwait(true);
                 await LoadVenuesAsync().ConfigureAwait(true);
                 _doCheck = true;
+                if (_players.Count == 0 && MyPlayer != null)
+                {
+                    await SaveGamePlayer(MyPlayer);
+                }
                 CheckNextPage();
             }
             catch (Exception e)
@@ -396,7 +404,7 @@ namespace TeeScore.ViewModels
         {
             if (PreviousPageEnabled)
             {
-                CurrentPage = (CreateGamePage)CurrentPage - 1;
+                CurrentPage = CurrentPage - 1;
                 CurrentPageIndex = (int)CurrentPage;
                 CheckNextPage();
             }
@@ -429,6 +437,7 @@ namespace TeeScore.ViewModels
             {
                 _invitedPlayersCount = value;
                 RaisePropertyChanged(() => InvitedPlayersCount);
+                RaisePropertyChanged(() => NewPlayersCanBeAdded);
             }
         }
 
@@ -596,44 +605,116 @@ namespace TeeScore.ViewModels
             await SaveGame();
             if (_invitationRunning)
             {
-                _invitationRunning = false;
+                InvitationIsRunning = false;
                 return;
             }
 
-            await ContinuousPlayerPolling();
+            await ContinuousPlayerPolling().ConfigureAwait(true);
         }
 
         private async Task SaveGame()
         {
             UpdateGame();
+            Game.Game = await DataService.SaveGame(Game.Game);
         }
 
         private async Task ContinuousPlayerPolling()
         {
             var startTime = DateTime.Now;
             var maxWaitMinutes = 10;
-            while (_invitationRunning)
+            while (InvitationIsRunning)
             {
-                var players = await DataService.GetPlayersForGame(Game.Game.Id);
+                var players = await DataService.GetPlayersForGame(Game.Game.Id).ConfigureAwait(true);
                 if (players.Count == InvitedPlayersCount.Value)
                 {
-                    _invitationRunning = false;
+                    InvitationIsRunning = false;
                 }
 
                 if (_invitationRunning)
                 {
                     if (DateTime.Now.Subtract(startTime).Minutes > maxWaitMinutes)
                     {
-                        _invitationRunning = false;
+                        InvitationIsRunning = false;
                     }
                 }
                 // Update the UI (because of async/await magic, this is still in the UI thread!)
-                if (_invitationRunning)
+                if (InvitationIsRunning)
                 {
                     await Task.Delay(TimeSpan.FromSeconds(5));
                 }
             }
         }
-      
+
+        /* =========================================== property: InvitationIsRunning ====================================== */
+        /// <summary>
+        /// Sets and gets the InvitationIsRunning property.
+        /// </summary>
+        public bool InvitationIsRunning
+        {
+            get => _invitationRunning;
+            set
+            {
+                if (value == _invitationRunning)
+                {
+                    return;
+                }
+
+                _invitationRunning = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+        /* =========================================== property: SelectedPlayer ====================================== */
+        /// <summary>
+        /// Sets and gets the SelectedPlayer property.
+        /// </summary>
+        public Player SelectedPlayer
+        {
+            get => _selectedPlayer;
+            set
+            {
+                if (value == _selectedPlayer)
+                {
+                    return;
+                }
+
+                _selectedPlayer = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public async Task SaveSelectedPlayerAsync()
+        {
+            await SaveGamePlayer(SelectedPlayer);
+        }
+
+        private async Task SaveGamePlayer(Player aPlayer)
+        {
+            await SaveGame().ConfigureAwait(true);
+            var player = await DataService.SavePlayer(aPlayer).ConfigureAwait(true);
+            if (_players.All(x => x.Id != player.Id))
+            {
+                _players.Add(player);
+
+                var gamePlayer = new GamePlayer
+                {
+                    GameId = Game.Game.Id,
+                    PlayerId = player.Id
+                };
+                await DataService.SaveGamePlayer(gamePlayer).ConfigureAwait(true);
+                RaisePropertyChanged(() => NewPlayersCanBeAdded);
+                RaisePropertyChanged(() => Players);
+            }
+        }
+
+
+        /* =========================================== property: NewPlayersCanBeAdded ====================================== */
+        /// <summary>
+        /// Sets and gets the NewPlayersCanBeAdded property.
+        /// </summary>
+        public bool NewPlayersCanBeAdded => _players.Count < InvitedPlayersCount.Value;
+
     }
 }

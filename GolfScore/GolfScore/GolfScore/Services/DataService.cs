@@ -68,11 +68,11 @@ namespace TeeScore.Services
             {
                 return new List<Game>();
             }
-            var gameIds = await GamePlayersTable.Where(x => x.PlayerId == playerId).ToListAsync().ConfigureAwait(false);
+            var gamePlayers = await GamePlayersTable.Where(x => x.PlayerId == playerId).ToListAsync().ConfigureAwait(false);
             var result = new List<Game>();
-            foreach (var gameId in gameIds)
+            foreach (var gamePlayer in gamePlayers)
             {
-                var game = await GamesTable.LookupAsync(gameId.GameId).ConfigureAwait(false);
+                var game = await GamesTable.LookupAsync(gamePlayer.GameId).ConfigureAwait(false);
                 if (game != null)
                 {
                     result.Add(game);
@@ -84,6 +84,10 @@ namespace TeeScore.Services
 
         public async Task<Venue> GetVenue(string venueId)
         {
+            if (string.IsNullOrEmpty(venueId))
+            {
+                return null;
+            }
             return await VenuesTable.LookupAsync(venueId).ConfigureAwait(false);
         }
 
@@ -113,6 +117,7 @@ namespace TeeScore.Services
                 await GamesTable.PullAsync("AllGames", this.GamesTable.CreateQuery()).ConfigureAwait(false);
                 await PlayersTable.PullAsync("AllPlayers", this.PlayersTable.CreateQuery()).ConfigureAwait(false);
                 await VenuesTable.PullAsync("AllVenues", this.PlayersTable.CreateQuery()).ConfigureAwait(false);
+                await GamePlayersTable.PullAsync("AllGamePlayers", this.GamePlayersTable.CreateQuery()).ConfigureAwait(false);
             }
             catch (MobileServicePushFailedException exc)
             {
@@ -227,6 +232,10 @@ namespace TeeScore.Services
             return await VenuesTable.ToListAsync().ConfigureAwait(false);
         }
 
+        public async Task<GamePlayer> SaveGamePlayer(GamePlayer gamePlayer)
+        {
+            return await SaveAsync<GamePlayer>(gamePlayer);
+        }
 
 
 #if OFFLINE_SYNC_ENABLED

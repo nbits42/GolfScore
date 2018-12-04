@@ -5,7 +5,6 @@
         VenueSelection,
         PropertySelection,
         InvitationSelection,
-        InvitationWaiting,
         Ready
     }
 }
