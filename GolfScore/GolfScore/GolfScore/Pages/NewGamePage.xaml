@@ -30,8 +30,8 @@
                                         <ColumnDefinition Width="54"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <Entry Grid.Column="0" x:Name="SearchVenue" Style="{StaticResource EditorStyle}" TextChanged="VenueSearch_OnTextChanged"></Entry>
-                                    <Button x:Name="AddVenueButton" Grid.Column="1" Text="+" FontSize="30" Style="{StaticResource RoundButtonStyle}" Clicked="AddVenueButton_OnClicked">
-                                    </Button>
+                                    <ImageButton x:Name="AddVenueButton" Grid.Column="1" Style="{StaticResource RoundImagePlusButtonStyle}" Clicked="AddVenueButton_OnClicked">
+                                    </ImageButton>
                                 </Grid>
 
                             </StackLayout>
@@ -63,11 +63,11 @@
                                 <Label Text="Game type" Style="{StaticResource TinyLabelStyle}"></Label>
                                 <Picker ItemsSource="{Binding GameTypes}" SelectedIndex="{Binding SelectedGameTypeIndex, Mode=TwoWay}"></Picker>
                                 <Label Text="Number of Tees to play" Style="{StaticResource TinyLabelStyle}"></Label>
-                                <xForms:SfNumericUpDown Value="{Binding TeeCount.Value, Mode=TwoWay}" StepValue="1" Minimum="3" MaximumDecimalDigits="0"></xForms:SfNumericUpDown>
+                                <xForms:SfNumericUpDown Value="{Binding TeeCount, Mode=TwoWay}" StepValue="1" Minimum="3" MaximumDecimalDigits="0"></xForms:SfNumericUpDown>
                                 <Label Text="Start Tee" Style="{StaticResource TinyLabelStyle}"></Label>
-                                <xForms:SfNumericUpDown Value="{Binding StartTee.Value, Mode=TwoWay}" StepValue="1" Minimum="1" MaximumDecimalDigits="0"></xForms:SfNumericUpDown>
+                                <xForms:SfNumericUpDown Value="{Binding StartTee, Mode=TwoWay}" StepValue="1" Minimum="1" MaximumDecimalDigits="0"></xForms:SfNumericUpDown>
                                 <Label Text="Number of players" Style="{StaticResource TinyLabelStyle}"></Label>
-                                <xForms:SfNumericUpDown Value="{Binding InvitedPlayersCount.Value, Mode=TwoWay}" Minimum="1" Maximum="8" StepValue="1" MaximumDecimalDigits="0"></xForms:SfNumericUpDown>
+                                <xForms:SfNumericUpDown Value="{Binding PlayersCount, Mode=TwoWay}" Minimum="1" Maximum="8" StepValue="1" MaximumDecimalDigits="0"></xForms:SfNumericUpDown>
                             </StackLayout>
                         </Grid>
                     </tabView:SfTabItem.Content>
@@ -82,21 +82,36 @@
                                 <RowDefinition Height="auto"></RowDefinition>
                                 <RowDefinition Height="*"></RowDefinition>
                             </Grid.RowDefinitions>
+                            <!-- Player selection -->
                             <StackLayout Grid.Row="0">
                                 <Label Text="Select other players" Style="{StaticResource TinyLabelStyle}"></Label>
                                 <Picker ItemsSource="{Binding PlayerSelections}" SelectedIndex="{Binding SelectedPlayerSelectionIndex, Mode=TwoWay}"></Picker>
                             </StackLayout>
+                            <!-- By invitation number -->
                             <StackLayout Grid.Row="1" Orientation="Horizontal" IsVisible="{Binding HasAutomaticPlayerSelection, Mode=TwoWay}">
                                 <Frame  IsClippedToBounds="True" Style="{StaticResource BorderedFrameStyle}" HorizontalOptions="CenterAndExpand" >
-                                    <Label Text="{Binding InvitationNumber.Value, Mode=TwoWay}" Style="{StaticResource LargeLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" WidthRequest="150"></Label>
+                                    <Label Text="{Binding InvitationNumber, Mode=TwoWay}" Style="{StaticResource LargeLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" WidthRequest="150"></Label>
                                 </Frame>
                                 <Label Text="Pass this number to the other players. They can enter this number at the 'Join Game' page." Style="{StaticResource TinyLabelStyle}" VerticalOptions="CenterAndExpand"></Label>
                             </StackLayout>
-                            <!--<StackLayout Grid.Row="2" Orientation="Horizontal" IsVisible="{Binding HasAutomaticPlayerSelection, Mode=TwoWay}" HorizontalOptions="FillAndExpand">-->
-                            <Button  Grid.Row="2" Text="Start" BackgroundColor="{StaticResource ButtonBackgroundColor}" CornerRadius="25" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" Margin="20,3,20,3" TextColor="{StaticResource ButtonTextColor}" IsVisible="{Binding HasAutomaticPlayerSelection, Mode=TwoWay}" Command="{Binding InviteCommand}" IsEnabled="{Binding NewPlayersCanBeAdded, Mode=TwoWay}"></Button>
-                            <ActivityIndicator  Grid.Row="2" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" IsRunning="{Binding InvitationIsRunning}" Margin="8,4,8,4"  Color="GreenYellow"  IsVisible="{Binding HasAutomaticPlayerSelection, Mode=TwoWay}"></ActivityIndicator>
-                            <!--</StackLayout>-->
-                            
+                            <Button  Grid.Row="2" Text="Start" 
+                                     BackgroundColor="{StaticResource ButtonBackgroundColor}" 
+                                     CornerRadius="25" 
+                                     HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" 
+                                     Margin="20,3,20,3" 
+                                     TextColor="{StaticResource ButtonTextColor}" 
+                                     IsVisible="{Binding HasAutomaticPlayerSelection, Mode=TwoWay}" 
+                                     Command="{Binding InviteCommand}" 
+                                     IsEnabled="{Binding NewPlayersCanBeAdded, Mode=TwoWay}">
+                            </Button>
+                            <ActivityIndicator  Grid.Row="2" 
+                                                HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" 
+                                                IsRunning="{Binding InvitationIsRunning}" 
+                                                Margin="8,4,8,4"  
+                                                Color="GreenYellow"  
+                                                IsVisible="{Binding HasAutomaticPlayerSelection, Mode=TwoWay}">
+                            </ActivityIndicator>
+                            <!-- Manual -->
                             <StackLayout Grid.Row="3" IsVisible="{Binding HasManualPlayerSelection, Mode=TwoWay}">
                                 <Label Style="{StaticResource TinyLabelStyle}" Text="Find or add players"></Label>
                                 <Grid>
@@ -108,8 +123,11 @@
                                         <RowDefinition Height="54"></RowDefinition>
                                     </Grid.RowDefinitions>
                                     <Entry Grid.Column="0" Grid.Row="0" x:Name="SearchPlayer" Style="{StaticResource EditorStyle}" TextChanged="PlayerSearch_OnTextChanged"></Entry>
-                                    <Button x:Name="AddPlayerButton" Grid.Column="1" Grid.Row="0" Text="+" Style="{StaticResource RoundButtonStyle}" Clicked="AddPlayerButton_OnClicked" IsEnabled="{Binding NewPlayersCanBeAdded, Mode=TwoWay}">
-                                    </Button>
+                                    <ImageButton x:Name="AddPlayerButton" Grid.Column="1" Grid.Row="0" 
+                                            Style="{StaticResource RoundImagePlusButtonStyle}" 
+                                            Clicked="AddPlayerButton_OnClicked" 
+                                            IsEnabled="{Binding NewPlayersCanBeAdded, Mode=TwoWay}">
+                                    </ImageButton>
                                 </Grid>
 
                             </StackLayout>

@@ -28,10 +28,9 @@ namespace TeeScore.ViewModels
         private CreateGamePage _nextPage;
         private RelayCommand _nextPageCommand;
         private RelayCommand _previousPageCommand;
-        private ValidatableObject<int> _invitationNumber = new ValidatableObject<int>();
-        private ValidatableObject<int> _invitedPlayersCount = new ValidatableObject<int>();
-        private ValidatableObject<int> _teeCount = new ValidatableObject<int>();
-        private ValidatableObject<int> _startTee = new ValidatableObject<int>();
+        private int _invitationNumber = 0;
+        private int _teeCount = 1;
+        private int _startTee = 1;
         private GameType _gameType = GameType.Golf;
         private bool _doCheck = false;
         private List<EnumNameValue<GameType>> _gameTypesList;
@@ -44,7 +43,7 @@ namespace TeeScore.ViewModels
         private bool _invitationRunning = false;
         private ObservableCollection<Player> _players = new ObservableCollection<Player>();
         private Player _selectedPlayer;
-        private bool _newPlayersCanBeAdded;
+        private int _playersCount;
 
         public NewGameViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
         {
@@ -61,10 +60,12 @@ namespace TeeScore.ViewModels
             Game = new GameDto();
             SelectedVenue = null;
             GameType = Settings.LastGameType;
-            TeeCount.Value = Settings.LastTeeCount;
-            StartTee.Value = 1;
-            InvitedPlayersCount.Value = Settings.LastPlayersCount;
+            TeeCount = Settings.LastTeeCount;
+            StartTee = 1;
+            InvitationNumber = 0;
+            PlayersCount = Settings.LastPlayersCount;
             Players.Clear();
+            CheckNextPage();
         }
 
         private void NewGameViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -77,7 +78,7 @@ namespace TeeScore.ViewModels
                 case nameof(SelectedVenue):
                 case nameof(StartTee):
                 case nameof(TeeCount):
-                case nameof(InvitedPlayersCount):
+                case nameof(PlayersCount):
                     CheckNextPage();
                     break;
                 case nameof(GameType):
@@ -97,7 +98,10 @@ namespace TeeScore.ViewModels
 
                     if (_playerSelection == PlayerSelection.ByInvitationNumber)
                     {
-                        InvitationNumber.Value = GenerateInvitationNumber();
+                        if (_invitationNumber == 0)
+                        {
+                            InvitationNumber = GenerateInvitationNumber();
+                        }
                     }
                     CheckNextPage();
                     break;
@@ -122,17 +126,17 @@ namespace TeeScore.ViewModels
             UpdateGame();
             _nextPage = GameStateService.GetNextNewGamePage(Game, _currentPage);
             NextPageEnabled = _nextPage > _currentPage;
-            PreviousPageEnabled = _currentPage > CreateGamePage.VenueSelection && _currentPage < CreateGamePage.Ready;
+            PreviousPageEnabled = _currentPage > CreateGamePage.VenueSelection && _currentPage <= CreateGamePage.Ready;
         }
 
         private void UpdateGame()
         {
             Game.Venue = SelectedVenue;
             Game.Game.GameType = GameType;
-            Game.Game.InvitationNumber = InvitationNumber.Value;
-            Game.Game.InvitedPlayersCount = InvitedPlayersCount.Value;
-            Game.Game.StartTee = StartTee.Value;
-            Game.Game.TeeCount = TeeCount.Value;
+            Game.Game.InvitationNumber = InvitationNumber;
+            Game.Game.InvitedPlayersCount = PlayersCount;
+            Game.Game.StartTee = StartTee;
+            Game.Game.TeeCount = TeeCount;
             Game.Game.VenueId = SelectedVenue?.Id;
             Game.Game.PlayerSelection = PlayerSelection;
             Game.Players = new List<Player>(_players);
@@ -424,58 +428,89 @@ namespace TeeScore.ViewModels
 
         private bool ValidateStartTeeCommand()
         {
-            return StartTee.Value <= TeeCount.Value;
+            return StartTee <= TeeCount;
         }
 
 
-        /* =========================================== validatable property: InvitedPlayersCount ====================================== */
-
-        public ValidatableObject<int> InvitedPlayersCount
+        /* =========================================== property: PlayersCount ====================================== */
+        /// <summary>
+        /// Sets and gets the PlayersCount property.
+        /// </summary>
+        public int PlayersCount
         {
-            get => _invitedPlayersCount;
+            get => _playersCount;
             set
             {
-                _invitedPlayersCount = value;
-                RaisePropertyChanged(() => InvitedPlayersCount);
-                RaisePropertyChanged(() => NewPlayersCanBeAdded);
+                if (value == _playersCount)
+                {
+                    return;
+                }
+
+                _playersCount = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(NewPlayersCanBeAdded));
             }
         }
 
-        /* =========================================== validatable property: TeeCount ====================================== */
 
-        public ValidatableObject<int> TeeCount
+        /* =========================================== property: TeeCount ====================================== */
+        /// <summary>
+        /// Sets and gets the TeeCount property.
+        /// </summary>
+        public int TeeCount
         {
             get => _teeCount;
             set
             {
+                if (value == _teeCount)
+                {
+                    return;
+                }
+
                 _teeCount = value;
-                RaisePropertyChanged(() => TeeCount);
+                RaisePropertyChanged();
             }
         }
 
-        /* =========================================== validatable property: StartTee ====================================== */
-
-        public ValidatableObject<int> StartTee
+        /* =========================================== property: StartTee ====================================== */
+        /// <summary>
+        /// Sets and gets the StartTee property.
+        /// </summary>
+        public int StartTee
         {
             get => _startTee;
             set
             {
+                if (value == _startTee)
+                {
+                    return;
+                }
+
                 _startTee = value;
-                RaisePropertyChanged(() => StartTee);
+                RaisePropertyChanged();
             }
         }
 
-        /* =========================================== validatable property: InvitationNumber ====================================== */
-
-        public ValidatableObject<int> InvitationNumber
+        /* =========================================== property: InvitationNumber ====================================== */
+        /// <summary>
+        /// Sets and gets the InvitationNumber property.
+        /// </summary>
+        public int InvitationNumber
         {
             get => _invitationNumber;
             set
             {
+                if (value == _invitationNumber)
+                {
+                    return;
+                }
+
                 _invitationNumber = value;
-                RaisePropertyChanged(() => InvitationNumber);
+                RaisePropertyChanged();
             }
         }
+
+
 
 
         /* =========================================== property: GameType ====================================== */
@@ -622,10 +657,11 @@ namespace TeeScore.ViewModels
         {
             var startTime = DateTime.Now;
             var maxWaitMinutes = 10;
+            InvitationIsRunning = true;
             while (InvitationIsRunning)
             {
                 var players = await DataService.GetPlayersForGame(Game.Game.Id).ConfigureAwait(true);
-                if (players.Count == InvitedPlayersCount.Value)
+                if (players.Count == PlayersCount)
                 {
                     InvitationIsRunning = false;
                 }
@@ -714,7 +750,7 @@ namespace TeeScore.ViewModels
         /// <summary>
         /// Sets and gets the NewPlayersCanBeAdded property.
         /// </summary>
-        public bool NewPlayersCanBeAdded => _players.Count < InvitedPlayersCount.Value;
+        public bool NewPlayersCanBeAdded => _players.Count < PlayersCount;
 
     }
 }

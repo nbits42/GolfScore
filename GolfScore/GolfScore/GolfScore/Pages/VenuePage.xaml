@@ -6,49 +6,51 @@
              x:Class="TeeScore.Pages.VenuePage"
              Title="Venue">
     <ContentPage.Content>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="50"></RowDefinition>
-            </Grid.RowDefinitions>
-            <StackLayout Grid.Row="0" Style="{StaticResource  PageHeadingStyle}">
-                <Label  Text="Venue" Style="{StaticResource PageHeadingLabelStyle}"></Label>
-            </StackLayout>
-            <ScrollView Grid.Row="1" HorizontalScrollBarVisibility="Never">
-                <StackLayout  VerticalOptions="Start" Margin="8">
-                    <Label Text="Name" Style="{StaticResource TinyLabelStyle}"/>
-                    <Entry Text="{Binding Name.Value, Mode=TwoWay}"  Style="{StaticResource EntryStyle}" IsSpellCheckEnabled="False">
-                        <Entry.Behaviors>
-                            <validation:ValidateOnTextChangedBehavior ValidateCommand="{Binding ValidateNameCommand}"/>
-                        </Entry.Behaviors>
-                        <Entry.Triggers>
-                            <DataTrigger   
-                            TargetType="Entry" Binding="{Binding Name.IsValid}"  Value="False">
-                                <Setter Property="validation:BackgroundColorBehavior.BackgroundColor" Value="{StaticResource EntryLineErrorColor}" />
-                            </DataTrigger>
-                        </Entry.Triggers>
-                    </Entry>
-                    <Label Text="Location"  Style="{StaticResource TinyLabelStyle}"/>
-                    <Entry Text="{Binding Location.Value, Mode=TwoWay}" Style="{StaticResource EntryStyle}"
-                       IsSpellCheckEnabled="False">
-                        <Entry.Behaviors>
-                            <validation:ValidateOnTextChangedBehavior ValidateCommand="{Binding ValidateLocationCommand}" />
-                        </Entry.Behaviors>
-                        <Entry.Triggers>
-                            <DataTrigger
-                            TargetType="Entry" Binding="{Binding Location.IsValid}" Value="False">
-                                <Setter Property="validation:BackgroundColorBehavior.BackgroundColor"
-                                    Value="{StaticResource EntryLineErrorColor}" />
-                            </DataTrigger>
-                        </Entry.Triggers>
-                    </Entry>
+        <ScrollView>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="50"></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackLayout Grid.Row="0" Style="{StaticResource  PageHeadingStyle}">
+                    <Label  Text="Venue" Style="{StaticResource PageHeadingLabelStyle}"></Label>
                 </StackLayout>
-            </ScrollView>
-            <StackLayout Grid.Row="2" VerticalOptions="End" HorizontalOptions="Center" Orientation="Horizontal" Margin="8">
-                <Button Text="OK" Clicked="OK_Clicked" Style="{StaticResource DialogButtonStyle}" IsEnabled="{Binding IsValid}"></Button>
-                <Button Text="Cancel" Clicked="Cancel_Clicked" Style="{StaticResource DialogButtonStyle}"></Button>
-            </StackLayout>
-        </Grid>
+                <ScrollView Grid.Row="1" HorizontalScrollBarVisibility="Never">
+                    <StackLayout  VerticalOptions="Start" Margin="8">
+                        <Label Text="Name" Style="{StaticResource TinyLabelStyle}"/>
+                        <Entry Text="{Binding Name.Value, Mode=TwoWay}"  Style="{StaticResource EntryStyle}" IsSpellCheckEnabled="False">
+                            <Entry.Behaviors>
+                                <validation:ValidateOnTextChangedBehavior ValidateCommand="{Binding ValidateNameCommand}"/>
+                            </Entry.Behaviors>
+                            <Entry.Triggers>
+                                <DataTrigger   
+                            TargetType="Entry" Binding="{Binding Name.IsValid}"  Value="False">
+                                    <Setter Property="validation:BackgroundColorBehavior.BackgroundColor" Value="{StaticResource EntryLineErrorColor}" />
+                                </DataTrigger>
+                            </Entry.Triggers>
+                        </Entry>
+                        <Label Text="Location"  Style="{StaticResource TinyLabelStyle}"/>
+                        <Entry Text="{Binding Location.Value, Mode=TwoWay}" Style="{StaticResource EntryStyle}"
+                       IsSpellCheckEnabled="False">
+                            <Entry.Behaviors>
+                                <validation:ValidateOnTextChangedBehavior ValidateCommand="{Binding ValidateLocationCommand}" />
+                            </Entry.Behaviors>
+                            <Entry.Triggers>
+                                <DataTrigger
+                            TargetType="Entry" Binding="{Binding Location.IsValid}" Value="False">
+                                    <Setter Property="validation:BackgroundColorBehavior.BackgroundColor"
+                                    Value="{StaticResource EntryLineErrorColor}" />
+                                </DataTrigger>
+                            </Entry.Triggers>
+                        </Entry>
+                    </StackLayout>
+                </ScrollView>
+                <StackLayout Grid.Row="2" VerticalOptions="End" HorizontalOptions="Center" Orientation="Horizontal" Margin="8">
+                    <Button Text="OK" Clicked="OK_Clicked" Style="{StaticResource DialogButtonStyle}" IsEnabled="{Binding IsValid}"></Button>
+                    <Button Text="Cancel" Clicked="Cancel_Clicked" Style="{StaticResource DialogButtonStyle}"></Button>
+                </StackLayout>
+            </Grid>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>
