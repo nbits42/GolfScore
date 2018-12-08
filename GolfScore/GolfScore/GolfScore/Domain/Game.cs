@@ -1,6 +1,7 @@
 ﻿using GlobalContracts.Enumerations;
 using GlobalContracts.Interfaces;
 using System;
+using TeeScore.Services;
 
 namespace TeeScore.Domain
 {
@@ -8,10 +9,10 @@ namespace TeeScore.Domain
     {
         #region Properties          =====================================================
 
-        public DateTime Date { get; set; } = DateTime.Now;
+        public DateTime GameDate { get; set; } = DateTime.Now;
         public GameStatus GameStatus { get; set; }
-        public DateTime? FinishedAt { get; set; } = EmptyDate;
-        public DateTime? StartedAt { get; set; } = EmptyDate;
+        public DateTime FinishedAt { get; set; } = EmptyDate;
+        public DateTime StartedAt { get; set; } = EmptyDate;
         public string VenueId { get; set; }
         public GameType GameType { get; set; }
         public int InvitedPlayersCount { get; set; }
@@ -21,6 +22,11 @@ namespace TeeScore.Domain
         public int CurrentTee { get; set; }
         public int InvitationNumber { get; set; }
         public PlayerSelection PlayerSelection { get; set; }
+        public string VenueName { get; set; }
+        public string PlayerNames { get; set; }
+
+        public string GameTypeName => TranslationService.Translate($"GameType_{GameType}");
+
         #endregion
 
 

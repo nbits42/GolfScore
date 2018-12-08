@@ -3,6 +3,7 @@ using System.Linq;
 using Syncfusion.Licensing.crypto;
 using Syncfusion.ListView.XForms;
 using TeeScore.Domain;
+using TeeScore.DTO;
 using TeeScore.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -74,7 +75,7 @@ namespace TeeScore.Pages
 
 	    private async void AddPlayerButton_OnClicked(object sender, EventArgs e)
 	    {
-	        _vm.SelectedPlayer = new Player();
+	        _vm.SelectedPlayer = new PlayerDto();
             var playerPage = new PlayerPage();
 	        await Navigation.PushModalAsync(playerPage);
 	    }

@@ -1,4 +1,5 @@
-﻿using GlobalContracts.Enumerations;
+﻿using System;
+using GlobalContracts.Enumerations;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
@@ -72,5 +73,6 @@ namespace TeeScore.Helpers
             get => AppSettings.GetValueOrDefault(LastPlayersCountKey, LastPlayersCountDefault);
             set => AppSettings.AddOrUpdateValue(LastPlayersCountKey, value);
         }
+
     }
 }

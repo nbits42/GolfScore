@@ -136,10 +136,13 @@
     <value>Short golf</value>
   </data>
   <data name="PlayerSelection_ByInvitationNumber" xml:space="preserve">
-    <value>Met uitnodgingsnummer</value>
+    <value>Met uitnodigingsnummer</value>
   </data>
   <data name="PlayerSelection_ByNfc" xml:space="preserve">
     <value>M.b.v. NFC</value>
+  </data>
+  <data name="PlayerSelection_ByQrCode" xml:space="preserve">
+    <value>Met QR Code</value>
   </data>
   <data name="PlayerSelection_Manual" xml:space="preserve">
     <value>Handmatig</value>

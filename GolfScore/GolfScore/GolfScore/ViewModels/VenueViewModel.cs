@@ -2,6 +2,7 @@
 using Syncfusion.SfNumericUpDown.XForms;
 using TeeScore.Contracts;
 using TeeScore.Domain;
+using TeeScore.Helpers;
 using TeeScore.Validation;
 
 namespace TeeScore.ViewModels
@@ -89,7 +90,7 @@ namespace TeeScore.ViewModels
         {
             if (string.IsNullOrEmpty(venueId))
             {
-                Venue = new Venue();
+                Venue = new Venue {OwnerId = Settings.MyPlayerId};
             }
             else
             {

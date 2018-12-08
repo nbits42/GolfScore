@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using TeeScore.Domain;
+using TeeScore.DTO;
 
 namespace TeeScore.Mapping
 {
@@ -6,7 +8,8 @@ namespace TeeScore.Mapping
     {
         public DefaultProfile()
         {
-         
+            CreateMap<Player, PlayerDto>();
+            CreateMap<PlayerDto, Player>();
 
         }
 

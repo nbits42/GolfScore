@@ -8,9 +8,10 @@ namespace TeeScore.Services
 {
     public class ErrorReportingService
     {
-        public static void ReportError(object sender, Exception e, [CallerMemberName] string caller = null)
+        public static void ReportError(object sender, Exception e, string message = "", [CallerMemberName] string caller = null)
         {
-            Debug.WriteLine($"*** BEGIN ERROR [{sender.GetType().Name}.{caller}]: {e.Message}");
+            Debug.WriteLine($"*** BEGIN ERROR [{sender.GetType().Name}.{caller}]: {message}");
+            Debug.WriteLine($"*** - {e.Message}");
             Debug.WriteLine($"*** - {e.StackTrace}");
 
             var inner = e.InnerException;

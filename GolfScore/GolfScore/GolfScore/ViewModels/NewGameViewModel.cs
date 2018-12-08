@@ -42,8 +42,11 @@ namespace TeeScore.ViewModels
         private RelayCommand _inviteCommand;
         private bool _invitationRunning = false;
         private ObservableCollection<Player> _players = new ObservableCollection<Player>();
-        private Player _selectedPlayer;
+        private PlayerDto _selectedPlayer;
         private int _playersCount;
+        private ObservableCollection<Player> _knownPlayers = new ObservableCollection<Player>();
+        private RelayCommand _loadKnownPlayersCommand;
+        private Player _selectedKnownPlayer;
 
         public NewGameViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
         {
@@ -108,6 +111,20 @@ namespace TeeScore.ViewModels
                 case nameof(Players):
                     CheckNextPage();
                     break;
+                case nameof(SelectedKnownPlayer):
+                    if (SelectedKnownPlayer == null)
+                    {
+                        SelectedPlayer.Name = string.Empty;
+                        SelectedPlayer.Abbreviation = string.Empty;
+                        SelectedPlayer.Id = string.Empty;
+                    }
+                    else
+                    {
+                        SelectedPlayer.Name = SelectedKnownPlayer.Name;
+                        SelectedPlayer.Abbreviation = SelectedKnownPlayer.Abbreviation;
+                        SelectedPlayer.Id = SelectedKnownPlayer.Id;
+                    }
+                    break;
             }
         }
 
@@ -140,6 +157,8 @@ namespace TeeScore.ViewModels
             Game.Game.VenueId = SelectedVenue?.Id;
             Game.Game.PlayerSelection = PlayerSelection;
             Game.Players = new List<Player>(_players);
+            Game.Game.VenueName = SelectedVenue?.Name;
+            Game.Game.PlayerNames = string.Join("#", _players.Select(x => x.Name));
         }
 
         private void FilterVenues()
@@ -156,7 +175,7 @@ namespace TeeScore.ViewModels
                 _doCheck = true;
                 if (_players.Count == 0 && MyPlayer != null)
                 {
-                    await SaveGamePlayer(MyPlayer);
+                    await SaveGamePlayer(AutoMapper.Mapper.Map<PlayerDto>(MyPlayer), true);
                 }
                 CheckNextPage();
             }
@@ -377,23 +396,22 @@ namespace TeeScore.ViewModels
                 RaisePropertyChanged();
             }
         }
-
-
-
+        
 
         /* =========================================== RelayCommand: NextPageCommand ====================================== */
         /// <summary>
         /// Executes the NextPage command.
         /// </summary>
-        public RelayCommand NextPageCommand => _nextPageCommand ?? (_nextPageCommand = new RelayCommand(NextPage));
+        public RelayCommand NextPageCommand => _nextPageCommand ?? (_nextPageCommand = new RelayCommand(async () => await NextPage()));
 
-        private void NextPage()
+        private async Task NextPage()
         {
             if (NextPageEnabled)
             {
                 CurrentPage = _nextPage;
                 CurrentPageIndex = (int)CurrentPage;
                 CheckNextPage();
+                await SaveGame();
             }
         }
 
@@ -650,7 +668,7 @@ namespace TeeScore.ViewModels
         private async Task SaveGame()
         {
             UpdateGame();
-            Game.Game = await DataService.SaveGame(Game.Game);
+            Game.Game = await DataService.SaveGame(Game.Game, true);
         }
 
         private async Task ContinuousPlayerPolling()
@@ -706,7 +724,7 @@ namespace TeeScore.ViewModels
         /// <summary>
         /// Sets and gets the SelectedPlayer property.
         /// </summary>
-        public Player SelectedPlayer
+        public PlayerDto SelectedPlayer
         {
             get => _selectedPlayer;
             set
@@ -726,10 +744,10 @@ namespace TeeScore.ViewModels
             await SaveGamePlayer(SelectedPlayer);
         }
 
-        private async Task SaveGamePlayer(Player aPlayer)
+        private async Task SaveGamePlayer(PlayerDto aPlayer, bool owner = false)
         {
             await SaveGame().ConfigureAwait(true);
-            var player = await DataService.SavePlayer(aPlayer).ConfigureAwait(true);
+            var player = await DataService.SavePlayer(AutoMapper.Mapper.Map<Player>(aPlayer)).ConfigureAwait(true);
             if (_players.All(x => x.Id != player.Id))
             {
                 _players.Add(player);
@@ -737,7 +755,11 @@ namespace TeeScore.ViewModels
                 var gamePlayer = new GamePlayer
                 {
                     GameId = Game.Game.Id,
-                    PlayerId = player.Id
+                    PlayerId = player.Id,
+                    PlayerRole = owner
+                        ? PlayerRole.Owner
+                        : PlayerRole.Player,
+                    Hide = false
                 };
                 await DataService.SaveGamePlayer(gamePlayer).ConfigureAwait(true);
                 RaisePropertyChanged(() => NewPlayersCanBeAdded);
@@ -751,6 +773,64 @@ namespace TeeScore.ViewModels
         /// Sets and gets the NewPlayersCanBeAdded property.
         /// </summary>
         public bool NewPlayersCanBeAdded => _players.Count < PlayersCount;
+
+        /* =========================================== property: KnownPlayers ====================================== */
+        /// <summary>
+        /// Sets and gets the KnownPlayers property.
+        /// </summary>
+        public ObservableCollection<Player> KnownPlayers
+        {
+            get => _knownPlayers;
+            set
+            {
+                if (value == _knownPlayers)
+                {
+                    return;
+                }
+
+                _knownPlayers = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        /* =========================================== RelayCommand: LoadKnownPlayersCommand ====================================== */
+        /// <summary>
+        /// Executes the LoadKnownPlayers command.
+        /// </summary>
+        public RelayCommand LoadKnownPlayersCommand => _loadKnownPlayersCommand
+                       ?? (_loadKnownPlayersCommand = new RelayCommand(
+                           async () => { await LoadKnownPlayers(); }));
+
+        public async Task LoadKnownPlayers()
+        {
+            SelectedKnownPlayer = null;
+            if (KnownPlayers.Any())
+            {
+                return;
+            }
+            KnownPlayers = new ObservableCollection<Player>(await DataService.GetKnownPlayers(MyPlayer.Id));
+        }
+
+        /* =========================================== property: SelectedKnownPlayer ====================================== */
+        /// <summary>
+        /// Sets and gets the SelectedKnownPlayer property.
+        /// </summary>
+        public Player SelectedKnownPlayer
+        {
+            get => _selectedKnownPlayer;
+            set
+            {
+                if (value == _selectedKnownPlayer)
+                {
+                    return;
+                }
+
+                _selectedKnownPlayer = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
     }
 }

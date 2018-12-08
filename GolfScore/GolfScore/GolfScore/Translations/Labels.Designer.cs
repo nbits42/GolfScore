@@ -133,6 +133,15 @@ namespace TeeScore.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to By QR Code.
+        /// </summary>
+        internal static string PlayerSelection_ByQrCode {
+            get {
+                return ResourceManager.GetString("PlayerSelection_ByQrCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manual.
         /// </summary>
         internal static string PlayerSelection_Manual {

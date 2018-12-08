@@ -16,6 +16,12 @@
                     <Label  Text="Settings" Style="{StaticResource PageHeadingLabelStyle}"></Label>
                 </StackLayout>
                 <StackLayout Grid.Row="1" VerticalOptions="Start" Margin="8">
+                    <Picker ItemsSource="{Binding KnownPlayers, Mode=TwoWay}" 
+                            SelectedItem="{Binding SelectedKnownPlayer, Mode=TwoWay}" 
+                            Style="{StaticResource PickerStyle}" 
+                            ItemDisplayBinding="{Binding Name, Mode=TwoWay}"
+                            Title="Select a known player" >
+                    </Picker>
                     <Label Text="Name" Style="{StaticResource TinyLabelStyle}"/>
                     <Editor Text="{Binding SelectedPlayer.Name, Mode=TwoWay}" Style="{StaticResource EditorStyle}" IsSpellCheckEnabled="False"></Editor>
                     <Label Text="Abbreviation"  Style="{StaticResource TinyLabelStyle}"/>

@@ -10,6 +10,7 @@ namespace TeeScore.Domain
         public double Lat { get; set; } = 0;
         public double Long { get; set; } = 0;
         public string ThumbnailUrl { get; set; }
+        public string OwnerId { get; set; }
         public string Location { get; set; }
         public string Name { get; set; }
 

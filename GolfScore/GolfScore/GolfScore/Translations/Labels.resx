@@ -141,6 +141,9 @@
   <data name="PlayerSelection_ByNfc" xml:space="preserve">
     <value>By NFC</value>
   </data>
+  <data name="PlayerSelection_ByQrCode" xml:space="preserve">
+    <value>By QR Code</value>
+  </data>
   <data name="PlayerSelection_Manual" xml:space="preserve">
     <value>Manual</value>
   </data>

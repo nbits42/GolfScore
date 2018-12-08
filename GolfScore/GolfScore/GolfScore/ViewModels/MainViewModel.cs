@@ -13,10 +13,12 @@ namespace TeeScore.ViewModels
     {
         private Player _player = new Player();
         private bool _isInitialized;
+        private ObservableCollection<Game> _games;
+        private bool _isBusy;
 
         public MainViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
         {
-          
+            IsBusy = true;
         }
 
         /* =========================================== property: Player ====================================== */
@@ -38,7 +40,65 @@ namespace TeeScore.ViewModels
             }
         }
 
-        public ObservableCollection<GameDto> Games { get; set; } = new ObservableCollection<GameDto>();
+        /* =========================================== property: IsBusy ====================================== */
+        /// <summary>
+        /// Sets and gets the IsBusy property.
+        /// </summary>
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                if (value == _isBusy)
+                {
+                    return;
+                }
+
+                _isBusy = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+/* =========================================== property: Games ====================================== */
+        /// <summary>
+        /// Sets and gets the Games property.
+        /// </summary>
+        public ObservableCollection<Game> Games
+        {
+            get => _games;
+            set
+            {
+                if (value == _games)
+                {
+                    return;
+                }
+
+                _games = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public async Task HideGameAsync(Game item)
+        {
+            if (item == null)
+            {
+                return;
+            }
+
+            Games.Remove(item);
+            await HideGamePlayerAsync(item, MyPlayer);
+        }
+
+        private async Task HideGamePlayerAsync(Game item, Player player)
+        {
+            var gamePlayer = await DataService.GetGamePlayer(item.Id, player.Id);
+            if (gamePlayer != null)
+            {
+                gamePlayer.Hide = true;
+                await DataService.SaveGamePlayer(gamePlayer);
+            }
+        }
 
         public async Task LoadAsync()
         {
@@ -56,6 +116,8 @@ namespace TeeScore.ViewModels
             {
                 ErrorReportingService.ReportError(this, e);
             }
+
+            IsBusy = false;
         }
 
         private async Task LoadMyPlayerAsync()
@@ -71,20 +133,7 @@ namespace TeeScore.ViewModels
         {
             var playerId = Settings.MyPlayerId;
 
-            var games = await DataService.GetGames(playerId).ConfigureAwait(true);
-            Games.Clear();
-            foreach (var game in games)
-            {
-                var venue = await DataService.GetVenue(game.VenueId).ConfigureAwait(true);
-                var players = await DataService.GetPlayersForGame(game.Id).ConfigureAwait(true);
-                Games.Add(new GameDto
-                {
-                    Game = game,
-                    Venue = venue,
-                    Players = players,
-                });
-            }
-
+            Games = new ObservableCollection<Game>(await DataService.GetGames(playerId).ConfigureAwait(true));
         }
     }
 }

@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using TeeScore.Contracts;
 using TeeScore.Domain;
@@ -18,7 +18,7 @@ namespace TeeScore.Services
     public class DataService : IDataService
     {
         private MobileServiceSQLiteStore _store;
-        private const string dbVersion = "0.1";
+        private const string dbVersion = "0.2";
 
         public DataService()
         {
@@ -42,7 +42,12 @@ namespace TeeScore.Services
 #if OFFLINE_SYNC_ENABLED
 
             await App.MobileService.SyncContext.InitializeAsync(_store).ConfigureAwait(false);
-            await SyncAsync().ConfigureAwait(false);
+
+            var players = await PlayersTable.ToListAsync();
+            if (players.Count == 0)
+            {
+                await SyncAsync().ConfigureAwait(false);
+            }
 #endif
 
             MessagingCenter.Send(this, ServiceMessage.DataServiceInitialized);
@@ -68,7 +73,7 @@ namespace TeeScore.Services
             {
                 return new List<Game>();
             }
-            var gamePlayers = await GamePlayersTable.Where(x => x.PlayerId == playerId).ToListAsync().ConfigureAwait(false);
+            var gamePlayers = await GamePlayersTable.Where(x => x.PlayerId == playerId && x.Hide == false).ToListAsync().ConfigureAwait(false);
             var result = new List<Game>();
             foreach (var gamePlayer in gamePlayers)
             {
@@ -154,44 +159,22 @@ namespace TeeScore.Services
             return await PlayersTable.LookupAsync(myPlayerId).ConfigureAwait(false);
         }
 
-        public async Task<Player> SavePlayer(Player player)
+        public async Task<Player> SavePlayer(Player player, bool synchronize = false)
         {
-            //if (player.IsNew)
-            //{
-            //    player.Id = NewId();
-            //    await PlayersTable.InsertAsync(player);
-            //}
-            //else
-            //{
-            //    await PlayersTable.UpdateAsync(player);
-            //}
-
-            //await SyncAsync();
-            return await SaveAsync<Player>(player).ConfigureAwait(false);
+            return await SaveAsync<Player>(player, synchronize).ConfigureAwait(false);
         }
 
-        public async Task<Game> SaveGame(Game game)
+        public async Task<Game> SaveGame(Game game, bool synchronize = false)
         {
-            return await SaveAsync<Game>(game).ConfigureAwait(false);
+            return await SaveAsync<Game>(game, synchronize).ConfigureAwait(false);
         }
 
-        public async Task<Venue> SaveVenue(Venue venue)
+        public async Task<Venue> SaveVenue(Venue venue, bool synchronize = false)
         {
-            return await SaveAsync<Venue>(venue).ConfigureAwait(false);
-            //if (venue.IsNew)
-            //{
-            //    venue.Id = NewId();
-            //    await VenuesTable.InsertAsync(venue);
-            //}
-            //else
-            //{
-            //    await VenuesTable.UpdateAsync(venue);
-            //}
-
-            //return await VenuesTable.LookupAsync(venue.Id);
+            return await SaveAsync<Venue>(venue, synchronize).ConfigureAwait(false);
         }
 
-        private async Task<T> SaveAsync<T>(DomainBase entity) where T : DomainBase
+        private async Task<T> SaveAsync<T>(DomainBase entity, bool synchronize = false) where T : DomainBase
         {
 #if OFFLINE_SYNC_ENABLED
             var table = App.MobileService.GetSyncTable<T>();
@@ -201,7 +184,7 @@ namespace TeeScore.Services
             var action = "init";
             try
             {
-                
+
                 if (entity.IsNew)
                 {
                     entity.Id = NewId();
@@ -214,15 +197,19 @@ namespace TeeScore.Services
                     await table.UpdateAsync((T)entity).ConfigureAwait(false);
                 }
                 action = "sync";
-                await SyncAsync();
+                if (synchronize)
+                {
+                    await SyncAsync();
+                }
                 action = "lookup";
 
                 return await table.LookupAsync(entity.Id).ConfigureAwait(false);
             }
             catch (Exception e)
             {
-
-                Debug.WriteLine($"Error executing {action} operation. Item: {typeof(T).Name} ({entity.Id}). Operation discarded. Error: {e.Message}");
+                var msg = $"Error executing {action} operation. Item: {typeof(T).Name} ({entity.Id}). Operation discarded. ";
+                ErrorReportingService.ReportError(this,e, msg);
+                //Debug.WriteLine($"{msg}. Error: {e.Message}");
                 throw;
             }
         }
@@ -232,9 +219,34 @@ namespace TeeScore.Services
             return await VenuesTable.ToListAsync().ConfigureAwait(false);
         }
 
-        public async Task<GamePlayer> SaveGamePlayer(GamePlayer gamePlayer)
+        public async Task<GamePlayer> SaveGamePlayer(GamePlayer gamePlayer, bool synchronize = false)
         {
-            return await SaveAsync<GamePlayer>(gamePlayer);
+            return await SaveAsync<GamePlayer>(gamePlayer, synchronize);
+        }
+
+        public async Task<GamePlayer> GetGamePlayer(string gameId, string playerId)
+        {
+            var result = await GamePlayersTable.Where(x => x.GameId == gameId && x.PlayerId == playerId).ToListAsync();
+            return result.FirstOrDefault();
+        }
+
+        public async Task<List<Player>> GetKnownPlayers(string playerId)
+        {
+            var myGames = await GetGames(playerId);
+            var knownPlayers = new List<Player>();
+            foreach (var game in myGames)
+            {
+                var players = (await GetPlayersForGame(game.Id)).Where(x => x.Id != playerId);
+                foreach (var player in players)
+                {
+                    if (!knownPlayers.Exists(x => x.Id == player.Id))
+                    {
+                        knownPlayers.Add(player);
+                    }
+                }
+            }
+
+            return knownPlayers;
         }
 
 

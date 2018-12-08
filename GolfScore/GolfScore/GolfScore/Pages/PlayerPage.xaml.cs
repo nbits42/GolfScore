@@ -18,7 +18,7 @@ namespace TeeScore.Pages
 
 	    protected override async void OnAppearing()
 	    {
-	        await _vm.LoadAsync();
+	        await _vm.LoadKnownPlayers();
 	    }
 
         private async void OK_Clicked(object sender, EventArgs e)

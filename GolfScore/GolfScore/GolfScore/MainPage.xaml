@@ -9,17 +9,44 @@
              Title="TeeScore">
 
     <AbsoluteLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-        <xForms:SfListView ItemsSource="{Binding Games}" ItemSize="60" 
+        <xForms:SfListView x:Name="GamesView"
+                           ItemsSource="{Binding Games}" 
+                           ItemSize="90" 
                            AbsoluteLayout.LayoutFlags="All"
-                           AbsoluteLayout.LayoutBounds="0,0,1,1">
+                           AbsoluteLayout.LayoutBounds="0,0,1,1"
+                           AllowSwiping="True"
+                           SelectionMode="SingleDeselect"
+                           SelectionBackgroundColor="{StaticResource SelectedItemBackgroundColor}"
+                           SwipeOffset="360" SwipeThreshold="50"
+                           SwipeStarted="SfListView_OnSwipeStarted" 
+                           Swiping="SfListView_OnSwiping"
+                           IsBusy="{Binding IsBusy, Mode=TwoWay}"
+                           SwipeEnded="SfListView_OnSwipeEnded">
+            <xForms:SfListView.LeftSwipeTemplate>
+                <DataTemplate x:Name="LeftSwipeTemplate">
+                    <Grid BackgroundColor="{StaticResource DeleteItemBackgroundColor}" HorizontalOptions="Fill" VerticalOptions="Fill">
+                        <Grid VerticalOptions="Center" HorizontalOptions="Start">
+                            <Image Grid.Column="0"
+                                   Grid.Row="0"
+                                   HeightRequest="35"
+                                   WidthRequest="35"
+                                   BackgroundColor="Transparent"
+                                   Source="trash.png" />
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </xForms:SfListView.LeftSwipeTemplate>
             <xForms:SfListView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="2" Margin="2">
                         <Frame HasShadow="True" Padding="2" Margin="2">
                             <StackLayout>
-                                <Label Text="{Binding Game.Date}"></Label>
-                                <Label Text="{Binding Game.GameType}"></Label>
-                                <Label Text="{Binding Venue.Name}"></Label>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding GameDate}" Style="{StaticResource TinyLabelStyle}"></Label>
+                                    <Label Text="{Binding GameTypeName}" Style="{StaticResource TinyLabelStyle}"></Label>
+                                </StackLayout>
+                                <Label Text="{Binding VenueName}" Style="{StaticResource ListItemTextStyle}"></Label>
+                                <Label Text="{Binding PlayerNames}" Style="{StaticResource ListItemDetailTextStyle}"></Label>
                             </StackLayout>
                         </Frame>
                     </Grid>
