@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using TeeScore.Domain;
+using TeeScore.DTO;
 
 namespace TeeScore.Contracts
 {
@@ -18,5 +19,8 @@ namespace TeeScore.Contracts
         Task<GamePlayer> SaveGamePlayer(GamePlayer gamePlayer, bool synchronize = false);
         Task<GamePlayer> GetGamePlayer(string gameId, string playerId);
         Task<List<Player>> GetKnownPlayers(string playerId);
+        Task<GameDto> GetGame(string gameId);
+        void SetGame(string gameId);
+        string CurrentGameId { get; }
     }
 }

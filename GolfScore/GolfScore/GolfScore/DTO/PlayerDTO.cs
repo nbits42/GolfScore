@@ -92,6 +92,9 @@ namespace TeeScore.DTO
             }
         }
 
-
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

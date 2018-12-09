@@ -10,7 +10,7 @@ namespace TeeScore.Services
 {
     public class GameStateService
     {
-        public static CreateGamePage GetNextNewGamePage(GameDto game, CreateGamePage currentPage)
+        public static CreateGamePage GetNextNewGamePage(NewGameDto game, CreateGamePage currentPage)
         {
             var nextPage = CreateGamePage.VenueSelection;
             game.Game.GameStatus = GameStatus.Creating;

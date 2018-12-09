@@ -62,11 +62,11 @@
                                 <Label Text="Game type" Style="{StaticResource TinyLabelStyle}"></Label>
                                 <Picker ItemsSource="{Binding GameTypes}" SelectedIndex="{Binding SelectedGameTypeIndex, Mode=TwoWay}" Style="{StaticResource PickerStyle}"></Picker>
                                 <Label Text="Number of Tees to play" Style="{StaticResource TinyLabelStyle}"></Label>
-                                <xNumericUpDown:SfNumericUpDown Value="{Binding TeeCount, Mode=TwoWay}" StepValue="1" Minimum="3" MaximumDecimalDigits="0"></xNumericUpDown:SfNumericUpDown>
+                                <xNumericUpDown:SfNumericUpDown Value="{Binding TeeCount, Mode=TwoWay}" Style="{StaticResource NumericUpDownStyle}" StepValue="1" Minimum="3" MaximumDecimalDigits="0"></xNumericUpDown:SfNumericUpDown>
                                 <Label Text="Start Tee" Style="{StaticResource TinyLabelStyle}"></Label>
-                                <xNumericUpDown:SfNumericUpDown Value="{Binding StartTee, Mode=TwoWay}" StepValue="1" Minimum="1" MaximumDecimalDigits="0"></xNumericUpDown:SfNumericUpDown>
+                                <xNumericUpDown:SfNumericUpDown Value="{Binding StartTee, Mode=TwoWay}"  Style="{StaticResource NumericUpDownStyle}" StepValue="1" Minimum="1" MaximumDecimalDigits="0"></xNumericUpDown:SfNumericUpDown>
                                 <Label Text="Number of players" Style="{StaticResource TinyLabelStyle}"></Label>
-                                <xNumericUpDown:SfNumericUpDown Value="{Binding PlayersCount, Mode=TwoWay}" Minimum="1" Maximum="8" StepValue="1" MaximumDecimalDigits="0"></xNumericUpDown:SfNumericUpDown>
+                                <xNumericUpDown:SfNumericUpDown Value="{Binding PlayersCount, Mode=TwoWay}"  Style="{StaticResource NumericUpDownStyle}" Minimum="1" Maximum="8" StepValue="1" MaximumDecimalDigits="0"></xNumericUpDown:SfNumericUpDown>
                             </StackLayout>
                         </Grid>
                     </tabView:SfTabItem.Content>
@@ -149,8 +149,8 @@
                 </tabView:SfTabItem>
                 <tabView:SfTabItem Title="4">
                     <tabView:SfTabItem.Content>
-                        <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                            <Label Text="Ready"></Label>
+                        <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                            <ImageButton Command="StartGameCommand" Source="start_game.png" Style="{StaticResource RoundImageButtonStyle}"></ImageButton>
                         </StackLayout>
                     </tabView:SfTabItem.Content>
                 </tabView:SfTabItem>

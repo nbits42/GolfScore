@@ -18,7 +18,7 @@ namespace TeeScore.ViewModels
     {
         private List<Venue> _allVenues = new List<Venue>();
         private ObservableCollection<Venue> _venues = new ObservableCollection<Venue>();
-        private GameDto _game = new GameDto();
+        private NewGameDto _game = new NewGameDto();
         private Player _myPlayer = new Player();
         private Venue _selectedVenue = null;
         private string _venueSearch;
@@ -47,6 +47,7 @@ namespace TeeScore.ViewModels
         private ObservableCollection<Player> _knownPlayers = new ObservableCollection<Player>();
         private RelayCommand _loadKnownPlayersCommand;
         private Player _selectedKnownPlayer;
+        private RelayCommand _startGameCommand;
 
         public NewGameViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
         {
@@ -55,12 +56,13 @@ namespace TeeScore.ViewModels
             LoadPlayerSelections();
         }
 
+        public event EventHandler GameStarted;
 
         public void NewGame()
         {
             CurrentPage = CreateGamePage.VenueSelection;
             CurrentPageIndex = (int)CurrentPage;
-            Game = new GameDto();
+            Game = new NewGameDto();
             SelectedVenue = null;
             GameType = Settings.LastGameType;
             TeeCount = Settings.LastTeeCount;
@@ -245,7 +247,7 @@ namespace TeeScore.ViewModels
         /// <summary>
         /// Sets and gets the Game property.
         /// </summary>
-        public GameDto Game
+        public NewGameDto Game
         {
             get => _game;
             set
@@ -832,5 +834,23 @@ namespace TeeScore.ViewModels
         }
 
 
+        /* =========================================== RelayCommand: StartGameCommand ====================================== */
+        /// <summary>
+        /// Executes the StartGame command.
+        /// </summary>
+        public RelayCommand StartGameCommand => _startGameCommand
+                                                ?? (_startGameCommand = new RelayCommand(StartGame));
+
+        private void StartGame()
+        {
+            DataService.SetGame(Game.Game.Id);
+        }
+
+       
+
+        protected virtual void OnGameStarted()
+        {
+            GameStarted?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

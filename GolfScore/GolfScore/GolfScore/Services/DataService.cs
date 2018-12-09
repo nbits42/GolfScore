@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TeeScore.Contracts;
 using TeeScore.Domain;
+using TeeScore.DTO;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -38,6 +39,8 @@ namespace TeeScore.Services
             _store.DefineTable<Facility>();
             _store.DefineTable<Availability>();
             _store.DefineTable<AvailabilityPeriod>();
+            _store.DefineTable<Tee>();
+            _store.DefineTable<Score>();
 
 #if OFFLINE_SYNC_ENABLED
 
@@ -249,6 +252,26 @@ namespace TeeScore.Services
             return knownPlayers;
         }
 
+        public async Task<GameDto> GetGame(string gameId)
+        {
+            var result = new GameDto
+            {
+                Game = await GamesTable.LookupAsync(gameId),
+                Players = await GetPlayersForGame(gameId),
+                Tees = await TeesTable.Where(x => x.GameId == gameId).ToListAsync(),
+                Scores = await ScoresTable.Where(x => x.GameId == gameId).ToListAsync(),
+            };
+            result.Venue = await GetVenue(result.Game.VenueId);
+            return result;
+        }
+
+        public void SetGame(string gameId)
+        {
+            CurrentGameId = gameId;
+        }
+
+        public string CurrentGameId { get; private set; }
+
 
 #if OFFLINE_SYNC_ENABLED
         private IMobileServiceSyncTable<Game> GamesTable => App.MobileService.GetSyncTable<Game>();
@@ -258,6 +281,8 @@ namespace TeeScore.Services
         private IMobileServiceSyncTable<VenueAvailabilityPeriod> VenueAvailPeriods => App.MobileService.GetSyncTable<VenueAvailabilityPeriod>();
         private IMobileServiceSyncTable<VenueFacilities> VenueFacilitiesTable => App.MobileService.GetSyncTable<VenueFacilities>();
         private IMobileServiceSyncTable<Facility> FacilitiesTable => App.MobileService.GetSyncTable<Facility>();
+        private IMobileServiceSyncTable<Tee> TeesTable => App.MobileService.GetSyncTable<Tee>();
+        private IMobileServiceSyncTable<Score> ScoresTable => App.MobileService.GetSyncTable<Score>();
 
 #else
         private IMobileServiceTable<Game> GamesTable => App.MobileService.GetTable<Game>();
@@ -267,6 +292,8 @@ namespace TeeScore.Services
         private IMobileServiceTable<VenueAvailabilityPeriod> VenueAvailPeriods => App.MobileService.GetTable<VenueAvailabilityPeriod>();
         private IMobileServiceTable<VenueFacilities> VenueFacilitiesTable => App.MobileService.GetTable<VenueFacilities>();
         private IMobileServiceTable<Facility> FacilitiesTable => App.MobileService.GetTable<Facility>();
+        private IMobileServiceTable<Tee> TeesTable => App.MobileService.GetTable<Tee>();
+        private IMobileServiceTable<Score> ScoresTable => App.MobileService.GetTable<Score>();
 #endif
     }
 }
