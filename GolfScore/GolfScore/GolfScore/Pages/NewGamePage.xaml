@@ -149,9 +149,14 @@
                 </tabView:SfTabItem>
                 <tabView:SfTabItem Title="4">
                     <tabView:SfTabItem.Content>
-                        <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-                            <ImageButton Command="StartGameCommand" Source="start_game.png" Style="{StaticResource RoundImageButtonStyle}"></ImageButton>
-                        </StackLayout>
+                        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="100"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <ImageButton Grid.Row="1" Command="StartGameCommand" Source="start_game.png" Style="{StaticResource RoundImageButtonStyle}"></ImageButton>
+                        </Grid>
                     </tabView:SfTabItem.Content>
                 </tabView:SfTabItem>
             </tabView:SfTabView>

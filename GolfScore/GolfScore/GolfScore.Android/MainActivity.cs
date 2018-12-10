@@ -2,11 +2,12 @@
 using Android.Content.PM;
 using Android.Graphics;
 using Android.OS;
+using Android.Views;
 using Microsoft.WindowsAzure.MobileServices;
 
 namespace TeeScore.Droid
 {
-    [Activity(Label = "TeeScore", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "TeeScore", Icon = "@mipmap/icon", Theme = "@style/SplashScreen", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         internal static MainActivity Instance { get; private set; }
@@ -14,6 +15,8 @@ namespace TeeScore.Droid
         protected override void OnCreate(Bundle savedInstanceState)
         {
             Instance = this;
+            base.Window.RequestFeature(WindowFeatures.ActionBar);
+            base.SetTheme(Resource.Style.MainTheme);
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;

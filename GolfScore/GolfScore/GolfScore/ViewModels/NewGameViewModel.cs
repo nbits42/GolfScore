@@ -160,7 +160,7 @@ namespace TeeScore.ViewModels
             Game.Game.PlayerSelection = PlayerSelection;
             Game.Players = new List<Player>(_players);
             Game.Game.VenueName = SelectedVenue?.Name;
-            Game.Game.PlayerNames = string.Join("#", _players.Select(x => x.Name));
+            Game.Game.PlayerNames = string.Join(@" \u2022 ", _players.Select(x => x.Name));
         }
 
         private void FilterVenues()
@@ -839,11 +839,36 @@ namespace TeeScore.ViewModels
         /// Executes the StartGame command.
         /// </summary>
         public RelayCommand StartGameCommand => _startGameCommand
-                                                ?? (_startGameCommand = new RelayCommand(StartGame));
+                                                ?? (_startGameCommand = new RelayCommand(async () => await StartGame()));
 
-        private void StartGame()
+        private async Task StartGame()
         {
-            DataService.SetGame(Game.Game.Id);
+            UpdateGame();
+            await SaveGame();
+
+            for (var i = 1; i <= Game.Game.TeeCount; i++)
+            {
+                var tee = new Tee
+                {
+                    GameId = Game.Game.Id,
+                    Number = true.ToString()
+                };
+                tee = await DataService.SaveTee(tee);
+                foreach (var player in Game.Players)
+                {
+                    var teeScore = new Score
+                    {
+                        GameId = Game.Game.Id,
+                        TeeId = tee.Id,
+                        PlayerId = player.Id,
+                        Putts = 0,
+                    };
+                    await DataService.SaveScore(teeScore);
+                }
+            }
+
+            Settings.CurrentGameId = Game.Game.Id;
+            OnGameStarted();
         }
 
        

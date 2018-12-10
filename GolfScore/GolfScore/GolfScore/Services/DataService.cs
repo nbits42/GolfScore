@@ -206,7 +206,7 @@ namespace TeeScore.Services
                 }
                 action = "lookup";
 
-                return await table.LookupAsync(entity.Id).ConfigureAwait(false);
+                return (T) entity;
             }
             catch (Exception e)
             {
@@ -271,6 +271,15 @@ namespace TeeScore.Services
         }
 
         public string CurrentGameId { get; private set; }
+        public async Task<Tee> SaveTee(Tee tee)
+        {
+            return await SaveAsync<Tee>(tee);
+        }
+
+        public async Task<Score> SaveScore(Score teeScore)
+        {
+            return await SaveAsync<Score>(teeScore);
+        }
 
 
 #if OFFLINE_SYNC_ENABLED

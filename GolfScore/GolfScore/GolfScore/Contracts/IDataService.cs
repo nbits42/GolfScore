@@ -22,5 +22,7 @@ namespace TeeScore.Contracts
         Task<GameDto> GetGame(string gameId);
         void SetGame(string gameId);
         string CurrentGameId { get; }
+        Task<Tee> SaveTee(Tee tee);
+        Task<Score> SaveScore(Score teeScore);
     }
 }
