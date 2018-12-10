@@ -152,10 +152,10 @@
                         <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"></RowDefinition>
-                                <RowDefinition Height="100"></RowDefinition>
+                                <RowDefinition Height="180"></RowDefinition>
                                 <RowDefinition Height="*"></RowDefinition>
                             </Grid.RowDefinitions>
-                            <ImageButton Grid.Row="1" Command="StartGameCommand" Source="start_game.png" Style="{StaticResource RoundImageButtonStyle}"></ImageButton>
+                            <ImageButton Grid.Row="1" Command="{Binding StartGameCommand}" Source="start_game.png" Style="{StaticResource RoundImageButtonStyle}" CornerRadius="50"></ImageButton>
                         </Grid>
                     </tabView:SfTabItem.Content>
                 </tabView:SfTabItem>

@@ -22,10 +22,16 @@ namespace TeeScore.Pages
 			InitializeComponent ();
 		    _vm = App.IOC.NewGame;
 		    BindingContext = _vm;
+            _vm.GameStarted += _vm_GameStarted;
             _vm.NewGame();
 		}
 
-	    protected override async void OnAppearing()
+        private async void _vm_GameStarted(object sender, EventArgs e)
+        {
+            await Navigation.PopAsync(true);
+        }
+
+        protected override async void OnAppearing()
 	    {
 	        base.OnAppearing();
 	        await _vm.LoadAsync().ConfigureAwait(true);
