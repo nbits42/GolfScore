@@ -11,7 +11,7 @@ namespace TeeScore.ViewModels
 {
     public class MainViewModel : MyViewModelBase
     {
-        private Player _player = new Player();
+        private PlayerDto _player = new PlayerDto();
         private bool _isInitialized;
         private ObservableCollection<Game> _games;
         private bool _isBusy;
@@ -25,7 +25,7 @@ namespace TeeScore.ViewModels
         /// <summary>
         /// Sets and gets the Player property.
         /// </summary>
-        public Player MyPlayer
+        public PlayerDto MyPlayer
         {
             get => _player;
             set
@@ -90,7 +90,7 @@ namespace TeeScore.ViewModels
             await HideGamePlayerAsync(item, MyPlayer);
         }
 
-        private async Task HideGamePlayerAsync(Game item, Player player)
+        private async Task HideGamePlayerAsync(Game item, PlayerDto player)
         {
             var gamePlayer = await DataService.GetGamePlayer(item.Id, player.Id);
             if (gamePlayer != null)

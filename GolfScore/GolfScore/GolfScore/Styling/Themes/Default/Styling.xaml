@@ -94,6 +94,7 @@
         <Setter Property="FontFamily" Value="Roboto"></Setter>
         <Setter Property="FontSize" Value="Small"></Setter>
         <Setter Property="TextColor" Value="{StaticResource NormalTextColor}" />
+        <Setter Property="UpDownButtonColor" Value="{StaticResource NormalTextColor}" />
     </Style>
     <Style x:Key="PageHeadingStyle" TargetType="StackLayout">
         <Setter Property="HorizontalOptions" Value="FillAndExpand" />

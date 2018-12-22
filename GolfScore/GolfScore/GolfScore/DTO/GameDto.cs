@@ -3,11 +3,11 @@ using TeeScore.Domain;
 
 namespace TeeScore.DTO
 {
-    public class GameDto
+    public class PlayGameDto
     {
         public Game Game  { get; set; } = new Game();
-        public Venue Venue { get; set; }
-        public List<Player> Players { get; set; } = new List<Player>();
+        public VenueDto Venue { get; set; }
+        public List<PlayerDto> Players { get; set; } = new List<PlayerDto>();
         public List<Tee> Tees { get; set; } = new List<Tee>();
         public List<Score>  Scores { get; set; } = new List<Score>();
     }

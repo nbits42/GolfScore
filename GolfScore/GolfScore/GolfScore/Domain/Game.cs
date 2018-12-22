@@ -24,6 +24,7 @@ namespace TeeScore.Domain
         public PlayerSelection PlayerSelection { get; set; }
         public string VenueName { get; set; }
         public string PlayerNames { get; set; }
+        public string ScoresJson { get; set; }
 
         public string GameTypeName => TranslationService.Translate($"GameType_{GameType}");
 

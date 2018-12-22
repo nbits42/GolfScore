@@ -2183,6 +2183,8 @@ namespace TeeScore.Droid
 			global::Refractored.FabControl.Droid.Resource.Styleable.ViewStubCompat_android_layout = global::TeeScore.Droid.Resource.Styleable.ViewStubCompat_android_layout;
 			global::Syncfusion.XForms.Android.Core.Resource.Drawable.inputlayout_togglecollapseicon = global::TeeScore.Droid.Resource.Drawable.inputlayout_togglecollapseicon;
 			global::Syncfusion.XForms.Android.Core.Resource.Drawable.inputlayout_togglevisibleicon = global::TeeScore.Droid.Resource.Drawable.inputlayout_togglevisibleicon;
+			global::Syncfusion.ListView.XForms.Android.Resource.Drawable.inputlayout_togglecollapseicon = global::TeeScore.Droid.Resource.Drawable.inputlayout_togglecollapseicon;
+			global::Syncfusion.ListView.XForms.Android.Resource.Drawable.inputlayout_togglevisibleicon = global::TeeScore.Droid.Resource.Drawable.inputlayout_togglevisibleicon;
 			global::Syncfusion.ListView.XForms.Android.Resource.String.ApplicationName = global::TeeScore.Droid.Resource.String.ApplicationName;
 			global::Syncfusion.ListView.XForms.Android.Resource.String.Hello = global::TeeScore.Droid.Resource.String.Hello;
 			global::Syncfusion.ListView.XForms.Android.Resource.String.Load_More = global::TeeScore.Droid.Resource.String.Load_More;
@@ -2242,6 +2244,8 @@ namespace TeeScore.Droid
 			global::Com.Syncfusion.SfPicker.Resource.Styleable.SfPicker_pickerUnselectedItemTextColor = global::TeeScore.Droid.Resource.Styleable.SfPicker_pickerUnselectedItemTextColor;
 			global::Com.Syncfusion.SfPicker.Resource.Styleable.SfPicker_pickerUnselectedItemTextSize = global::TeeScore.Droid.Resource.Styleable.SfPicker_pickerUnselectedItemTextSize;
 			global::Com.Syncfusion.SfPicker.Resource.Styleable.SfPicker_pickerWidth = global::TeeScore.Droid.Resource.Styleable.SfPicker_pickerWidth;
+			global::Syncfusion.XForms.Android.ProgressBar.Resource.Drawable.inputlayout_togglecollapseicon = global::TeeScore.Droid.Resource.Drawable.inputlayout_togglecollapseicon;
+			global::Syncfusion.XForms.Android.ProgressBar.Resource.Drawable.inputlayout_togglevisibleicon = global::TeeScore.Droid.Resource.Drawable.inputlayout_togglevisibleicon;
 			global::Syncfusion.XForms.Android.ProgressBar.Resource.Drawable.sfprogressbar_determinate_linear = global::TeeScore.Droid.Resource.Drawable.sfprogressbar_determinate_linear;
 			global::Syncfusion.XForms.Android.ProgressBar.Resource.Drawable.sfprogressbar_indeterminate_circular = global::TeeScore.Droid.Resource.Drawable.sfprogressbar_indeterminate_circular;
 			global::Syncfusion.XForms.Android.ProgressBar.Resource.Drawable.sfprogressbar_indeterminate_linear = global::TeeScore.Droid.Resource.Drawable.sfprogressbar_indeterminate_linear;

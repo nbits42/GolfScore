@@ -8,6 +8,8 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using GlobalContracts.Enumerations;
 using TeeScore.Contracts;
 using TeeScore.Domain;
 using TeeScore.DTO;
@@ -46,14 +48,33 @@ namespace TeeScore.Services
 
             await App.MobileService.SyncContext.InitializeAsync(_store).ConfigureAwait(false);
 
-            var players = await PlayersTable.ToListAsync();
-            if (players.Count == 0)
-            {
+            await CleanupGames();
+            //var players = await PlayersTable.ToListAsync();
+            //if (players.Count == 0)
+            //{
                 await SyncAsync().ConfigureAwait(false);
-            }
+            //}
 #endif
 
             MessagingCenter.Send(this, ServiceMessage.DataServiceInitialized);
+        }
+
+        private async Task CleanupGames()
+        {
+            var now = DateTimeOffset.Now.AddDays(-2);
+            var games = await GamesTable.Where(x => x.CreatedAt < now).ToListAsync();
+            foreach (var game in games)
+            {
+                if ((int)game.GameStatus < (int)GameStatus.Started)
+                {
+                    var gamePlayers = await GamePlayersTable.Where(x => x.GameId == game.Id).ToListAsync();
+                    foreach (var gamePlayer in gamePlayers)
+                    {
+                        await GamePlayersTable.DeleteAsync(gamePlayer);
+                    }
+                    await GamesTable.DeleteAsync(game);
+                }
+            }
         }
 
         public bool IsOnline
@@ -77,10 +98,11 @@ namespace TeeScore.Services
                 return new List<Game>();
             }
             var gamePlayers = await GamePlayersTable.Where(x => x.PlayerId == playerId && x.Hide == false).ToListAsync().ConfigureAwait(false);
+            var games = await GamesTable.ToListAsync();
             var result = new List<Game>();
             foreach (var gamePlayer in gamePlayers)
             {
-                var game = await GamesTable.LookupAsync(gamePlayer.GameId).ConfigureAwait(false);
+                var game = games.FirstOrDefault(x=>x.Id == gamePlayer.GameId);
                 if (game != null)
                 {
                     result.Add(game);
@@ -90,22 +112,22 @@ namespace TeeScore.Services
             return result;
         }
 
-        public async Task<Venue> GetVenue(string venueId)
+        public async Task<VenueDto> GetVenue(string venueId)
         {
             if (string.IsNullOrEmpty(venueId))
             {
                 return null;
             }
-            return await VenuesTable.LookupAsync(venueId).ConfigureAwait(false);
+            return Mapper.Map<VenueDto>(await VenuesTable.LookupAsync(venueId).ConfigureAwait(false));
         }
 
-        public async Task<List<Player>> GetPlayersForGame(string gameId)
+        public async Task<List<PlayerDto>> GetPlayersForGame(string gameId)
         {
             var gamePlayers = await GamePlayersTable.Where(x => x.GameId == gameId).ToListAsync().ConfigureAwait(false);
-            var result = new List<Player>();
+            var result = new List<PlayerDto>();
             foreach (var gamePlayer in gamePlayers)
             {
-                result.Add(await PlayersTable.LookupAsync(gamePlayer.PlayerId).ConfigureAwait(false));
+                result.Add(await GetPlayer(gamePlayer.PlayerId));
             }
 
             return result;
@@ -157,14 +179,15 @@ namespace TeeScore.Services
             }
         }
 
-        public async Task<Player> GetPlayer(string myPlayerId)
+        public async Task<PlayerDto> GetPlayer(string myPlayerId)
         {
-            return await PlayersTable.LookupAsync(myPlayerId).ConfigureAwait(false);
+            return Mapper.Map<PlayerDto>(await PlayersTable.LookupAsync(myPlayerId).ConfigureAwait(false));
         }
 
-        public async Task<Player> SavePlayer(Player player, bool synchronize = false)
+        public async Task<PlayerDto> SavePlayer(PlayerDto player, bool synchronize = false)
         {
-            return await SaveAsync<Player>(player, synchronize).ConfigureAwait(false);
+            var saved = await SaveAsync<Player>(Mapper.Map<Player>(player), synchronize).ConfigureAwait(false);
+            return Mapper.Map<PlayerDto>(saved);
         }
 
         public async Task<Game> SaveGame(Game game, bool synchronize = false)
@@ -172,9 +195,10 @@ namespace TeeScore.Services
             return await SaveAsync<Game>(game, synchronize).ConfigureAwait(false);
         }
 
-        public async Task<Venue> SaveVenue(Venue venue, bool synchronize = false)
+        public async Task<VenueDto> SaveVenue(VenueDto venue, bool synchronize = false)
         {
-            return await SaveAsync<Venue>(venue, synchronize).ConfigureAwait(false);
+            var saved = await SaveAsync<Venue>(Mapper.Map<Venue>(venue), synchronize).ConfigureAwait(false);
+            return Mapper.Map<VenueDto>(saved);
         }
 
         private async Task<T> SaveAsync<T>(DomainBase entity, bool synchronize = false) where T : DomainBase
@@ -217,9 +241,9 @@ namespace TeeScore.Services
             }
         }
 
-        public async Task<List<Venue>> GetVenues()
+        public async Task<List<VenueDto>> GetVenues()
         {
-            return await VenuesTable.ToListAsync().ConfigureAwait(false);
+            return Mapper.Map<List<Venue>, List<VenueDto>>(await VenuesTable.ToListAsync().ConfigureAwait(false));
         }
 
         public async Task<GamePlayer> SaveGamePlayer(GamePlayer gamePlayer, bool synchronize = false)
@@ -233,10 +257,10 @@ namespace TeeScore.Services
             return result.FirstOrDefault();
         }
 
-        public async Task<List<Player>> GetKnownPlayers(string playerId)
+        public async Task<List<PlayerDto>> GetKnownPlayers(string playerId)
         {
             var myGames = await GetGames(playerId);
-            var knownPlayers = new List<Player>();
+            var knownPlayers = new List<PlayerDto>();
             foreach (var game in myGames)
             {
                 var players = (await GetPlayersForGame(game.Id)).Where(x => x.Id != playerId);
@@ -244,7 +268,7 @@ namespace TeeScore.Services
                 {
                     if (!knownPlayers.Exists(x => x.Id == player.Id))
                     {
-                        knownPlayers.Add(player);
+                        knownPlayers.Add(Mapper.Map<PlayerDto>(player));
                     }
                 }
             }
@@ -252,9 +276,9 @@ namespace TeeScore.Services
             return knownPlayers;
         }
 
-        public async Task<GameDto> GetGame(string gameId)
+        public async Task<PlayGameDto> GetGame(string gameId)
         {
-            var result = new GameDto
+            var result = new PlayGameDto
             {
                 Game = await GamesTable.LookupAsync(gameId),
                 Players = await GetPlayersForGame(gameId),
@@ -265,20 +289,40 @@ namespace TeeScore.Services
             return result;
         }
 
+        public async Task<NewGameDto> GetNewGame(string gameId)
+        {
+            var result = new NewGameDto
+            {
+                Game = await GamesTable.LookupAsync(gameId),
+                Players = await GetPlayersForGame(gameId),
+            };
+            result.Venue = await GetVenue(result.Game.VenueId);
+            return result;
+        }
+
+        public async Task DeleteGamePlayer(string gameId, string playerId)
+        {
+            var gamePlayer = await GetGamePlayer(gameId, playerId);
+            if (gamePlayer != null)
+            {
+                await GamePlayersTable.DeleteAsync(gamePlayer);
+            }
+        }
+
         public void SetGame(string gameId)
         {
             CurrentGameId = gameId;
         }
 
         public string CurrentGameId { get; private set; }
-        public async Task<Tee> SaveTee(Tee tee)
+        public async Task<Tee> SaveTee(Tee tee, bool synchronize = false)
         {
-            return await SaveAsync<Tee>(tee);
+            return await SaveAsync<Tee>(tee, synchronize);
         }
 
-        public async Task<Score> SaveScore(Score teeScore)
+        public async Task<Score> SaveScore(Score teeScore, bool synchronize = false)
         {
-            return await SaveAsync<Score>(teeScore);
+            return await SaveAsync<Score>(teeScore, synchronize);
         }
 
 

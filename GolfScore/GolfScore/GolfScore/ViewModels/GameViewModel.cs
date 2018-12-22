@@ -18,6 +18,6 @@ namespace TeeScore.ViewModels
             GameDto = await DataService.GetGame(gameId);
         }
 
-        public GameDto GameDto { get; set; }
+        public PlayGameDto GameDto { get; set; }
     }
 }

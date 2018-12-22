@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
 using TeeScore.Contracts;
 using TeeScore.Domain;
+using TeeScore.DTO;
 using TeeScore.Helpers;
 
 namespace TeeScore.ViewModels
 {
     public class SettingsViewModel : MyViewModelBase
     {
-        private Player _player = new Player();
+        private PlayerDto _player = new PlayerDto();
 
         public SettingsViewModel(IDataService dataservice, INavigationService navigationService) : base(dataservice, navigationService)
         {
@@ -17,7 +18,7 @@ namespace TeeScore.ViewModels
         /// <summary>
         /// Sets and gets the Player property.
         /// </summary>
-        public Player Player
+        public PlayerDto Player
         {
             get => _player;
             set
@@ -37,15 +38,12 @@ namespace TeeScore.ViewModels
             var playerId = Settings.MyPlayerId;
             if (string.IsNullOrEmpty(playerId))
             {
-                Player = new Player();
+                Player = new PlayerDto();
             }
             else
             {
-                Player = await DataService.GetPlayer(playerId);
-                if (Player == null)
-                {
-                    Player = new Player();
-                }
+                Player = await DataService.GetPlayer(playerId) ?? 
+                         new PlayerDto();
             }
         }
 

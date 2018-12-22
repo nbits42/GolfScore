@@ -4,16 +4,27 @@
              xmlns:tabView="clr-namespace:Syncfusion.XForms.TabView;assembly=Syncfusion.SfTabView.XForms"
              xmlns:xListView="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
              xmlns:xNumericUpDown="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
+             xmlns:converters="clr-namespace:TeeScore.Converters;assembly=TeeScore"
              x:Class="TeeScore.Pages.NewGamePage"
              BackgroundColor="{StaticResource PageBackgroundColor}"
              Title="New game!">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:SelectionBoolToBackgroundColorConverter x:Key="BoolToColorConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <Grid  Margin="8,3,8,3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="35"></RowDefinition>
             </Grid.RowDefinitions>
-            <tabView:SfTabView Grid.Row="0" DisplayMode="NoHeader" TabWidth="0" EnableSwiping="False" SelectedIndex="{Binding CurrentPageIndex}">
+            <tabView:SfTabView Grid.Row="0" 
+                               x:Name="TabView"
+                               DisplayMode="NoHeader" 
+                               TabWidth="0" 
+                               EnableSwiping="False" 
+                               SelectedIndex="{Binding CurrentPageIndex, Mode=OneWay}">
                 <tabView:SfTabItem Title="1">
                     <tabView:SfTabItem.Content>
                         <Grid>
@@ -34,7 +45,14 @@
                                 </Grid>
 
                             </StackLayout>
-                            <xListView:SfListView x:Name="VenuesView" Grid.Row="1" ItemsSource="{Binding Venues}" ItemSize="60" SelectionBackgroundColor="{StaticResource PageHeadingBackgroundColor}"  SelectionChanged="VenuesView_OnSelectionChanged">
+                            <xListView:SfListView x:Name="VenuesView" 
+                                                  Grid.Row="1" 
+                                                  ItemsSource="{Binding Venues}" 
+                                                  ItemSize="60" 
+                                                  SelectionMode="Single"
+                                                  SelectionBackgroundColor="{StaticResource SelectedItemBackgroundColor}"
+                                                  SelectedItem="{Binding SelectedVenue, Mode=TwoWay}" >
+                                            
                                 <xListView:SfListView.ItemTemplate>
                                     <DataTemplate>
                                         <Grid Padding="1" Margin="2">
@@ -48,7 +66,6 @@
                                     </DataTemplate>
                                 </xListView:SfListView.ItemTemplate>
                             </xListView:SfListView>
-
                         </Grid>
                     </tabView:SfTabItem.Content>
                 </tabView:SfTabItem>
@@ -62,7 +79,7 @@
                                 <Label Text="Game type" Style="{StaticResource TinyLabelStyle}"></Label>
                                 <Picker ItemsSource="{Binding GameTypes}" SelectedIndex="{Binding SelectedGameTypeIndex, Mode=TwoWay}" Style="{StaticResource PickerStyle}"></Picker>
                                 <Label Text="Number of Tees to play" Style="{StaticResource TinyLabelStyle}"></Label>
-                                <xNumericUpDown:SfNumericUpDown Value="{Binding TeeCount, Mode=TwoWay}" Style="{StaticResource NumericUpDownStyle}" StepValue="1" Minimum="3" MaximumDecimalDigits="0"></xNumericUpDown:SfNumericUpDown>
+                                <xNumericUpDown:SfNumericUpDown Value="{Binding TeeCount, Mode=TwoWay}" Style="{StaticResource NumericUpDownStyle}"  StepValue="1" Minimum="3" MaximumDecimalDigits="0"></xNumericUpDown:SfNumericUpDown>
                                 <Label Text="Start Tee" Style="{StaticResource TinyLabelStyle}"></Label>
                                 <xNumericUpDown:SfNumericUpDown Value="{Binding StartTee, Mode=TwoWay}"  Style="{StaticResource NumericUpDownStyle}" StepValue="1" Minimum="1" MaximumDecimalDigits="0"></xNumericUpDown:SfNumericUpDown>
                                 <Label Text="Number of players" Style="{StaticResource TinyLabelStyle}"></Label>
@@ -130,7 +147,32 @@
                                 </Grid>
 
                             </StackLayout>
-                            <xListView:SfListView Grid.Row="4" x:Name="PlayersView" ItemsSource="{Binding Players}" ItemSize="60" SelectionBackgroundColor="{StaticResource PageHeadingBackgroundColor}">
+                            <xListView:SfListView Grid.Row="4" 
+                                                  x:Name="PlayersView" 
+                                                  ItemsSource="{Binding Players}" 
+                                                  ItemSize="60" 
+                                                  AllowSwiping="True"
+                                                  SelectionMode="SingleDeselect"
+                                                  SelectionBackgroundColor="{StaticResource SelectedItemBackgroundColor}"
+                                                  SwipeOffset="360" SwipeThreshold="50"
+                                                  SwipeStarted="SfListView_OnSwipeStarted" 
+                                                  Swiping="SfListView_OnSwiping"
+                                                  SwipeEnded="SfListView_OnSwipeEnded">
+                                <xListView:SfListView.LeftSwipeTemplate>
+                                    <DataTemplate x:Name="LeftSwipeTemplate">
+                                        <Grid BackgroundColor="{StaticResource DeleteItemBackgroundColor}" HorizontalOptions="Fill" VerticalOptions="Fill">
+                                            <Grid VerticalOptions="Center" HorizontalOptions="Center">
+                                                <Image Grid.Column="0"
+                                                       Grid.Row="0"
+                                                       HeightRequest="35"
+                                                       WidthRequest="35"
+                                                       BackgroundColor="Transparent"
+                                                       Source="trash.png" />
+                                            </Grid>
+                                        </Grid>
+                                    </DataTemplate>
+                                </xListView:SfListView.LeftSwipeTemplate>
+
                                 <xListView:SfListView.ItemTemplate>
                                     <DataTemplate>
                                         <Grid Padding="1" Margin="2">

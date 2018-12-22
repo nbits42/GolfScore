@@ -10,7 +10,8 @@ namespace TeeScore.Mapping
         {
             CreateMap<Player, PlayerDto>();
             CreateMap<PlayerDto, Player>();
-
+            CreateMap<Venue, VenueDto>();
+            CreateMap<VenueDto, Venue>();
         }
 
 

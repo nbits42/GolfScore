@@ -10,6 +10,23 @@ namespace TeeScore.DTO
         private string _abbreviation;
         private string _id;
         private string _avatarUrl;
+        private bool _isValid;
+
+        public PlayerDto()
+        {
+            PropertyChanged += PlayerDto_PropertyChanged;
+        }
+
+        private void PlayerDto_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(Abbreviation):
+                case nameof(Name):
+                    IsValid = !(string.IsNullOrEmpty(Abbreviation) || string.IsNullOrEmpty(Name));
+                    break;
+            }
+        }
 
         /* =========================================== property: Id ====================================== */
         /// <summary>
@@ -92,9 +109,35 @@ namespace TeeScore.DTO
             }
         }
 
+        /* =========================================== property: IsValid ====================================== */
+        /// <summary>
+        /// Sets and gets the IsValid property.
+        /// </summary>
+        public bool IsValid
+        {
+            get => _isValid;
+            set
+            {
+                if (value == _isValid)
+                {
+                    return;
+                }
+
+                _isValid = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         public override string ToString()
         {
             return Name;
+        }
+
+        public void Reset()
+        {
+            Name = string.Empty;
+            Abbreviation = string.Empty;
         }
     }
 }

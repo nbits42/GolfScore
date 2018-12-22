@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TeeScore.Contracts;
 using TeeScore.Domain;
 using TeeScore.DTO;
@@ -16,11 +17,10 @@ namespace TeeScore.ViewModels
 {
     public class NewGameViewModel : ValidatableViewModelBase
     {
-        private List<Venue> _allVenues = new List<Venue>();
-        private ObservableCollection<Venue> _venues = new ObservableCollection<Venue>();
+        private ObservableCollection<VenueDto> _venues = new ObservableCollection<VenueDto>();
         private NewGameDto _game = new NewGameDto();
-        private Player _myPlayer = new Player();
-        private Venue _selectedVenue = null;
+        private PlayerDto _myPlayer = null;
+        private VenueDto _selectedVenue = null;
         private string _venueSearch;
         private bool _nextPageEnabled;
         private bool _previousPageEnabled;
@@ -41,13 +41,12 @@ namespace TeeScore.ViewModels
         private List<EnumNameValue<PlayerSelection>> _playerSelectionList;
         private RelayCommand _inviteCommand;
         private bool _invitationRunning = false;
-        private ObservableCollection<Player> _players = new ObservableCollection<Player>();
-        private PlayerDto _selectedPlayer;
+        private ObservableCollection<PlayerDto> _players = new ObservableCollection<PlayerDto>();
         private int _playersCount;
-        private ObservableCollection<Player> _knownPlayers = new ObservableCollection<Player>();
-        private RelayCommand _loadKnownPlayersCommand;
-        private Player _selectedKnownPlayer;
         private RelayCommand _startGameCommand;
+        private bool _loaded = false;
+        private GamePlayer _myGamePlayer = null;
+
 
         public NewGameViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
         {
@@ -58,10 +57,13 @@ namespace TeeScore.ViewModels
 
         public event EventHandler GameStarted;
 
-        public void NewGame()
+        public async Task NewGameAsync()
         {
-            CurrentPage = CreateGamePage.VenueSelection;
-            CurrentPageIndex = (int)CurrentPage;
+            await LoadAsync();
+
+            _myGamePlayer = null;
+            _doCheck = false;
+
             Game = new NewGameDto();
             SelectedVenue = null;
             GameType = Settings.LastGameType;
@@ -70,17 +72,53 @@ namespace TeeScore.ViewModels
             InvitationNumber = 0;
             PlayersCount = Settings.LastPlayersCount;
             Players.Clear();
+
+            Players.Add(MyPlayer);
+
+            CurrentPage = CreateGamePage.VenueSelection;
+            CurrentPageIndex = (int)CurrentPage;
+
+            _doCheck = true;
             CheckNextPage();
+        }
+
+        public async Task ResumeNewGameAsync(string gameId)
+        {
+            await LoadAsync();
+
+            _doCheck = false;
+            _myGamePlayer = new GamePlayer {GameId = Game.Game.Id, PlayerId = MyPlayer.Id};
+            Game = await GetGame(gameId).ConfigureAwait(true);
+            Players = new ObservableCollection<PlayerDto>(Game.Players);
+            SelectedGameTypeIndex = _gameTypesList.FindIndex(x => x.Value == Game.Game.GameType);
+            SelectedPlayerSelectionIndex = _playerSelectionList.FindIndex(x => x.Value == Game.Game.PlayerSelection);
+            TeeCount = Game.Game.TeeCount;
+            StartTee = Game.Game.StartTee;
+            PlayersCount = Game.Game.InvitedPlayersCount;
+
+            _doCheck = true;
+            CurrentPage = CreateGamePage.VenueSelection;
+            CurrentPageIndex = (int)CurrentPage;
+            SelectedVenue = FindVenue(Game.Venue);
+        }
+
+        private VenueDto FindVenue(VenueDto gameVenue)
+        {
+            return Venues.FirstOrDefault(x => x.Id == gameVenue.Id);
+        }
+
+        private async Task<NewGameDto> GetGame(string gameId)
+        {
+            return await DataService.GetNewGame(gameId);
         }
 
         private void NewGameViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
             {
-                case nameof(VenueSearch):
-                    FilterVenues();
-                    break;
                 case nameof(SelectedVenue):
+                    CheckNextPage();
+                    break;
                 case nameof(StartTee):
                 case nameof(TeeCount):
                 case nameof(PlayersCount):
@@ -113,21 +151,8 @@ namespace TeeScore.ViewModels
                 case nameof(Players):
                     CheckNextPage();
                     break;
-                case nameof(SelectedKnownPlayer):
-                    if (SelectedKnownPlayer == null)
-                    {
-                        SelectedPlayer.Name = string.Empty;
-                        SelectedPlayer.Abbreviation = string.Empty;
-                        SelectedPlayer.Id = string.Empty;
-                    }
-                    else
-                    {
-                        SelectedPlayer.Name = SelectedKnownPlayer.Name;
-                        SelectedPlayer.Abbreviation = SelectedKnownPlayer.Abbreviation;
-                        SelectedPlayer.Id = SelectedKnownPlayer.Id;
-                    }
-                    break;
-            }
+                
+           }
         }
 
         private int GenerateInvitationNumber()
@@ -144,12 +169,16 @@ namespace TeeScore.ViewModels
             }
             UpdateGame();
             _nextPage = GameStateService.GetNextNewGamePage(Game, _currentPage);
-            NextPageEnabled = _nextPage > _currentPage;
+            NextPageEnabled = _nextPage > _currentPage && _currentPage < CreateGamePage.Ready;
             PreviousPageEnabled = _currentPage > CreateGamePage.VenueSelection && _currentPage <= CreateGamePage.Ready;
         }
 
         private void UpdateGame()
         {
+            if (SelectedVenue == null)
+            {
+                return;
+            }
             Game.Venue = SelectedVenue;
             Game.Game.GameType = GameType;
             Game.Game.InvitationNumber = InvitationNumber;
@@ -158,28 +187,26 @@ namespace TeeScore.ViewModels
             Game.Game.TeeCount = TeeCount;
             Game.Game.VenueId = SelectedVenue?.Id;
             Game.Game.PlayerSelection = PlayerSelection;
-            Game.Players = new List<Player>(_players);
+            Game.Players = new List<PlayerDto>(_players);
             Game.Game.VenueName = SelectedVenue?.Name;
-            Game.Game.PlayerNames = string.Join(@" \u2022 ", _players.Select(x => x.Name));
-        }
-
-        private void FilterVenues()
-        {
-            Venues = new ObservableCollection<Venue>(_allVenues.OrderBy(x => x.Name).ToList());
+            Game.Game.PlayerNames = string.Join(" \u2022 ", _players.Select(x => x.Name));
         }
 
         public async Task LoadAsync()
         {
+            if (_loaded)
+            {
+                return;
+            }
             try
             {
                 await LoadPlayerAsync().ConfigureAwait(true);
-                await LoadVenuesAsync().ConfigureAwait(true);
-                _doCheck = true;
-                if (_players.Count == 0 && MyPlayer != null)
+                if (Venues == null || !Venues.Any())
                 {
-                    await SaveGamePlayer(AutoMapper.Mapper.Map<PlayerDto>(MyPlayer), true);
+                    await LoadVenuesAsync().ConfigureAwait(true);
                 }
-                CheckNextPage();
+
+                _loaded = true;
             }
             catch (Exception e)
             {
@@ -209,26 +236,26 @@ namespace TeeScore.ViewModels
             }
         }
 
-        private async Task LoadVenuesAsync()
+        public async Task LoadVenuesAsync()
         {
-            _allVenues = await DataService.GetVenues().ConfigureAwait(false);
-            FilterVenues();
+            var allVenues = await DataService.GetVenues().ConfigureAwait(true);
+            Venues = new ObservableCollection<VenueDto>(allVenues.OrderBy(x => x.Name).ToList());
         }
 
         private async Task LoadPlayerAsync()
         {
-            MyPlayer = await DataService.GetPlayer(Settings.MyPlayerId).ConfigureAwait(false);
-            if (MyPlayer != null && !Players.Any())
+            if (MyPlayer == null)
             {
-                //Players.Add(MyPlayer);
+                MyPlayer = await DataService.GetPlayer(Settings.MyPlayerId).ConfigureAwait(true);
             }
+            
         }
 
         /* =========================================== property: Venues ====================================== */
         /// <summary>
         /// Sets and gets the Venues property.
         /// </summary>
-        public ObservableCollection<Venue> Venues
+        public ObservableCollection<VenueDto> Venues
         {
             get => _venues;
             set
@@ -266,7 +293,7 @@ namespace TeeScore.ViewModels
         /// <summary>
         /// Sets and gets the MyPlayer property.
         /// </summary>
-        public Player MyPlayer
+        public PlayerDto MyPlayer
         {
             get => _myPlayer;
             set
@@ -286,7 +313,7 @@ namespace TeeScore.ViewModels
         /// <summary>
         /// Sets and gets the SelectedVenue property.
         /// </summary>
-        public Venue SelectedVenue
+        public VenueDto SelectedVenue
         {
             get => _selectedVenue;
             set
@@ -376,7 +403,6 @@ namespace TeeScore.ViewModels
 
                 _currentPage = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(() => CurrentPageIndex);
             }
         }
 
@@ -410,7 +436,7 @@ namespace TeeScore.ViewModels
         {
             if (NextPageEnabled)
             {
-                CurrentPage = _nextPage;
+                CurrentPage = CurrentPage + 1;
                 CurrentPageIndex = (int)CurrentPage;
                 CheckNextPage();
                 await SaveGame();
@@ -620,7 +646,7 @@ namespace TeeScore.ViewModels
         /// <summary>
         /// Sets and gets the Players property.
         /// </summary>
-        public ObservableCollection<Player> Players
+        public ObservableCollection<PlayerDto> Players
         {
             get => _players;
             set
@@ -671,6 +697,16 @@ namespace TeeScore.ViewModels
         {
             UpdateGame();
             Game.Game = await DataService.SaveGame(Game.Game, true);
+            if (_myGamePlayer == null)
+            {
+                _myGamePlayer = new GamePlayer
+                {
+                    GameId = Game.Game.Id,
+                    PlayerId = MyPlayer.Id
+                };
+                _myGamePlayer = await DataService.SaveGamePlayer(_myGamePlayer);
+            }
+            Settings.CurrentGameId = Game.Game.Id;
         }
 
         private async Task ContinuousPlayerPolling()
@@ -720,118 +756,11 @@ namespace TeeScore.ViewModels
             }
         }
 
-
-
-        /* =========================================== property: SelectedPlayer ====================================== */
-        /// <summary>
-        /// Sets and gets the SelectedPlayer property.
-        /// </summary>
-        public PlayerDto SelectedPlayer
-        {
-            get => _selectedPlayer;
-            set
-            {
-                if (value == _selectedPlayer)
-                {
-                    return;
-                }
-
-                _selectedPlayer = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public async Task SaveSelectedPlayerAsync()
-        {
-            await SaveGamePlayer(SelectedPlayer);
-        }
-
-        private async Task SaveGamePlayer(PlayerDto aPlayer, bool owner = false)
-        {
-            await SaveGame().ConfigureAwait(true);
-            var player = await DataService.SavePlayer(AutoMapper.Mapper.Map<Player>(aPlayer)).ConfigureAwait(true);
-            if (_players.All(x => x.Id != player.Id))
-            {
-                _players.Add(player);
-
-                var gamePlayer = new GamePlayer
-                {
-                    GameId = Game.Game.Id,
-                    PlayerId = player.Id,
-                    PlayerRole = owner
-                        ? PlayerRole.Owner
-                        : PlayerRole.Player,
-                    Hide = false
-                };
-                await DataService.SaveGamePlayer(gamePlayer).ConfigureAwait(true);
-                RaisePropertyChanged(() => NewPlayersCanBeAdded);
-                RaisePropertyChanged(() => Players);
-            }
-        }
-
-
         /* =========================================== property: NewPlayersCanBeAdded ====================================== */
         /// <summary>
         /// Sets and gets the NewPlayersCanBeAdded property.
         /// </summary>
         public bool NewPlayersCanBeAdded => _players.Count < PlayersCount;
-
-        /* =========================================== property: KnownPlayers ====================================== */
-        /// <summary>
-        /// Sets and gets the KnownPlayers property.
-        /// </summary>
-        public ObservableCollection<Player> KnownPlayers
-        {
-            get => _knownPlayers;
-            set
-            {
-                if (value == _knownPlayers)
-                {
-                    return;
-                }
-
-                _knownPlayers = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-        /* =========================================== RelayCommand: LoadKnownPlayersCommand ====================================== */
-        /// <summary>
-        /// Executes the LoadKnownPlayers command.
-        /// </summary>
-        public RelayCommand LoadKnownPlayersCommand => _loadKnownPlayersCommand
-                       ?? (_loadKnownPlayersCommand = new RelayCommand(
-                           async () => { await LoadKnownPlayers(); }));
-
-        public async Task LoadKnownPlayers()
-        {
-            SelectedKnownPlayer = null;
-            if (KnownPlayers.Any())
-            {
-                return;
-            }
-            KnownPlayers = new ObservableCollection<Player>(await DataService.GetKnownPlayers(MyPlayer.Id));
-        }
-
-        /* =========================================== property: SelectedKnownPlayer ====================================== */
-        /// <summary>
-        /// Sets and gets the SelectedKnownPlayer property.
-        /// </summary>
-        public Player SelectedKnownPlayer
-        {
-            get => _selectedKnownPlayer;
-            set
-            {
-                if (value == _selectedKnownPlayer)
-                {
-                    return;
-                }
-
-                _selectedKnownPlayer = value;
-                RaisePropertyChanged();
-            }
-        }
 
 
         /* =========================================== RelayCommand: StartGameCommand ====================================== */
@@ -844,38 +773,60 @@ namespace TeeScore.ViewModels
         private async Task StartGame()
         {
             UpdateGame();
-            await SaveGame();
 
+            Game.Game.GameStatus = GameStatus.Started;
+
+            var gameScores = new GameScoresDto();
             for (var i = 1; i <= Game.Game.TeeCount; i++)
             {
-                var tee = new Tee
+                var tee = new TeeDto
                 {
+                    Id = Guid.NewGuid().ToString(),
                     GameId = Game.Game.Id,
                     Number = true.ToString()
                 };
-                tee = await DataService.SaveTee(tee);
                 foreach (var player in Game.Players)
                 {
-                    var teeScore = new Score
+                    var teeScore = new ScoreDto
                     {
+                        Id = Guid.NewGuid().ToString(),
                         GameId = Game.Game.Id,
                         TeeId = tee.Id,
                         PlayerId = player.Id,
                         Putts = 0,
                     };
-                    await DataService.SaveScore(teeScore);
+                    tee.Scores.Add(teeScore);
                 }
+                gameScores.Tees.Add(tee);
             }
+
+            Game.Game.ScoresJson = JsonConvert.SerializeObject(gameScores);
+            await SaveGame();
 
             Settings.CurrentGameId = Game.Game.Id;
             OnGameStarted();
         }
 
-       
+
 
         protected virtual void OnGameStarted()
         {
             GameStarted?.Invoke(this, EventArgs.Empty);
+        }
+
+        public async Task DeleteGamePlayerAsync(PlayerDto player)
+        {
+            if (player != null)
+            {
+                await DataService.DeleteGamePlayer(Game.Game.Id, player.Id);
+                Players.Remove(player);
+            }
+        }
+
+        public void Refresh()
+        {
+            RaisePropertyChanged(nameof(Players));
+            RaisePropertyChanged(nameof(Venues));
         }
     }
 }

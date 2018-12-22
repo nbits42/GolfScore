@@ -1,51 +1,34 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using GalaSoft.MvvmLight.Views;
 using Syncfusion.SfNumericUpDown.XForms;
 using TeeScore.Contracts;
 using TeeScore.Domain;
+using TeeScore.DTO;
 using TeeScore.Helpers;
 using TeeScore.Validation;
+using INavigationService = TeeScore.Contracts.INavigationService;
 
 namespace TeeScore.ViewModels
 {
-    public class VenueViewModel : ValidatableViewModelBase
+    public class VenueViewModel : MyViewModelBase
     {
-        private Venue _venue = new Venue();
-        private ValidatableObject<string> _name = new ValidatableObject<string>();
-        private ValidatableObject<string> _location = new ValidatableObject<string>();
+        private readonly IDialogService _dialogService;
+        private VenueDto _venue = new VenueDto();
+        private ObservableCollection<VenueDto> _venues;
 
-        public VenueViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
+        public VenueViewModel(IDataService dataService, INavigationService navigationService, IDialogService dialogService) : base(dataService, navigationService)
         {
+            _dialogService = dialogService;
         }
-
-        protected override void AddValidations()
-        {
-            _name.Validations.Add(new IsNotNullOrEmptyRule<string>(Translations.Messages.NameIsRequired));
-            _location.Validations.Add(new IsNotNullOrEmptyRule<string>(Translations.Messages.NameIsRequired));
-        }
-
-        public override bool Validate()
-        {
-            var isValidName = ValidateNameCommand();
-            var isValidLocation = ValidateLocationCommand();
-            return isValidName && isValidLocation;
-        }
-
-        public bool ValidateLocationCommand()
-        {
-            return _location.Validate();
-        }
-
-        public bool ValidateNameCommand()
-        {
-            return _name.Validate();
-        }
-
 
         /* =========================================== property: Venue ====================================== */
         /// <summary>
         /// Sets and gets the Venue property.
         /// </summary>
-        public Venue Venue
+        public VenueDto Venue
         {
             get => _venue;
             set
@@ -60,55 +43,58 @@ namespace TeeScore.ViewModels
             }
         }
 
-
-        /* =========================================== validatable property: Name ====================================== */
-
-        public ValidatableObject<string> Name
+        /* =========================================== property: Venues ====================================== */
+        /// <summary>
+        /// Sets and gets the Venues property.
+        /// </summary>
+        public ObservableCollection<VenueDto> Venues
         {
-            get => _name;
+            get => _venues;
             set
             {
-                _name = value;
-                RaisePropertyChanged(() => Name);
+                if (value == _venues)
+                {
+                    return;
+                }
+
+                _venues = value;
+                RaisePropertyChanged();
             }
         }
-
-        /* =========================================== validatable property: Location ====================================== */
-
-        public ValidatableObject<string> Location
-        {
-            get => _location;
-            set
-            {
-                _location = value;
-                RaisePropertyChanged(() => Location);
-            }
-        }
-
 
         public async Task LoadAsync(string venueId)
         {
             if (string.IsNullOrEmpty(venueId))
             {
-                Venue = new Venue {OwnerId = Settings.MyPlayerId};
+                Venue = new VenueDto {OwnerId = Settings.MyPlayerId};
             }
             else
             {
                 Venue = await DataService.GetVenue(venueId);
             }
-
-            Name.Value = Venue.Name;
-            Location.Value = Venue.Location;
-            IsValid = Validate();
         }
 
-        public async Task SaveAsync()
+       
+        public async Task<bool> ValidateAndSave()
         {
-            Venue.Name = Name.Value;
-            Venue.Location = Location.Value;
-            Venue.Lat = 0;
-            Venue.Long = 0;
-            Venue = await DataService.SaveVenue(Venue);
+            var valid = Venue.IsValid;
+
+            if (valid) 
+            {
+                if (Venues.Any(x=>x.Name.Equals(Venue.Name, StringComparison.OrdinalIgnoreCase) && x.Location.Equals(Venue.Location, StringComparison.OrdinalIgnoreCase)))
+                {
+                    await _dialogService.ShowError("This Venue is already in your venues list", "Venue error", null, null);
+                    return false;
+                }
+            }
+
+            if (valid)
+            {
+                Venue = await DataService.SaveVenue(Venue, false);
+                Venues.Insert(0, Venue);
+            }
+
+            return valid;
         }
     }
 }

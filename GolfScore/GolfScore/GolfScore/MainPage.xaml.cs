@@ -1,9 +1,11 @@
 ﻿using System;
+using GlobalContracts.Enumerations;
 using Syncfusion.ListView.XForms;
 using TeeScore.Domain;
 using TeeScore.Pages;
 using TeeScore.ViewModels;
 using Xamarin.Forms;
+using ItemTappedEventArgs = Syncfusion.ListView.XForms.ItemTappedEventArgs;
 using SwipeDirection = Syncfusion.ListView.XForms.SwipeDirection;
 
 namespace TeeScore
@@ -19,6 +21,7 @@ namespace TeeScore
 
             BindingContext = _viewModel;
             ToolbarItems.Add(new ToolbarItem("Settings", "settings.png", ShowSettingsPage));
+            FloatingActionButtonAdd.IsEnabled = false;
             FloatingActionButtonAdd.Clicked = AddButtonClicked;
         }
 
@@ -35,6 +38,10 @@ namespace TeeScore
             if (string.IsNullOrEmpty(_viewModel.MyPlayer?.Id))
             {
                 ShowSettingsPage();
+            }
+            else
+            {
+                FloatingActionButtonAdd.IsEnabled = true;
             }
         }
 
@@ -64,6 +71,18 @@ namespace TeeScore
             if (e.SwipeOffSet > 200)
             {
                 e.Handled = true;
+            }
+        }
+
+        private async void GamesView_OnItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            if (e.ItemData is Game game)
+            {
+                if (game.GameStatus < GameStatus.Started)
+                {
+                    var newGamePage = new NewGamePage(game.Id);
+                    await Navigation.PushAsync(newGamePage).ConfigureAwait(true);
+                }
             }
         }
     }

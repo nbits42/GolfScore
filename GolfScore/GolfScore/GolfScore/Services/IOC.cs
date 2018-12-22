@@ -12,6 +12,7 @@ namespace TeeScore.Services
         public SettingsViewModel Settings => SimpleIoc.Default.GetInstance<SettingsViewModel>();
         public NewGameViewModel NewGame => SimpleIoc.Default.GetInstance<NewGameViewModel>();
         public VenueViewModel Venue => SimpleIoc.Default.GetInstance<VenueViewModel>();
+        public GamePlayerViewModel GamePlayer => SimpleIoc.Default.GetInstance<GamePlayerViewModel>();
 
         public Ioc()
         {
@@ -25,6 +26,7 @@ namespace TeeScore.Services
             SimpleIoc.Default.Register<SettingsViewModel>();
             SimpleIoc.Default.Register<VenueViewModel>();
             SimpleIoc.Default.Register<NewGameViewModel>();
+            SimpleIoc.Default.Register<GamePlayerViewModel>();
         }
 
         static INavigationService CreateNavigationService()

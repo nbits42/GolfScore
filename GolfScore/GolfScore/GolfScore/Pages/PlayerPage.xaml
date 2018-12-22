@@ -23,12 +23,28 @@
                             Style="{StaticResource PickerStyle}"
                             Title="Select a known player"/>
                     <Label Text="Name" Style="{StaticResource TinyLabelStyle}"/>
-                    <Editor Text="{Binding SelectedPlayer.Name, Mode=TwoWay}" Style="{StaticResource EditorStyle}" IsSpellCheckEnabled="False"></Editor>
+                    <Entry Text="{Binding Player.Name, Mode=TwoWay}" Style="{StaticResource EditorStyle}" IsSpellCheckEnabled="False" IsEnabled="{Binding PlayerFieldsEnabled, Mode=TwoWay}" >
+                        <Entry.Keyboard>
+                            <Keyboard x:FactoryMethod="Create">
+                                <x:Arguments>
+                                    <KeyboardFlags>CapitalizeWord</KeyboardFlags>
+                                </x:Arguments>
+                            </Keyboard>
+                        </Entry.Keyboard>
+                    </Entry>
                     <Label Text="Abbreviation"  Style="{StaticResource TinyLabelStyle}"/>
-                    <Editor Text="{Binding SelectedPlayer.Abbreviation, Mode=TwoWay}" Style="{StaticResource EditorStyle}" IsSpellCheckEnabled="False"></Editor>
+                    <Entry Text="{Binding Player.Abbreviation, Mode=TwoWay}" Style="{StaticResource EditorStyle}" IsSpellCheckEnabled="False" IsEnabled="{Binding PlayerFieldsEnabled, Mode=TwoWay}">
+                        <Entry.Keyboard>
+                            <Keyboard x:FactoryMethod="Create">
+                                <x:Arguments>
+                                    <KeyboardFlags>CapitalizeCharacter</KeyboardFlags>
+                                </x:Arguments>
+                            </Keyboard>
+                        </Entry.Keyboard>
+                    </Entry>
                 </StackLayout>
                 <StackLayout Grid.Row="2" VerticalOptions="End" HorizontalOptions="Center" Orientation="Horizontal" Margin="8">
-                    <Button Text="OK" Clicked="OK_Clicked" Style="{StaticResource DialogButtonStyle}"></Button>
+                    <Button Text="OK" Clicked="OK_Clicked" Style="{StaticResource DialogButtonStyle}" IsEnabled="{Binding Player.IsValid, Mode=TwoWay}"></Button>
                     <Button Text="Cancel" Clicked="Cancel_Clicked" Style="{StaticResource DialogButtonStyle}"></Button>
                 </StackLayout>
             </Grid>

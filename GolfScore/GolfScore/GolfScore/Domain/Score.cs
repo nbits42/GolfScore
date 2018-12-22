@@ -10,6 +10,6 @@ namespace TeeScore.Domain
         public string GameId { get; set; }
         public string TeeId { get; set; }
         public string PlayerId { get; set; }
-        public int Putts { get; set; }
+        public int Putts { get; set; } = 0;
     }
 }

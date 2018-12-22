@@ -21,11 +21,12 @@
                            SwipeStarted="SfListView_OnSwipeStarted" 
                            Swiping="SfListView_OnSwiping"
                            IsBusy="{Binding IsBusy, Mode=TwoWay}"
+                           ItemTapped="GamesView_OnItemTapped"
                            SwipeEnded="SfListView_OnSwipeEnded">
             <xForms:SfListView.LeftSwipeTemplate>
                 <DataTemplate x:Name="LeftSwipeTemplate">
                     <Grid BackgroundColor="{StaticResource DeleteItemBackgroundColor}" HorizontalOptions="Fill" VerticalOptions="Fill">
-                        <Grid VerticalOptions="Center" HorizontalOptions="Start">
+                        <Grid VerticalOptions="Center" HorizontalOptions="Center">
                             <Image Grid.Column="0"
                                    Grid.Row="0"
                                    HeightRequest="35"

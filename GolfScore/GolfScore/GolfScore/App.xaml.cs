@@ -23,7 +23,8 @@ namespace TeeScore
 
         public App()
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mjk3MTZAMzEzNjJlMzMyZTMwZmFha0xUWmJPMHZTYjVkUEwwOWxEaEJ1bjR5WlAyVUhiQkJpbHhmTkx0dz0="); // version 16.3.*
+            // https://www.syncfusion.com/account/downloads  & keys
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTI0MTZAMzEzNjJlMzQyZTMwWmJEWFBiZGhoSlcraHZuYVJUUitKU3ArcmR6c3Rwc0s3RjBNVUwrZk55UT0="); // version 16.4.*
 
             // Settingup for translation
             if (Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Android)
