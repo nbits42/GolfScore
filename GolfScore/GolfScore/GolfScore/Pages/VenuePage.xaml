@@ -2,9 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:validation="clr-namespace:TeeScore.Validation;assembly=TeeScore"
+             xmlns:extensions="clr-namespace:TeeScore.Extensions;assembly=TeeScore"
              BackgroundColor="{StaticResource PageBackgroundColor}"
              x:Class="TeeScore.Pages.VenuePage"
-             Title="Venue">
+             Title="{extensions:Translate title_new_venue}">
     <ContentPage.Content>
         <ScrollView>
             <Grid>
@@ -18,7 +19,7 @@
                 </StackLayout>
                 <ScrollView Grid.Row="1" HorizontalScrollBarVisibility="Never">
                     <StackLayout  VerticalOptions="Start" Margin="8">
-                        <Label Text="Name" Style="{StaticResource TinyLabelStyle}"/>
+                        <Label Text="{extensions:Translate lbl_name}" Style="{StaticResource TinyLabelStyle}"/>
                         <Entry Text="{Binding Venue.Name, Mode=TwoWay}"  Style="{StaticResource EntryStyle}">
                             <Entry.Keyboard>
                                 <Keyboard x:FactoryMethod="Create">
@@ -28,7 +29,7 @@
                                 </Keyboard>
                             </Entry.Keyboard>
                         </Entry>
-                        <Label Text="Location"  Style="{StaticResource TinyLabelStyle}"/>
+                        <Label Text="{extensions:Translate lbl_location}"  Style="{StaticResource TinyLabelStyle}"/>
                         <Entry Text="{Binding Venue.Location, Mode=TwoWay}" Style="{StaticResource EntryStyle}">
                             <Entry.Keyboard>
                                 <Keyboard x:FactoryMethod="Create">
@@ -41,8 +42,8 @@
                     </StackLayout>
                 </ScrollView>
                 <StackLayout Grid.Row="2" VerticalOptions="End" HorizontalOptions="Center" Orientation="Horizontal" Margin="8">
-                    <Button Text="OK" Clicked="OK_Clicked" Style="{StaticResource DialogButtonStyle}" IsEnabled="{Binding Venue.IsValid}"></Button>
-                    <Button Text="Cancel" Clicked="Cancel_Clicked" Style="{StaticResource DialogButtonStyle}"></Button>
+                    <Button Text="{extensions:Translate btn_OK}" Clicked="OK_Clicked" Style="{StaticResource DialogButtonStyle}" IsEnabled="{Binding Venue.IsValid}"></Button>
+                    <Button Text="{extensions:Translate btn_cancel}" Clicked="Cancel_Clicked" Style="{StaticResource DialogButtonStyle}"></Button>
                 </StackLayout>
             </Grid>
         </ScrollView>

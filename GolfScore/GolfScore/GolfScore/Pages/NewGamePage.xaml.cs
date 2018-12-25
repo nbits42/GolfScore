@@ -26,21 +26,8 @@ namespace TeeScore.Pages
             InitializeComponent();
             _vm = App.IOC.NewGame;
             BindingContext = _vm;
-            _vm.GameStarted += _vm_GameStarted;
             _gameId = gameId;
             
-        }
-
-        private async void _vm_GameStarted(object sender, EventArgs e)
-        {
-            if (Navigation.NavigationStack.Count > 0)
-            {
-                await Navigation.PopToRootAsync(true).ConfigureAwait(true);
-            }
-            else
-            {
-                //
-            }
         }
 
         protected override async void OnAppearing()
@@ -153,5 +140,10 @@ namespace TeeScore.Pages
             }
         }
 
+        private async void ImageButton_OnClicked(object sender, EventArgs e)
+        {
+            await _vm.StartGame();
+            await Navigation.PopToRootAsync(true);
+        }
     }
 }

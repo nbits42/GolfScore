@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System;
+using GalaSoft.MvvmLight;
 using GlobalContracts.Interfaces;
 
 namespace TeeScore.DTO
@@ -10,6 +11,26 @@ namespace TeeScore.DTO
         private string _teeId;
         private string _playerId;
         private int _putts;
+        private string _playerAbbreviation;
+        private PlayerDto _player;
+        private string _teeNumber;
+
+        public event EventHandler ScoreChanged;
+
+        public ScoreDto()
+        {
+            PropertyChanged += ScoreDto_PropertyChanged;
+        }
+
+        private void ScoreDto_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(Putts):
+                    OnScoreChanged();
+                    break;
+            }
+        }
 
         /* =========================================== property: Id ====================================== */
         /// <summary>
@@ -107,5 +128,69 @@ namespace TeeScore.DTO
             }
         }
 
+        /* =========================================== property: Player ====================================== */
+        /// <summary>
+        /// Sets and gets the Player property.
+        /// </summary>
+        public PlayerDto Player
+        {
+            get => _player;
+            set
+            {
+                if (value == _player)
+                {
+                    return;
+                }
+
+                _player = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+        /* =========================================== property: PlayerAbbreviation ====================================== */
+        /// <summary>
+        /// Sets and gets the PlayerAbbreviation property.
+        /// </summary>
+        public string PlayerAbbreviation
+        {
+            get => _playerAbbreviation;
+            set
+            {
+                if (value == _playerAbbreviation)
+                {
+                    return;
+                }
+
+                _playerAbbreviation = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /* =========================================== property: TeeNumber ====================================== */
+        /// <summary>
+        /// Sets and gets the TeeNumber property.
+        /// </summary>
+        public string  TeeNumber
+        {
+            get => _teeNumber;
+            set
+            {
+                if (value == _teeNumber)
+                {
+                    return;
+                }
+
+                _teeNumber = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        protected virtual void OnScoreChanged()
+        {
+            ScoreChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

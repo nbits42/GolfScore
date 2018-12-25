@@ -1,4 +1,6 @@
 ﻿#define OFFLINE_SYNC_ENABLED
+using AutoMapper;
+using GlobalContracts.Enumerations;
 using Microsoft.WindowsAzure.MobileServices;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using Microsoft.WindowsAzure.MobileServices.Sync;
@@ -8,8 +10,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using GlobalContracts.Enumerations;
 using TeeScore.Contracts;
 using TeeScore.Domain;
 using TeeScore.DTO;
@@ -52,7 +52,7 @@ namespace TeeScore.Services
             //var players = await PlayersTable.ToListAsync();
             //if (players.Count == 0)
             //{
-                await SyncAsync().ConfigureAwait(false);
+            await SyncAsync().ConfigureAwait(false);
             //}
 #endif
 
@@ -62,17 +62,17 @@ namespace TeeScore.Services
         private async Task CleanupGames()
         {
             var now = DateTimeOffset.Now.AddDays(-2);
-            var games = await GamesTable.Where(x => x.CreatedAt < now).ToListAsync();
+            var games = await GamesTable.Where(x => x.CreatedAt < now).ToListAsync().ConfigureAwait(false);
             foreach (var game in games)
             {
                 if ((int)game.GameStatus < (int)GameStatus.Started)
                 {
-                    var gamePlayers = await GamePlayersTable.Where(x => x.GameId == game.Id).ToListAsync();
+                    var gamePlayers = await GamePlayersTable.Where(x => x.GameId == game.Id).ToListAsync().ConfigureAwait(false);
                     foreach (var gamePlayer in gamePlayers)
                     {
-                        await GamePlayersTable.DeleteAsync(gamePlayer);
+                        await GamePlayersTable.DeleteAsync(gamePlayer).ConfigureAwait(false);
                     }
-                    await GamesTable.DeleteAsync(game);
+                    await GamesTable.DeleteAsync(game).ConfigureAwait(false);
                 }
             }
         }
@@ -98,11 +98,11 @@ namespace TeeScore.Services
                 return new List<Game>();
             }
             var gamePlayers = await GamePlayersTable.Where(x => x.PlayerId == playerId && x.Hide == false).ToListAsync().ConfigureAwait(false);
-            var games = await GamesTable.ToListAsync();
+            var games = await GamesTable.ToListAsync().ConfigureAwait(false);
             var result = new List<Game>();
             foreach (var gamePlayer in gamePlayers)
             {
-                var game = games.FirstOrDefault(x=>x.Id == gamePlayer.GameId);
+                var game = games.FirstOrDefault(x => x.Id == gamePlayer.GameId);
                 if (game != null)
                 {
                     result.Add(game);
@@ -148,6 +148,8 @@ namespace TeeScore.Services
                 await PlayersTable.PullAsync("AllPlayers", this.PlayersTable.CreateQuery()).ConfigureAwait(false);
                 await VenuesTable.PullAsync("AllVenues", this.PlayersTable.CreateQuery()).ConfigureAwait(false);
                 await GamePlayersTable.PullAsync("AllGamePlayers", this.GamePlayersTable.CreateQuery()).ConfigureAwait(false);
+                await TeesTable.PullAsync("AllTees", this.TeesTable.CreateQuery()).ConfigureAwait(false);
+                await ScoresTable.PullAsync("AllScores", this.ScoresTable.CreateQuery()).ConfigureAwait(false);
             }
             catch (MobileServicePushFailedException exc)
             {
@@ -226,16 +228,16 @@ namespace TeeScore.Services
                 action = "sync";
                 if (synchronize)
                 {
-                    await SyncAsync();
+                    await SyncAsync().ConfigureAwait(false);
                 }
                 action = "lookup";
 
-                return (T) entity;
+                return (T)entity;
             }
             catch (Exception e)
             {
                 var msg = $"Error executing {action} operation. Item: {typeof(T).Name} ({entity.Id}). Operation discarded. ";
-                ErrorReportingService.ReportError(this,e, msg);
+                ErrorReportingService.ReportError(this, e, msg);
                 //Debug.WriteLine($"{msg}. Error: {e.Message}");
                 throw;
             }
@@ -253,7 +255,7 @@ namespace TeeScore.Services
 
         public async Task<GamePlayer> GetGamePlayer(string gameId, string playerId)
         {
-            var result = await GamePlayersTable.Where(x => x.GameId == gameId && x.PlayerId == playerId).ToListAsync();
+            var result = await GamePlayersTable.Where(x => x.GameId == gameId && x.PlayerId == playerId).ToListAsync().ConfigureAwait(false);
             return result.FirstOrDefault();
         }
 
@@ -263,7 +265,7 @@ namespace TeeScore.Services
             var knownPlayers = new List<PlayerDto>();
             foreach (var game in myGames)
             {
-                var players = (await GetPlayersForGame(game.Id)).Where(x => x.Id != playerId);
+                var players = (await GetPlayersForGame(game.Id).ConfigureAwait(false)).Where(x => x.Id != playerId);
                 foreach (var player in players)
                 {
                     if (!knownPlayers.Exists(x => x.Id == player.Id))
@@ -280,12 +282,12 @@ namespace TeeScore.Services
         {
             var result = new PlayGameDto
             {
-                Game = await GamesTable.LookupAsync(gameId),
-                Players = await GetPlayersForGame(gameId),
-                Tees = await TeesTable.Where(x => x.GameId == gameId).ToListAsync(),
-                Scores = await ScoresTable.Where(x => x.GameId == gameId).ToListAsync(),
+                Game = await GamesTable.LookupAsync(gameId).ConfigureAwait(false),
+                Players = (await GetPlayersForGame(gameId).ConfigureAwait(false)).OrderBy(x => x.Abbreviation).ToList(),
+                Tees = Mapper.Map<List<Tee>, List<TeeDto>>(await TeesTable.Where(x => x.GameId == gameId).OrderBy(x => x.Number).ToListAsync().ConfigureAwait(false)),
+                Scores = Mapper.Map<List<Score>, List<ScoreDto>>(await ScoresTable.Where(x => x.GameId == gameId).ToListAsync().ConfigureAwait(false)),
             };
-            result.Venue = await GetVenue(result.Game.VenueId);
+            result.Venue = await GetVenue(result.Game.VenueId).ConfigureAwait(false);
             return result;
         }
 
@@ -293,19 +295,19 @@ namespace TeeScore.Services
         {
             var result = new NewGameDto
             {
-                Game = await GamesTable.LookupAsync(gameId),
-                Players = await GetPlayersForGame(gameId),
+                Game = await GamesTable.LookupAsync(gameId).ConfigureAwait(false),
+                Players = await GetPlayersForGame(gameId).ConfigureAwait(false),
             };
-            result.Venue = await GetVenue(result.Game.VenueId);
+            result.Venue = await GetVenue(result.Game.VenueId).ConfigureAwait(false);
             return result;
         }
 
         public async Task DeleteGamePlayer(string gameId, string playerId)
         {
-            var gamePlayer = await GetGamePlayer(gameId, playerId);
+            var gamePlayer = await GetGamePlayer(gameId, playerId).ConfigureAwait(false);
             if (gamePlayer != null)
             {
-                await GamePlayersTable.DeleteAsync(gamePlayer);
+                await GamePlayersTable.DeleteAsync(gamePlayer).ConfigureAwait(false);
             }
         }
 
@@ -315,14 +317,16 @@ namespace TeeScore.Services
         }
 
         public string CurrentGameId { get; private set; }
-        public async Task<Tee> SaveTee(Tee tee, bool synchronize = false)
+        public async Task<TeeDto> SaveTee(TeeDto tee, bool synchronize = false)
         {
-            return await SaveAsync<Tee>(tee, synchronize);
+            var saved = await SaveAsync<Tee>(Mapper.Map<Tee>(tee), synchronize);
+            return Mapper.Map<TeeDto>(saved);
         }
 
-        public async Task<Score> SaveScore(Score teeScore, bool synchronize = false)
+        public async Task<ScoreDto> SaveScore(ScoreDto teeScore, bool synchronize = false)
         {
-            return await SaveAsync<Score>(teeScore, synchronize);
+            var saved = await SaveAsync<Score>(Mapper.Map<Score>(teeScore), synchronize);
+            return Mapper.Map<ScoreDto>(saved);
         }
 
 

@@ -61,6 +61,51 @@ namespace TeeScore.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BACK.
+        /// </summary>
+        internal static string btn_back {
+            get {
+                return ResourceManager.GetString("btn_back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string btn_cancel {
+            get {
+                return ResourceManager.GetString("btn_cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NEXT.
+        /// </summary>
+        internal static string btn_next {
+            get {
+                return ResourceManager.GetString("btn_next", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        internal static string btn_OK {
+            get {
+                return ResourceManager.GetString("btn_OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        internal static string btn_start {
+            get {
+                return ResourceManager.GetString("btn_start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disc golf.
         /// </summary>
         internal static string GameType_DiskGolf {
@@ -115,6 +160,177 @@ namespace TeeScore.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abbreviation.
+        /// </summary>
+        internal static string lbl_abbreviation {
+            get {
+                return ResourceManager.GetString("lbl_abbreviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose or add venue.
+        /// </summary>
+        internal static string lbl_choose_or_add_venue {
+            get {
+                return ResourceManager.GetString("lbl_choose_or_add_venue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current player.
+        /// </summary>
+        internal static string lbl_current_player {
+            get {
+                return ResourceManager.GetString("lbl_current_player", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current tee.
+        /// </summary>
+        internal static string lbl_current_tee {
+            get {
+                return ResourceManager.GetString("lbl_current_tee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find or add players.
+        /// </summary>
+        internal static string lbl_find_or_add_players {
+            get {
+                return ResourceManager.GetString("lbl_find_or_add_players", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pass this number to the other players. They can enter this number at the &apos;Join Game&apos; page..
+        /// </summary>
+        internal static string lbl_game_number {
+            get {
+                return ResourceManager.GetString("lbl_game_number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game type.
+        /// </summary>
+        internal static string lbl_game_type {
+            get {
+                return ResourceManager.GetString("lbl_game_type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location.
+        /// </summary>
+        internal static string lbl_location {
+            get {
+                return ResourceManager.GetString("lbl_location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        internal static string lbl_name {
+            get {
+                return ResourceManager.GetString("lbl_name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nr. of players.
+        /// </summary>
+        internal static string lbl_players_count {
+            get {
+                return ResourceManager.GetString("lbl_players_count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select other players.
+        /// </summary>
+        internal static string lbl_select_other_players {
+            get {
+                return ResourceManager.GetString("lbl_select_other_players", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start tee.
+        /// </summary>
+        internal static string lbl_start_tee {
+            get {
+                return ResourceManager.GetString("lbl_start_tee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Started at.
+        /// </summary>
+        internal static string lbl_started {
+            get {
+                return ResourceManager.GetString("lbl_started", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Getting all game data ....
+        /// </summary>
+        internal static string lbl_starting_getting_data {
+            get {
+                return ResourceManager.GetString("lbl_starting_getting_data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saving game ....
+        /// </summary>
+        internal static string lbl_starting_saving_data {
+            get {
+                return ResourceManager.GetString("lbl_starting_saving_data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting game ....
+        /// </summary>
+        internal static string lbl_starting_starting {
+            get {
+                return ResourceManager.GetString("lbl_starting_starting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tee.
+        /// </summary>
+        internal static string lbl_tee {
+            get {
+                return ResourceManager.GetString("lbl_tee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nr. of tees.
+        /// </summary>
+        internal static string lbl_tees_count {
+            get {
+                return ResourceManager.GetString("lbl_tees_count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Venue.
+        /// </summary>
+        internal static string lbl_venue {
+            get {
+                return ResourceManager.GetString("lbl_venue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to By invitation number.
         /// </summary>
         internal static string PlayerSelection_ByInvitationNumber {
@@ -147,6 +363,33 @@ namespace TeeScore.Translations {
         internal static string PlayerSelection_Manual {
             get {
                 return ResourceManager.GetString("PlayerSelection_Manual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New game.
+        /// </summary>
+        internal static string title_new_game {
+            get {
+                return ResourceManager.GetString("title_new_game", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New game player.
+        /// </summary>
+        internal static string title_new_game_player {
+            get {
+                return ResourceManager.GetString("title_new_game_player", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New venue.
+        /// </summary>
+        internal static string title_new_venue {
+            get {
+                return ResourceManager.GetString("title_new_venue", resourceCulture);
             }
         }
     }

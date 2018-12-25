@@ -13,7 +13,7 @@ namespace TeeScore.ViewModels
 {
     public class GamePlayerViewModel : MyViewModelBase
     {
-        private readonly IDialogService _dialogService;
+        private readonly IModalDialogService _dialogService;
         private ObservableCollection<PlayerDto> _players;
         private PlayerDto _player;
         private bool _playerFieldsEnabled;
@@ -22,7 +22,7 @@ namespace TeeScore.ViewModels
         private PlayerDto _selectedKnownPlayer;
         private string _gameId;
 
-        public GamePlayerViewModel(IDataService dataService, INavigationService navigationService, IDialogService dialogService) : base(dataService, navigationService)
+        public GamePlayerViewModel(IDataService dataService, INavigationService navigationService, IModalDialogService dialogService) : base(dataService, navigationService)
         {
             _dialogService = dialogService;
             PropertyChanged += GamePlayerViewModel_PropertyChanged;
@@ -184,7 +184,7 @@ namespace TeeScore.ViewModels
             if (Players.Any(x => x.Name.Equals(Player.Name, StringComparison.OrdinalIgnoreCase) && 
                                  x.Abbreviation.Equals(Player.Abbreviation, StringComparison.OrdinalIgnoreCase)))
             {
-                await _dialogService.ShowError("This player is already on your game", "Validation error",null,null);
+                _dialogService.ShowError("This player is already on your game", "Validation error");
                 return false;
             }
 

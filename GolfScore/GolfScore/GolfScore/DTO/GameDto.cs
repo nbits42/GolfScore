@@ -8,7 +8,7 @@ namespace TeeScore.DTO
         public Game Game  { get; set; } = new Game();
         public VenueDto Venue { get; set; }
         public List<PlayerDto> Players { get; set; } = new List<PlayerDto>();
-        public List<Tee> Tees { get; set; } = new List<Tee>();
-        public List<Score>  Scores { get; set; } = new List<Score>();
+        public List<TeeDto> Tees { get; set; } = new List<TeeDto>();
+        public List<ScoreDto>  Scores { get; set; } = new List<ScoreDto>();
     }
 }

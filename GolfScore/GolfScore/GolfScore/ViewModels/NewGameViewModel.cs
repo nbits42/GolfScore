@@ -12,6 +12,7 @@ using TeeScore.DTO;
 using TeeScore.Helpers;
 using TeeScore.Services;
 using TeeScore.Validation;
+using Xamarin.Forms;
 
 namespace TeeScore.ViewModels
 {
@@ -46,6 +47,10 @@ namespace TeeScore.ViewModels
         private RelayCommand _startGameCommand;
         private bool _loaded = false;
         private GamePlayer _myGamePlayer = null;
+        private bool _startButtonIsEnabled;
+        private string _startText;
+        private bool _startButtonIsVisible;
+        private bool _startingIsBusy;
 
 
         public NewGameViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
@@ -64,6 +69,7 @@ namespace TeeScore.ViewModels
             _myGamePlayer = null;
             _doCheck = false;
 
+            Settings.CurrentScoreIx = 0;
             Game = new NewGameDto();
             SelectedVenue = null;
             GameType = Settings.LastGameType;
@@ -77,7 +83,8 @@ namespace TeeScore.ViewModels
 
             CurrentPage = CreateGamePage.VenueSelection;
             CurrentPageIndex = (int)CurrentPage;
-
+            StartButtonIsVisible = true;
+            StartingIsBusy = false;
             _doCheck = true;
             CheckNextPage();
         }
@@ -87,6 +94,7 @@ namespace TeeScore.ViewModels
             await LoadAsync();
 
             _doCheck = false;
+            Settings.CurrentScoreIx = 0;
             _myGamePlayer = new GamePlayer {GameId = Game.Game.Id, PlayerId = MyPlayer.Id};
             Game = await GetGame(gameId).ConfigureAwait(true);
             Players = new ObservableCollection<PlayerDto>(Game.Players);
@@ -100,6 +108,8 @@ namespace TeeScore.ViewModels
             CurrentPage = CreateGamePage.VenueSelection;
             CurrentPageIndex = (int)CurrentPage;
             SelectedVenue = FindVenue(Game.Venue);
+            StartButtonIsVisible = true;
+            StartingIsBusy = false;
         }
 
         private VenueDto FindVenue(VenueDto gameVenue)
@@ -696,7 +706,7 @@ namespace TeeScore.ViewModels
         private async Task SaveGame()
         {
             UpdateGame();
-            Game.Game = await DataService.SaveGame(Game.Game, true);
+            Game.Game = await DataService.SaveGame(Game.Game, true).ConfigureAwait(false);
             if (_myGamePlayer == null)
             {
                 _myGamePlayer = new GamePlayer
@@ -704,7 +714,7 @@ namespace TeeScore.ViewModels
                     GameId = Game.Game.Id,
                     PlayerId = MyPlayer.Id
                 };
-                _myGamePlayer = await DataService.SaveGamePlayer(_myGamePlayer);
+                _myGamePlayer = await DataService.SaveGamePlayer(_myGamePlayer).ConfigureAwait(false);
             }
             Settings.CurrentGameId = Game.Game.Id;
         }
@@ -770,41 +780,112 @@ namespace TeeScore.ViewModels
         public RelayCommand StartGameCommand => _startGameCommand
                                                 ?? (_startGameCommand = new RelayCommand(async () => await StartGame()));
 
-        private async Task StartGame()
+
+        /* =========================================== property: StartButtonIsVisible ====================================== */
+        /// <summary>
+        /// Sets and gets the StartButtonIsVisible property.
+        /// </summary>
+        public bool StartButtonIsVisible
         {
+            get => _startButtonIsVisible;
+            set
+            {
+                if (value == _startButtonIsVisible)
+                {
+                    return;
+                }
+
+                _startButtonIsVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        /* =========================================== property: StartingIsBusy ====================================== */
+        /// <summary>
+        /// Sets and gets the StartingIsBusy property.
+        /// </summary>
+        public bool StartingIsBusy
+        {
+            get => _startingIsBusy;
+            set
+            {
+                if (value == _startingIsBusy)
+                {
+                    return;
+                }
+
+                _startingIsBusy = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+        /* =========================================== property: StartText ====================================== */
+        /// <summary>
+        /// Sets and gets the StartText property.
+        /// </summary>
+        public string StartText
+        {
+            get => _startText;
+            set
+            {
+                if (value == _startText)
+                {
+                    return;
+                }
+
+                _startText = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
+        public async Task StartGame()
+        {
+            StartButtonIsVisible = false;
+            StartingIsBusy = true;
+            PreviousPageEnabled = false;
+            StartText = Translations.Labels.lbl_starting_getting_data;
             UpdateGame();
 
-            Game.Game.GameStatus = GameStatus.Started;
+            Settings.LastGameType = Game.Game.GameType;
+            Settings.LastPlayersCount = Game.Game.InvitedPlayersCount;
+            Settings.LastTeeCount = Game.Game.TeeCount;
+            Settings.CurrentGameId = Game.Game.Id;
 
-            var gameScores = new GameScoresDto();
+            Game.Game.GameStatus = GameStatus.Started;
+            Game.Game.CurrentTee = (Game.Game.StartTee - 1 ) * Game.Game.InvitedPlayersCount;
+            await SaveGame();
+
             for (var i = 1; i <= Game.Game.TeeCount; i++)
             {
                 var tee = new TeeDto
                 {
-                    Id = Guid.NewGuid().ToString(),
                     GameId = Game.Game.Id,
-                    Number = true.ToString()
+                    Number = i.ToString("D2")
                 };
-                foreach (var player in Game.Players)
+                tee = await DataService.SaveTee(tee);
+                foreach (var player in Game.Players.OrderBy(x=>x.Abbreviation))
                 {
                     var teeScore = new ScoreDto
                     {
-                        Id = Guid.NewGuid().ToString(),
                         GameId = Game.Game.Id,
                         TeeId = tee.Id,
                         PlayerId = player.Id,
+                        PlayerAbbreviation = player.Abbreviation,
                         Putts = 0,
                     };
-                    tee.Scores.Add(teeScore);
+                    await DataService.SaveScore(teeScore);
                 }
-                gameScores.Tees.Add(tee);
             }
 
-            Game.Game.ScoresJson = JsonConvert.SerializeObject(gameScores);
-            await SaveGame();
+            StartText = Translations.Labels.lbl_starting_saving_data;
 
-            Settings.CurrentGameId = Game.Game.Id;
-            OnGameStarted();
+            await DataService.SyncAsync();
+            //OnGameStarted();
+            StartText = Translations.Labels.lbl_starting_starting;
         }
 
 

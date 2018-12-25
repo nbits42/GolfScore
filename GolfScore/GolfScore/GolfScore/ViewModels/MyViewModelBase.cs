@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using GalaSoft.MvvmLight.Views;
 using TeeScore.Contracts;
+using IDialogService = TeeScore.Contracts.IDialogService;
 using INavigationService = TeeScore.Contracts.INavigationService;
 
 namespace TeeScore.ViewModels
@@ -18,13 +19,6 @@ namespace TeeScore.ViewModels
         {
             DataService = dataService;
             NavigationService = navigationService;
-        }
-
-        protected IDialogService DialogService => SimpleIoc.Default.GetInstance<IDialogService>();
-
-        protected void ShowError(Exception ex, string title, string buttonText, Action afterHideCallBack)
-        {
-            DialogService.ShowError(ex, title, buttonText, afterHideCallBack);
         }
     }
 

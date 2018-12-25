@@ -117,6 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="btn_back" xml:space="preserve">
+    <value>BACK</value>
+  </data>
+  <data name="btn_cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="btn_next" xml:space="preserve">
+    <value>NEXT</value>
+  </data>
+  <data name="btn_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="btn_start" xml:space="preserve">
+    <value>Start</value>
+  </data>
   <data name="GameType_DiskGolf" xml:space="preserve">
     <value>Disc golf</value>
   </data>
@@ -135,6 +150,42 @@
   <data name="GameType_ShortGolf" xml:space="preserve">
     <value>Short golf</value>
   </data>
+  <data name="lbl_abbreviation" xml:space="preserve">
+    <value>Abbreviation</value>
+  </data>
+  <data name="lbl_choose_or_add_venue" xml:space="preserve">
+    <value>Choose or add venue</value>
+  </data>
+  <data name="lbl_find_or_add_players" xml:space="preserve">
+    <value>Find or add players</value>
+  </data>
+  <data name="lbl_game_number" xml:space="preserve">
+    <value>Pass this number to the other players. They can enter this number at the 'Join Game' page.</value>
+  </data>
+  <data name="lbl_game_type" xml:space="preserve">
+    <value>Game type</value>
+  </data>
+  <data name="lbl_location" xml:space="preserve">
+    <value>Location</value>
+  </data>
+  <data name="lbl_name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="lbl_players_count" xml:space="preserve">
+    <value>Nr. of players</value>
+  </data>
+  <data name="lbl_select_other_players" xml:space="preserve">
+    <value>Select other players</value>
+  </data>
+  <data name="lbl_start_tee" xml:space="preserve">
+    <value>Start tee</value>
+  </data>
+  <data name="lbl_tees_count" xml:space="preserve">
+    <value>Nr. of tees</value>
+  </data>
+  <data name="lbl_venue" xml:space="preserve">
+    <value>Venue</value>
+  </data>
   <data name="PlayerSelection_ByInvitationNumber" xml:space="preserve">
     <value>By invitation number</value>
   </data>
@@ -146,5 +197,35 @@
   </data>
   <data name="PlayerSelection_Manual" xml:space="preserve">
     <value>Manual</value>
+  </data>
+  <data name="title_new_game" xml:space="preserve">
+    <value>New game</value>
+  </data>
+  <data name="title_new_game_player" xml:space="preserve">
+    <value>New game player</value>
+  </data>
+  <data name="title_new_venue" xml:space="preserve">
+    <value>New venue</value>
+  </data>
+  <data name="lbl_current_player" xml:space="preserve">
+    <value>Current player</value>
+  </data>
+  <data name="lbl_current_tee" xml:space="preserve">
+    <value>Current tee</value>
+  </data>
+  <data name="lbl_started" xml:space="preserve">
+    <value>Started at</value>
+  </data>
+  <data name="lbl_starting_getting_data" xml:space="preserve">
+    <value>Getting all game data ...</value>
+  </data>
+  <data name="lbl_starting_saving_data" xml:space="preserve">
+    <value>Saving game ...</value>
+  </data>
+  <data name="lbl_starting_starting" xml:space="preserve">
+    <value>Starting game ...</value>
+  </data>
+  <data name="lbl_tee" xml:space="preserve">
+    <value>Tee</value>
   </data>
 </root>

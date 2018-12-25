@@ -2,9 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:xForms="clr-namespace:Syncfusion.SfPicker.XForms;assembly=Syncfusion.SfPicker.XForms"
+             xmlns:extensions="clr-namespace:TeeScore.Extensions;assembly=TeeScore"
              x:Class="TeeScore.Pages.PlayerPage"
              BackgroundColor="{StaticResource PageBackgroundColor}"
-             Title="Game player">
+             Title="{extensions:Translate title_new_game_player}">
     <ContentPage.Content>
         <ScrollView>
             <Grid>
@@ -22,7 +23,7 @@
                             ItemDisplayBinding="{Binding Name, Mode=TwoWay}"
                             Style="{StaticResource PickerStyle}"
                             Title="Select a known player"/>
-                    <Label Text="Name" Style="{StaticResource TinyLabelStyle}"/>
+                    <Label Text="{extensions:Translate lbl_name}" Style="{StaticResource TinyLabelStyle}"/>
                     <Entry Text="{Binding Player.Name, Mode=TwoWay}" Style="{StaticResource EditorStyle}" IsSpellCheckEnabled="False" IsEnabled="{Binding PlayerFieldsEnabled, Mode=TwoWay}" >
                         <Entry.Keyboard>
                             <Keyboard x:FactoryMethod="Create">
@@ -32,7 +33,7 @@
                             </Keyboard>
                         </Entry.Keyboard>
                     </Entry>
-                    <Label Text="Abbreviation"  Style="{StaticResource TinyLabelStyle}"/>
+                    <Label Text="{extensions:Translate lbl_abbreviation}"  Style="{StaticResource TinyLabelStyle}"/>
                     <Entry Text="{Binding Player.Abbreviation, Mode=TwoWay}" Style="{StaticResource EditorStyle}" IsSpellCheckEnabled="False" IsEnabled="{Binding PlayerFieldsEnabled, Mode=TwoWay}">
                         <Entry.Keyboard>
                             <Keyboard x:FactoryMethod="Create">
@@ -44,8 +45,8 @@
                     </Entry>
                 </StackLayout>
                 <StackLayout Grid.Row="2" VerticalOptions="End" HorizontalOptions="Center" Orientation="Horizontal" Margin="8">
-                    <Button Text="OK" Clicked="OK_Clicked" Style="{StaticResource DialogButtonStyle}" IsEnabled="{Binding Player.IsValid, Mode=TwoWay}"></Button>
-                    <Button Text="Cancel" Clicked="Cancel_Clicked" Style="{StaticResource DialogButtonStyle}"></Button>
+                    <Button Text="{extensions:Translate btn_OK}" Clicked="OK_Clicked" Style="{StaticResource DialogButtonStyle}" IsEnabled="{Binding Player.IsValid, Mode=TwoWay}"></Button>
+                    <Button Text="{extensions:Translate btn_cancel}" Clicked="Cancel_Clicked" Style="{StaticResource DialogButtonStyle}"></Button>
                 </StackLayout>
             </Grid>
         </ScrollView>

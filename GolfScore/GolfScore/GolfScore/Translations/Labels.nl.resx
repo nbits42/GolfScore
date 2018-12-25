@@ -117,6 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="btn_back" xml:space="preserve">
+    <value>TERUG</value>
+  </data>
+  <data name="btn_cancel" xml:space="preserve">
+    <value>Annuleren</value>
+  </data>
+  <data name="btn_next" xml:space="preserve">
+    <value>VOLGENDE</value>
+  </data>
+  <data name="btn_OK" xml:space="preserve">
+    <value>Akkoord</value>
+  </data>
+  <data name="btn_start" xml:space="preserve">
+    <value>Start</value>
+  </data>
   <data name="GameType_DiskGolf" xml:space="preserve">
     <value>Disk golf</value>
   </data>
@@ -135,6 +150,42 @@
   <data name="GameType_ShortGolf" xml:space="preserve">
     <value>Short golf</value>
   </data>
+  <data name="lbl_abbreviation" xml:space="preserve">
+    <value>Afkorting</value>
+  </data>
+  <data name="lbl_choose_or_add_venue" xml:space="preserve">
+    <value>Kies een plaats of voeg een plaats toe</value>
+  </data>
+  <data name="lbl_find_or_add_players" xml:space="preserve">
+    <value>Zoek een speler of voeg een speler toe</value>
+  </data>
+  <data name="lbl_game_number" xml:space="preserve">
+    <value>Geef dit nummer door aan de andere spelers. Zij kunnen dit nummer invullen op de mee doen pagina</value>
+  </data>
+  <data name="lbl_game_type" xml:space="preserve">
+    <value>Spel soort</value>
+  </data>
+  <data name="lbl_location" xml:space="preserve">
+    <value>Lokatie</value>
+  </data>
+  <data name="lbl_name" xml:space="preserve">
+    <value>Naam</value>
+  </data>
+  <data name="lbl_players_count" xml:space="preserve">
+    <value>Aantal spelers</value>
+  </data>
+  <data name="lbl_select_other_players" xml:space="preserve">
+    <value>Kies andere spelers</value>
+  </data>
+  <data name="lbl_start_tee" xml:space="preserve">
+    <value>Start tee</value>
+  </data>
+  <data name="lbl_tees_count" xml:space="preserve">
+    <value>Aantal tees</value>
+  </data>
+  <data name="lbl_venue" xml:space="preserve">
+    <value>Plaats</value>
+  </data>
   <data name="PlayerSelection_ByInvitationNumber" xml:space="preserve">
     <value>Met uitnodigingsnummer</value>
   </data>
@@ -146,5 +197,32 @@
   </data>
   <data name="PlayerSelection_Manual" xml:space="preserve">
     <value>Handmatig</value>
+  </data>
+  <data name="title_new_game" xml:space="preserve">
+    <value>Nieuw spel</value>
+  </data>
+  <data name="title_new_game_player" xml:space="preserve">
+    <value>Nieuwe speler</value>
+  </data>
+  <data name="title_new_venue" xml:space="preserve">
+    <value>Nieuwe plaats</value>
+  </data>
+  <data name="lbl_current_player" xml:space="preserve">
+    <value>Huidige speler</value>
+  </data>
+  <data name="lbl_current_tee" xml:space="preserve">
+    <value>Huidige tee</value>
+  </data>
+  <data name="lbl_starting_getting_data" xml:space="preserve">
+    <value>Verzamelen gegevens ...</value>
+  </data>
+  <data name="lbl_starting_saving_data" xml:space="preserve">
+    <value>Opslaan ...</value>
+  </data>
+  <data name="lbl_starting_starting" xml:space="preserve">
+    <value>Starten spel ...</value>
+  </data>
+  <data name="lbl_tee" xml:space="preserve">
+    <value>Tee</value>
   </data>
 </root>

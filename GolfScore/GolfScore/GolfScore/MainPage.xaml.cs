@@ -83,6 +83,11 @@ namespace TeeScore
                     var newGamePage = new NewGamePage(game.Id);
                     await Navigation.PushAsync(newGamePage).ConfigureAwait(true);
                 }
+                else
+                {
+                    var playGamePage = new PlayGamePage(game.Id);
+                    await Navigation.PushAsync(playGamePage).ConfigureAwait(true);
+                }
             }
         }
     }

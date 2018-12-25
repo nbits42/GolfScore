@@ -2,14 +2,16 @@
 using GalaSoft.MvvmLight;
 using GlobalContracts.Interfaces;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using TeeScore.Domain;
 
 namespace TeeScore.DTO
 {
     public class TeeDto : ObservableObject, ITee
     {
         private string _id;
-        private DateTime _finished;
-        private DateTime _started;
+        private DateTime _finished = DomainBase.EmptyDate;
+        private DateTime _started = DomainBase.EmptyDate;
         private string _number;
         private string _gameId;
 
@@ -110,6 +112,6 @@ namespace TeeScore.DTO
             }
         }
 
-        public List<ScoreDto> Scores { get; set; } = new List<ScoreDto>();
+        public ObservableCollection<ScoreDto> Scores { get; set; } = new ObservableCollection<ScoreDto>();
     }
 }

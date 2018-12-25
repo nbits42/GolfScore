@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:tabView="clr-namespace:Syncfusion.XForms.TabView;assembly=Syncfusion.SfTabView.XForms"
+             xmlns:xForms="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+             xmlns:xForms1="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
+             xmlns:extensions="clr-namespace:TeeScore.Extensions;assembly=TeeScore"
+             x:Class="TeeScore.Pages.PlayGamePage"
+             BackgroundColor="{StaticResource PageBackgroundColor}"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <tabView:SfTabView DisplayMode="NoHeader" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" TabHeight="0">
+            <tabView:TabItemCollection>
+                <tabView:SfTabItem Title="1">
+                    <tabView:SfTabItem.Content>
+                        <StackLayout Padding="8,3,8,3">
+                            <Label Text="{Binding Game.Game.GameDate}" Style="{StaticResource TinyLabelStyle}"></Label>
+                            <Label Text="{Binding Game.Venue.Name}" Style="{StaticResource LargeLabelStyle}"></Label>
+                            <Label Text="{Binding Game.Venue.Location}" Style="{StaticResource SmallLabelStyle}"></Label>
+                            <Label Text="{Binding Game.Game.PlayerNames}" Style="{StaticResource SmallLabelStyle}"></Label>
+                            <BoxView Color="{StaticResource ButtonBackgroundColor}" HeightRequest="2"></BoxView>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <Label Grid.Row="0" Grid.Column="0"  Text="{extensions:Translate lbl_started}" Style="{StaticResource SmallLabelStyle}" ></Label>
+                                <Label Grid.Row="0" Grid.Column="1"  Text="{Binding Game.Game.StartedAt, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
+                                <Label Grid.Row="1" Grid.Column="0"  Text="{extensions:Translate lbl_current_tee}" Style="{StaticResource SmallLabelStyle}"></Label>
+                                <Label Grid.Row="1" Grid.Column="1"  Text="{Binding CurrentScore.TeeNumber, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
+                                <Label Grid.Row="2" Grid.Column="0"  Text="{extensions:Translate lbl_current_player}" Style="{StaticResource SmallLabelStyle}" ></Label>
+                                <Label Grid.Row="2" Grid.Column="1"  Text="{Binding CurrentScore.Player.Name, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
+
+                            </Grid>
+                        </StackLayout>
+                    </tabView:SfTabItem.Content>
+                </tabView:SfTabItem>
+                <tabView:SfTabItem Title="2">
+                    <tabView:SfTabItem.Content>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="80"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <xForms:SfListView Grid.Row="0" ItemsSource="{Binding Tees}" 
+                                               SelectedItem="{Binding CurrentTee, Mode=TwoWay}" 
+                                               BackgroundColor="White"
+                                               SelectionBackgroundColor="{StaticResource SelectedItemBackgroundColor}" 
+                                               SelectionChanged="SfListView_OnSelectionChanged"
+                                               Padding="8,3,8,3" 
+                                               IsStickyFooter="True"
+                                               IsStickyHeader="True"
+                                               FooterSize="20"
+                                               SelectionMode="Single">
+                                <xForms:SfListView.HeaderTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Text=""></Label>
+                                            <xForms:SfListView Grid.Column="1" ItemsSource="{Binding Game.Players}" 
+                                                               Orientation="Horizontal">
+                                                <xForms:SfListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Label Text="{Binding Abbreviation}" HorizontalTextAlignment="Center" VerticalTextAlignment="Start" TextColor="{StaticResource NormalTextColor}" FontAttributes="Bold"></Label>
+                                                    </DataTemplate>
+                                                </xForms:SfListView.ItemTemplate>
+                                            </xForms:SfListView>
+                                        </Grid>
+                                    </DataTemplate>
+                                </xForms:SfListView.HeaderTemplate>
+                                <xForms:SfListView.FooterTemplate>
+                                    <DataTemplate>
+                                        <Grid BackgroundColor="WhiteSmoke">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Text=""></Label>
+                                            <xForms:SfListView Grid.Column="1" ItemsSource="{Binding TotalScores}" Orientation="Horizontal">
+                                                <xForms:SfListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Label Text="{Binding TotalPutts}" HorizontalTextAlignment="Center" VerticalTextAlignment="Start" TextColor="{StaticResource NormalTextColor}" FontAttributes="Bold"></Label>
+                                                    </DataTemplate>
+                                                </xForms:SfListView.ItemTemplate>
+                                            </xForms:SfListView>
+                                        </Grid>
+                                    </DataTemplate>
+                                </xForms:SfListView.FooterTemplate>
+                                <xForms:SfListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid BackgroundColor="White" Margin="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30"></ColumnDefinition>
+                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Column="0" Text="{Binding Number}" HorizontalTextAlignment="Start" VerticalTextAlignment="Start" TextColor="{StaticResource NormalTextColor}" FontAttributes="Bold" Margin="2,0,0,0"></Label>
+                                            <xForms:SfListView Grid.Column="1" ItemsSource="{Binding Scores}" SelectionMode="None" Orientation="Horizontal">
+                                                <xForms:SfListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Label Text="{Binding Putts}" HorizontalTextAlignment="Center" VerticalTextAlignment="Start"  TextColor="{StaticResource NormalTextColor}"></Label>
+                                                    </DataTemplate>
+                                                </xForms:SfListView.ItemTemplate>
+                                            </xForms:SfListView>
+                                        </Grid>
+                                    </DataTemplate>
+                                </xForms:SfListView.ItemTemplate>
+                            </xForms:SfListView>
+                            <StackLayout Grid.Row="1" VerticalOptions="End" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource PageHeadingBackgroundColor}">
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" BackgroundColor="{StaticResource PageHeadingBackgroundColor}" Margin="3">
+                                    <Label Text="{extensions:Translate lbl_tee}" TextColor="White"></Label>
+                                    <Label Text=": " TextColor="White"></Label>
+                                    <Label Text="{Binding CurrentScore.TeeNumber}" TextColor="White"></Label>
+                                    <Label Text=" - " TextColor="White"></Label>
+                                    <Label Text="{Binding CurrentScore.Player.Name}" TextColor="White"></Label>
+                                </StackLayout>
+                                <Grid BackgroundColor="{StaticResource PageBackgroundColor}" VerticalOptions="End">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="100"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <ImageButton Grid.Column="0" Source="back.png" BackgroundColor="{StaticResource ButtonBackgroundColor}" Command="{Binding BackCommand}" IsEnabled="{Binding IsBackEnabled, Mode=TwoWay}" ></ImageButton>
+                                    <xForms1:SfNumericUpDown  Grid.Column="1" Minimum="0" Maximum="7" Value="{Binding CurrentScore.Putts, Mode=TwoWay}" MaximumDecimalDigits="0" TextColor="{StaticResource NormalTextColor}"></xForms1:SfNumericUpDown>
+                                    <ImageButton Grid.Column="2" Source="next.png" BackgroundColor="{StaticResource ButtonBackgroundColor}" Command="{Binding NextCommand}" IsEnabled="{Binding IsNextEnabled, Mode=TwoWay}" ></ImageButton>
+                                </Grid>
+                            </StackLayout>
+                        </Grid>
+                    </tabView:SfTabItem.Content>
+                </tabView:SfTabItem>
+            </tabView:TabItemCollection>
+        </tabView:SfTabView>
+    </ContentPage.Content>
+</ContentPage>

@@ -74,5 +74,16 @@ namespace TeeScore.Helpers
             set => AppSettings.AddOrUpdateValue(LastPlayersCountKey, value);
         }
 
+        /* ------------------- CurrentScoreIx  -------------------- */
+
+        private const string CurrentScoreIxKey = "CurrentScoreIx_key";
+        private static readonly int CurrentScoreIxDefault = 0;
+
+        public static int CurrentScoreIx
+        {
+            get => AppSettings.GetValueOrDefault(CurrentScoreIxKey, CurrentScoreIxDefault);
+            set => AppSettings.AddOrUpdateValue(CurrentScoreIxKey, value);
+        }
+
     }
 }

@@ -12,6 +12,10 @@ namespace TeeScore.Mapping
             CreateMap<PlayerDto, Player>();
             CreateMap<Venue, VenueDto>();
             CreateMap<VenueDto, Venue>();
+            CreateMap<TeeDto, Tee>();
+            CreateMap<Tee, TeeDto>();
+            CreateMap<ScoreDto, Score>();
+            CreateMap<Score, ScoreDto>();
         }
 
 

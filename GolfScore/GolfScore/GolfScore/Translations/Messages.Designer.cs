@@ -61,6 +61,15 @@ namespace TeeScore.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This player is already on your game.
+        /// </summary>
+        internal static string GamePlayerExists {
+            get {
+                return ResourceManager.GetString("GamePlayerExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Location is required.
         /// </summary>
         internal static string LocationIsRequired {
@@ -75,6 +84,15 @@ namespace TeeScore.Translations {
         internal static string NameIsRequired {
             get {
                 return ResourceManager.GetString("NameIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This venue already exists.
+        /// </summary>
+        internal static string VenueExists {
+            get {
+                return ResourceManager.GetString("VenueExists", resourceCulture);
             }
         }
     }

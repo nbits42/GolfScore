@@ -16,6 +16,8 @@ using Android.App;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 
+[assembly: Application(Icon = "@mipmap/icon")]
+
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version

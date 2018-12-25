@@ -15,11 +15,11 @@ namespace TeeScore.ViewModels
 {
     public class VenueViewModel : MyViewModelBase
     {
-        private readonly IDialogService _dialogService;
+        private readonly IModalDialogService _dialogService;
         private VenueDto _venue = new VenueDto();
         private ObservableCollection<VenueDto> _venues;
 
-        public VenueViewModel(IDataService dataService, INavigationService navigationService, IDialogService dialogService) : base(dataService, navigationService)
+        public VenueViewModel(IDataService dataService, INavigationService navigationService, IModalDialogService dialogService) : base(dataService, navigationService)
         {
             _dialogService = dialogService;
         }
@@ -83,7 +83,7 @@ namespace TeeScore.ViewModels
             {
                 if (Venues.Any(x=>x.Name.Equals(Venue.Name, StringComparison.OrdinalIgnoreCase) && x.Location.Equals(Venue.Location, StringComparison.OrdinalIgnoreCase)))
                 {
-                    await _dialogService.ShowError("This Venue is already in your venues list", "Venue error", null, null);
+                    _dialogService.ShowError("This Venue is already in your venues list", "Validation error");
                     return false;
                 }
             }

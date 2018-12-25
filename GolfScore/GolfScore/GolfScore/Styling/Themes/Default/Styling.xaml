@@ -72,6 +72,14 @@
         <Setter Property="Margin" Value="5,0,0,0" />
         <Setter Property="TextColor" Value="{StaticResource NormalTextColor}" />
     </Style>
+    <Style x:Key="SmallLabelStyle" TargetType="Label">
+        <Setter Property="FontFamily" Value="Roboto" />
+        <Setter Property="FontSize" Value="Small" />
+        <Setter Property="HorizontalOptions" Value="StartAndExpand" />
+        <Setter Property="VerticalOptions" Value="Start" />
+        <Setter Property="Margin" Value="5,0,0,0" />
+        <Setter Property="TextColor" Value="{StaticResource NormalTextColor}" />
+    </Style>
     <Style x:Key="PickerStyle" TargetType="Picker">
         <Setter Property="FontFamily" Value="Roboto" />
         <Setter Property="TextColor" Value="{StaticResource NormalTextColor}"></Setter>

@@ -117,10 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="GamePlayerExists" xml:space="preserve">
+    <value>This player is already on your game</value>
+  </data>
   <data name="LocationIsRequired" xml:space="preserve">
     <value>Location is required</value>
   </data>
   <data name="NameIsRequired" xml:space="preserve">
     <value>Name is required</value>
+  </data>
+  <data name="VenueExists" xml:space="preserve">
+    <value>This venue already exists</value>
   </data>
 </root>
