@@ -1,6 +1,6 @@
-﻿using System;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GlobalContracts.Interfaces;
+using System;
 
 namespace TeeScore.DTO
 {
@@ -14,6 +14,7 @@ namespace TeeScore.DTO
         private string _playerAbbreviation;
         private PlayerDto _player;
         private string _teeNumber;
+        private string _displayPutts;
 
         public event EventHandler ScoreChanged;
 
@@ -70,7 +71,7 @@ namespace TeeScore.DTO
             }
         }
 
-/* =========================================== property: TeeId ====================================== */
+        /* =========================================== property: TeeId ====================================== */
         /// <summary>
         /// Sets and gets the TeeId property.
         /// </summary>
@@ -89,7 +90,7 @@ namespace TeeScore.DTO
             }
         }
 
-/* =========================================== property: PlayerId ====================================== */
+        /* =========================================== property: PlayerId ====================================== */
         /// <summary>
         /// Sets and gets the PlayerId property.
         /// </summary>
@@ -109,7 +110,7 @@ namespace TeeScore.DTO
         }
 
 
-/* =========================================== property: Putts ====================================== */
+        /* =========================================== property: Putts ====================================== */
         /// <summary>
         /// Sets and gets the Putts property.
         /// </summary>
@@ -125,6 +126,7 @@ namespace TeeScore.DTO
 
                 _putts = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(DisplayPutts));
             }
         }
 
@@ -172,7 +174,7 @@ namespace TeeScore.DTO
         /// <summary>
         /// Sets and gets the TeeNumber property.
         /// </summary>
-        public string  TeeNumber
+        public string TeeNumber
         {
             get => _teeNumber;
             set
@@ -186,6 +188,12 @@ namespace TeeScore.DTO
                 RaisePropertyChanged();
             }
         }
+
+        /* =========================================== property: DisplayPutts ====================================== */
+        /// <summary>
+        /// Sets and gets the DisplayPutts property.
+        /// </summary>
+        public string DisplayPutts => Putts > 7 ? "7+" : Putts.ToString();
 
 
         protected virtual void OnScoreChanged()

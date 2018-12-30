@@ -9,7 +9,7 @@
              BackgroundColor="{StaticResource PageBackgroundColor}"
              Title="{Binding Title}">
     <ContentPage.Content>
-        <tabView:SfTabView DisplayMode="NoHeader" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" TabHeight="0">
+        <tabView:SfTabView x:Name="TabView" DisplayMode="NoHeader" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" TabHeight="0" SelectionChanged="TabView_OnSelectionChanged">
             <tabView:TabItemCollection>
                 <tabView:SfTabItem Title="1">
                     <tabView:SfTabItem.Content>
@@ -129,10 +129,38 @@
                                         <ColumnDefinition Width="100"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <ImageButton Grid.Column="0" Source="back.png" BackgroundColor="{StaticResource ButtonBackgroundColor}" Command="{Binding BackCommand}" IsEnabled="{Binding IsBackEnabled, Mode=TwoWay}" ></ImageButton>
-                                    <xForms1:SfNumericUpDown  Grid.Column="1" Minimum="0" Maximum="7" Value="{Binding CurrentScore.Putts, Mode=TwoWay}" MaximumDecimalDigits="0" TextColor="{StaticResource NormalTextColor}"></xForms1:SfNumericUpDown>
+                                    <xForms1:SfNumericUpDown  Grid.Column="1" Minimum="0" Maximum="7" Value="{Binding CurrentScore.Putts, Mode=TwoWay}" MaximumDecimalDigits="0" TextColor="{StaticResource NormalTextColor}" IsEnabled="{Binding ScoringIsEnabled, Mode=TwoWay}"></xForms1:SfNumericUpDown>
                                     <ImageButton Grid.Column="2" Source="next.png" BackgroundColor="{StaticResource ButtonBackgroundColor}" Command="{Binding NextCommand}" IsEnabled="{Binding IsNextEnabled, Mode=TwoWay}" ></ImageButton>
                                 </Grid>
                             </StackLayout>
+                        </Grid>
+                    </tabView:SfTabItem.Content>
+                </tabView:SfTabItem>
+                <tabView:SfTabItem>
+                    <tabView:SfTabItem.Content>
+                        <Grid BackgroundColor="LightGreen">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"></RowDefinition>
+                                <RowDefinition Height="20"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="40"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <StackLayout Grid.Row="0" Orientation="Horizontal" HorizontalOptions="Center">
+                                <Label  TextColor="{StaticResource NormalTextColor}" Text="{extensions:Translate lbl_tee}" FontSize="Medium"></Label>
+                                <Label  TextColor="{StaticResource NormalTextColor}" Text=": " FontSize="Medium"></Label>
+                                <Label  TextColor="{StaticResource NormalTextColor}" Text="{Binding CurrentScore.TeeNumber}" FontSize="Medium"></Label>
+                            </StackLayout>
+                            <Label Grid.Row="1" TextColor="{StaticResource NormalTextColor}" HorizontalOptions="Center" Text="{Binding CurrentScore.Player.Name}" FontSize="Medium"></Label>
+                            <Button Grid.Row="2" Text="{Binding CurrentScore.DisplayPutts, Mode=TwoWay}" FontSize="50" HorizontalOptions="Center" VerticalOptions="Center" CornerRadius="125" Command="{Binding ScoreUpCommand}" WidthRequest="250" HeightRequest="250" BackgroundColor="{StaticResource ButtonBackgroundColor}"  TextColor="{StaticResource ButtonTextColor}"  IsEnabled="{Binding ScoringIsEnabled, Mode=TwoWay}"></Button>
+                            <Button Grid.Row="2" Text="-"  FontSize="50" HorizontalOptions="Start" VerticalOptions="End" CornerRadius="40" Command="{Binding ScoreDownCommand}" WidthRequest="80" HeightRequest="80" Margin="50,0,0,100" BackgroundColor="{StaticResource ButtonBackgroundColor}" BorderColor="Silver" BorderWidth="2" TextColor="{StaticResource ButtonTextColor}"  IsEnabled="{Binding ScoringIsEnabled, Mode=TwoWay}"></Button>
+                            <Grid Grid.Row="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                                    <ColumnDefinition Width="6*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="0" Text="PREVIOUS"  TextColor="{StaticResource ButtonBackgroundColor}" BackgroundColor="Transparent" BorderColor="Black" Command="{Binding BackCommand}"></Button>
+                                <Button Grid.Column="1" Text="NEXT PLAYER" TextColor="{StaticResource ButtonBackgroundColor}" BackgroundColor="Transparent" BorderColor="Black" Command="{Binding NextCommand}"></Button>
+                            </Grid>
                         </Grid>
                     </tabView:SfTabItem.Content>
                 </tabView:SfTabItem>

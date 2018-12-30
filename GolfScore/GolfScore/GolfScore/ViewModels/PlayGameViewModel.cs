@@ -12,6 +12,7 @@ namespace TeeScore.ViewModels
 {
     public class PlayGameViewModel : MyViewModelBase
     {
+        private readonly IDialogService _dialogService;
         private ObservableCollection<TeeDto> _tees;
         private TeeDto _currentTee;
         private PlayerDto _currentPlayer;
@@ -24,15 +25,13 @@ namespace TeeScore.ViewModels
         private bool _isNextEnabled;
         private string _title;
         private ObservableCollection<TotalScoreDto> _totalScores;
+        private RelayCommand _scoreUpCommand;
+        private RelayCommand _scoreDownCommand;
+        private bool _scoringIsEnabled;
 
-        public PlayGameViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
+        public PlayGameViewModel(IDataService dataService, INavigationService navigationService, IDialogService dialogService) : base(dataService, navigationService)
         {
-            PropertyChanged += PlayGameViewModel_PropertyChanged;
-        }
-
-        private void PlayGameViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            var propname = e.PropertyName;
+            _dialogService = dialogService;
         }
 
         public async Task LoadAsync(string gameId)
@@ -69,6 +68,7 @@ namespace TeeScore.ViewModels
             CurrentTee = Tees.First(x => x.Id == CurrentScore.TeeId);
             IsBackEnabled = false;
             IsNextEnabled = true;
+            ScoringIsEnabled = Game.Game.FinishedAt == DomainBase.EmptyDate;
             Title = $"{Game.Game.GameType} @ {Game.Venue.Name}";
         }
 
@@ -216,7 +216,7 @@ namespace TeeScore.ViewModels
         {
             var currentScoreIx = Scores.IndexOf(CurrentScore);
             Game.Game.CurrentTee = currentScoreIx;
-            SaveScoreAsync();
+            SaveScore();
             if (currentScoreIx > 0)
             {
                 currentScoreIx--;
@@ -238,7 +238,7 @@ namespace TeeScore.ViewModels
             await Task.Yield();
         }
 
-        private void SaveScoreAsync()
+        private void SaveScore()
         {
             if (Game.Game.StartedAt == DomainBase.EmptyDate)
             {
@@ -307,7 +307,7 @@ namespace TeeScore.ViewModels
         {
             var currentScoreIx = Scores.IndexOf(CurrentScore);
             Game.Game.CurrentTee = currentScoreIx;
-            SaveScoreAsync();
+            SaveScore();
             if (currentScoreIx < Scores.Count - 1)
             {
                 currentScoreIx++;
@@ -373,14 +373,72 @@ namespace TeeScore.ViewModels
         }
 
 
+        /* =========================================== RelayCommand: ScoreUpCommand ====================================== */
+        /// <summary>
+        /// Executes the ScoreUp command.
+        /// </summary>
+        public RelayCommand ScoreUpCommand => _scoreUpCommand
+                       ?? (_scoreUpCommand = new RelayCommand(ScoreUp));
+
+        private void ScoreUp()
+        {
+            CurrentScore.Putts++;
+        }
+
+        /* =========================================== RelayCommand: ScoreDownCommand ====================================== */
+        /// <summary>
+        /// Executes the ScoreUp command.
+        /// </summary>
+        public RelayCommand ScoreDownCommand => _scoreDownCommand
+                       ?? (_scoreDownCommand = new RelayCommand(ScoreDown));
+
+        private void ScoreDown()
+        {
+            if (CurrentScore.Putts > 0)
+            {
+                CurrentScore.Putts--;
+            }
+            
+        }
+
         public void GotoTee(TeeDto tee)
         {
-            SaveScoreAsync();
+            SaveScore();
             CurrentScore.ScoreChanged -= CurrentScore_ScoreChanged;
             CurrentScore = Scores.First(x => x.TeeId == tee.Id);
             CurrentScore.ScoreChanged += CurrentScore_ScoreChanged;
             var currentScoreIx = Scores.IndexOf(CurrentScore);
             SetButtons(currentScoreIx);
+        }
+
+        /* =========================================== property: ScoringIsEnabled ====================================== */
+        /// <summary>
+        /// Sets and gets the ScoringIsEnabled property.
+        /// </summary>
+        public bool ScoringIsEnabled
+        {
+            get => _scoringIsEnabled;
+            set
+            {
+                if (value == _scoringIsEnabled)
+                {
+                    return;
+                }
+
+                _scoringIsEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
+        
+        public async Task Finish()
+        {
+            var finish = await _dialogService.ShowMessage("Are you sure you want to finish the game?", "Finish", "Yes", "No");
+            if (finish)
+            {
+                ScoringIsEnabled = false;
+                Game.Game.FinishedAt = DateTime.Now;
+                SaveScore();
+            }
         }
     }
 }

@@ -57,7 +57,6 @@ namespace TeeScore.Pages
                     throw new ArgumentOutOfRangeException();
             }
         }
-
         protected override bool OnBackButtonPressed()
         {
             TabView.SelectedIndex = 0;
