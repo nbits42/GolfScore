@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:extensions="clr-namespace:TeeScore.Extensions;assembly=TeeScore"
+             x:Class="TeeScore.Pages.JoinGamePage"
+             BackgroundColor="{StaticResource PageBackgroundColor}"
+             Title="{extensions:Translate title_join_game}">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="150"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackLayout Grid.Row="0">
+                <Label Margin="20,40,20,0" Text="{extensions:Translate lbl_fill_invitation_number}" Style="{StaticResource TinyLabelStyle}"></Label>
+                <Grid Margin="20,0,20,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="100"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Entry Grid.Column="0" Text="{Binding InvitationNumber, Mode=TwoWay}" WidthRequest="200" Style="{StaticResource EditorStyle}" Keyboard="Numeric" FontSize="Large" MaxLength="6">
+                    </Entry>
+                    <Button Grid.Column="1" Text="{extensions:Translate btn_join}" Style="{StaticResource DialogButtonStyle}"></Button>
+                </Grid>
+            </StackLayout>
+            <ActivityIndicator Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="140" Color="{StaticResource ButtonBackgroundColor}" IsRunning="{Binding IsWaiting, Mode=TwoWay}"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

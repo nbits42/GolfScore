@@ -2244,6 +2244,16 @@ namespace TeeScore.Droid
 			global::Com.Syncfusion.SfPicker.Resource.Styleable.SfPicker_pickerUnselectedItemTextColor = global::TeeScore.Droid.Resource.Styleable.SfPicker_pickerUnselectedItemTextColor;
 			global::Com.Syncfusion.SfPicker.Resource.Styleable.SfPicker_pickerUnselectedItemTextSize = global::TeeScore.Droid.Resource.Styleable.SfPicker_pickerUnselectedItemTextSize;
 			global::Com.Syncfusion.SfPicker.Resource.Styleable.SfPicker_pickerWidth = global::TeeScore.Droid.Resource.Styleable.SfPicker_pickerWidth;
+			global::Syncfusion.XForms.Android.PopupLayout.Resource.Drawable.inputlayout_togglecollapseicon = global::TeeScore.Droid.Resource.Drawable.inputlayout_togglecollapseicon;
+			global::Syncfusion.XForms.Android.PopupLayout.Resource.Drawable.inputlayout_togglevisibleicon = global::TeeScore.Droid.Resource.Drawable.inputlayout_togglevisibleicon;
+			global::Syncfusion.XForms.Android.PopupLayout.Resource.Drawable.popup_forms_android_close_icon = global::TeeScore.Droid.Resource.Drawable.popup_forms_android_close_icon;
+			global::Syncfusion.XForms.Android.PopupLayout.Resource.Drawable.popup_forms_android_shadow = global::TeeScore.Droid.Resource.Drawable.popup_forms_android_shadow;
+			global::Syncfusion.XForms.Android.PopupLayout.Resource.Id.BorderView = global::TeeScore.Droid.Resource.Id.BorderView;
+			global::Syncfusion.XForms.Android.PopupLayout.Resource.String.accept = global::TeeScore.Droid.Resource.String.accept;
+			global::Syncfusion.XForms.Android.PopupLayout.Resource.String.decline = global::TeeScore.Droid.Resource.String.decline;
+			global::Syncfusion.XForms.Android.PopupLayout.Resource.String.library_name = global::TeeScore.Droid.Resource.String.library_name;
+			global::Syncfusion.XForms.Android.PopupLayout.Resource.String.popup_message = global::TeeScore.Droid.Resource.String.popup_message;
+			global::Syncfusion.XForms.Android.PopupLayout.Resource.String.title = global::TeeScore.Droid.Resource.String.title;
 			global::Syncfusion.XForms.Android.ProgressBar.Resource.Drawable.inputlayout_togglecollapseicon = global::TeeScore.Droid.Resource.Drawable.inputlayout_togglecollapseicon;
 			global::Syncfusion.XForms.Android.ProgressBar.Resource.Drawable.inputlayout_togglevisibleicon = global::TeeScore.Droid.Resource.Drawable.inputlayout_togglevisibleicon;
 			global::Syncfusion.XForms.Android.ProgressBar.Resource.Drawable.sfprogressbar_determinate_linear = global::TeeScore.Droid.Resource.Drawable.sfprogressbar_determinate_linear;
@@ -4689,26 +4699,26 @@ namespace TeeScore.Droid
 			// aapt resource value: 0x7f020053
 			public const int avd_hide_password = 2130837587;
 			
-			// aapt resource value: 0x7f020144
-			public const int avd_hide_password_1 = 2130837828;
-			
-			// aapt resource value: 0x7f020145
-			public const int avd_hide_password_2 = 2130837829;
-			
 			// aapt resource value: 0x7f020146
-			public const int avd_hide_password_3 = 2130837830;
+			public const int avd_hide_password_1 = 2130837830;
+			
+			// aapt resource value: 0x7f020147
+			public const int avd_hide_password_2 = 2130837831;
+			
+			// aapt resource value: 0x7f020148
+			public const int avd_hide_password_3 = 2130837832;
 			
 			// aapt resource value: 0x7f020054
 			public const int avd_show_password = 2130837588;
 			
-			// aapt resource value: 0x7f020147
-			public const int avd_show_password_1 = 2130837831;
-			
-			// aapt resource value: 0x7f020148
-			public const int avd_show_password_2 = 2130837832;
-			
 			// aapt resource value: 0x7f020149
-			public const int avd_show_password_3 = 2130837833;
+			public const int avd_show_password_1 = 2130837833;
+			
+			// aapt resource value: 0x7f02014a
+			public const int avd_show_password_2 = 2130837834;
+			
+			// aapt resource value: 0x7f02014b
+			public const int avd_show_password_3 = 2130837835;
 			
 			// aapt resource value: 0x7f020055
 			public const int back = 2130837589;
@@ -5376,11 +5386,11 @@ namespace TeeScore.Droid
 			// aapt resource value: 0x7f020132
 			public const int notification_icon_background = 2130837810;
 			
-			// aapt resource value: 0x7f020142
-			public const int notification_template_icon_bg = 2130837826;
+			// aapt resource value: 0x7f020144
+			public const int notification_template_icon_bg = 2130837828;
 			
-			// aapt resource value: 0x7f020143
-			public const int notification_template_icon_low_bg = 2130837827;
+			// aapt resource value: 0x7f020145
+			public const int notification_template_icon_low_bg = 2130837829;
 			
 			// aapt resource value: 0x7f020133
 			public const int notification_tile_bg = 2130837811;
@@ -5395,37 +5405,43 @@ namespace TeeScore.Droid
 			public const int plus_disabled = 2130837814;
 			
 			// aapt resource value: 0x7f020137
-			public const int score = 2130837815;
+			public const int popup_forms_android_close_icon = 2130837815;
 			
 			// aapt resource value: 0x7f020138
-			public const int screen = 2130837816;
+			public const int popup_forms_android_shadow = 2130837816;
 			
 			// aapt resource value: 0x7f020139
-			public const int settings = 2130837817;
+			public const int score = 2130837817;
 			
 			// aapt resource value: 0x7f02013a
-			public const int sfprogressbar_determinate_linear = 2130837818;
+			public const int screen = 2130837818;
 			
 			// aapt resource value: 0x7f02013b
-			public const int sfprogressbar_indeterminate_circular = 2130837819;
+			public const int settings = 2130837819;
 			
 			// aapt resource value: 0x7f02013c
-			public const int sfprogressbar_indeterminate_linear = 2130837820;
+			public const int sfprogressbar_determinate_linear = 2130837820;
 			
 			// aapt resource value: 0x7f02013d
-			public const int start_game = 2130837821;
+			public const int sfprogressbar_indeterminate_circular = 2130837821;
 			
 			// aapt resource value: 0x7f02013e
-			public const int todo = 2130837822;
+			public const int sfprogressbar_indeterminate_linear = 2130837822;
 			
 			// aapt resource value: 0x7f02013f
-			public const int tooltip_frame_dark = 2130837823;
+			public const int start_game = 2130837823;
 			
 			// aapt resource value: 0x7f020140
-			public const int tooltip_frame_light = 2130837824;
+			public const int todo = 2130837824;
 			
 			// aapt resource value: 0x7f020141
-			public const int trash = 2130837825;
+			public const int tooltip_frame_dark = 2130837825;
+			
+			// aapt resource value: 0x7f020142
+			public const int tooltip_frame_light = 2130837826;
+			
+			// aapt resource value: 0x7f020143
+			public const int trash = 2130837827;
 			
 			static Drawable()
 			{
@@ -5442,6 +5458,9 @@ namespace TeeScore.Droid
 			
 			// aapt resource value: 0x7f090032
 			public const int ALT = 2131296306;
+			
+			// aapt resource value: 0x7f0900ce
+			public const int BorderView = 2131296462;
 			
 			// aapt resource value: 0x7f090033
 			public const int CTRL = 2131296307;
@@ -5911,14 +5930,14 @@ namespace TeeScore.Droid
 			// aapt resource value: 0x7f09008c
 			public const int select_dialog_listview = 2131296396;
 			
+			// aapt resource value: 0x7f0900d1
+			public const int sfprogressbar_progress = 2131296465;
+			
 			// aapt resource value: 0x7f0900d0
-			public const int sfprogressbar_progress = 2131296464;
+			public const int sfprogressbar_secondary_progress = 2131296464;
 			
 			// aapt resource value: 0x7f0900cf
-			public const int sfprogressbar_secondary_progress = 2131296463;
-			
-			// aapt resource value: 0x7f0900ce
-			public const int sfprogressbar_track = 2131296462;
+			public const int sfprogressbar_track = 2131296463;
 			
 			// aapt resource value: 0x7f090076
 			public const int shortcut = 2131296374;
@@ -6393,14 +6412,14 @@ namespace TeeScore.Droid
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f0a003e
-			public const int ApplicationName = 2131361854;
+			// aapt resource value: 0x7f0a0042
+			public const int ApplicationName = 2131361858;
 			
-			// aapt resource value: 0x7f0a003d
-			public const int Hello = 2131361853;
+			// aapt resource value: 0x7f0a0041
+			public const int Hello = 2131361857;
 			
-			// aapt resource value: 0x7f0a003f
-			public const int Load_More = 2131361855;
+			// aapt resource value: 0x7f0a0043
+			public const int Load_More = 2131361859;
 			
 			// aapt resource value: 0x7f0a0015
 			public const int abc_action_bar_home_description = 2131361813;
@@ -6489,6 +6508,9 @@ namespace TeeScore.Droid
 			// aapt resource value: 0x7f0a0025
 			public const int abc_toolbar_collapse_description = 2131361829;
 			
+			// aapt resource value: 0x7f0a003f
+			public const int accept = 2131361855;
+			
 			// aapt resource value: 0x7f0a0033
 			public const int appbar_scrolling_view_behavior = 2131361843;
 			
@@ -6497,6 +6519,9 @@ namespace TeeScore.Droid
 			
 			// aapt resource value: 0x7f0a0035
 			public const int character_counter_pattern = 2131361845;
+			
+			// aapt resource value: 0x7f0a0040
+			public const int decline = 2131361856;
 			
 			// aapt resource value: 0x7f0a003c
 			public const int library_name = 2131361852;
@@ -6579,14 +6604,20 @@ namespace TeeScore.Droid
 			// aapt resource value: 0x7f0a003a
 			public const int path_password_strike_through = 2131361850;
 			
+			// aapt resource value: 0x7f0a003e
+			public const int popup_message = 2131361854;
+			
 			// aapt resource value: 0x7f0a0026
 			public const int search_menu_title = 2131361830;
 			
 			// aapt resource value: 0x7f0a003b
 			public const int status_bar_notification_info_overflow = 2131361851;
 			
-			// aapt resource value: 0x7f0a0040
-			public const int title_activity_webview = 2131361856;
+			// aapt resource value: 0x7f0a003d
+			public const int title = 2131361853;
+			
+			// aapt resource value: 0x7f0a0044
+			public const int title_activity_webview = 2131361860;
 			
 			static String()
 			{

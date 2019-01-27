@@ -8,7 +8,7 @@
              xmlns:extensions="clr-namespace:TeeScore.Extensions;assembly=TeeScore"
              x:Class="TeeScore.Pages.NewGamePage"
              BackgroundColor="{StaticResource PageBackgroundColor}"
-             Title="New game!">
+             Title="{extensions:Translate title_new_game}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:SelectionBoolToBackgroundColorConverter x:Key="BoolToColorConverter"/>

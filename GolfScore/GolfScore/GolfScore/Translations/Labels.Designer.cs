@@ -79,6 +79,15 @@ namespace TeeScore.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Join.
+        /// </summary>
+        internal static string btn_join {
+            get {
+                return ResourceManager.GetString("btn_join", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to NEXT.
         /// </summary>
         internal static string btn_next {
@@ -192,6 +201,15 @@ namespace TeeScore.Translations {
         internal static string lbl_current_tee {
             get {
                 return ResourceManager.GetString("lbl_current_tee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fill the game number and press Join.
+        /// </summary>
+        internal static string lbl_fill_invitation_number {
+            get {
+                return ResourceManager.GetString("lbl_fill_invitation_number", resourceCulture);
             }
         }
         
@@ -363,6 +381,15 @@ namespace TeeScore.Translations {
         internal static string PlayerSelection_Manual {
             get {
                 return ResourceManager.GetString("PlayerSelection_Manual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Join game.
+        /// </summary>
+        internal static string title_join_game {
+            get {
+                return ResourceManager.GetString("title_join_game", resourceCulture);
             }
         }
         

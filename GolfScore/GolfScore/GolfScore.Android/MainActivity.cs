@@ -4,10 +4,11 @@ using Android.Graphics;
 using Android.OS;
 using Android.Views;
 using Microsoft.WindowsAzure.MobileServices;
+using Syncfusion.XForms.Android.PopupLayout;
 
 namespace TeeScore.Droid
 {
-    [Activity(Label = "TeeScore", Icon = "@mipmap/icon", Theme = "@style/SplashScreen", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "TeeScore", Icon = "@drawable/icon", Theme = "@style/SplashScreen", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         internal static MainActivity Instance { get; private set; }
@@ -26,6 +27,7 @@ namespace TeeScore.Droid
             CurrentPlatform.Init();
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            SfPopupLayoutRenderer.Init();
             LoadApplication(new App());
         }
 

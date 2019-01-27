@@ -4,7 +4,7 @@
              xmlns:validation="clr-namespace:TeeScore.Validation;assembly=TeeScore"
              xmlns:xForms="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
              x:Class="TeeScore.Styling.Themes.Default.Styling">
-    <Color x:Key="PageBackgroundColor">White</Color>
+    <Color x:Key="PageBackgroundColor">#eeffdc</Color>
     <Color x:Key="PageHeadingBackgroundColor">#3C7202</Color>
     <Color x:Key="PageHeadingTextColor">White</Color>
     <Color x:Key="ButtonTextColor">White</Color>
@@ -135,6 +135,14 @@
         <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
         <Setter Property="BackgroundColor" Value="{StaticResource ButtonBackgroundColor}" />
     </Style>
+    <Style x:Key="PopupButtonStyle" TargetType="Button">
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="FontFamily" Value="Roboto" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="TextColor" Value="{StaticResource ButtonTextColor}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource ButtonBackgroundColor}" />
+    </Style>
     <Style x:Key="RoundButtonStyle" TargetType="Button">
         <Setter Property="HorizontalOptions" Value="Center" />
         <Setter Property="VerticalOptions" Value="Center" />
@@ -212,6 +220,6 @@
         <Setter Property="FontFamily" Value="Roboto"></Setter>
         <Setter Property="FontSize" Value="Small"></Setter>
         <!--<Setter Property="validation:BackgroundColorBehavior.ApplyBackgroundColor"  Value="True" />-->
-        <Setter Property="validation:BackgroundColorBehavior.BackgroundColor" Value="{StaticResource EntryLineColor}" />
+        <!--<Setter Property="validation:BackgroundColorBehavior.BackgroundColor" Value="{StaticResource EntryLineColor}" />-->
     </Style>
 </ResourceDictionary>

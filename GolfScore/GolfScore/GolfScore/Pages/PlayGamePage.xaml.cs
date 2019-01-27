@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Syncfusion.ListView.XForms;
 using Syncfusion.XForms.TabView;
 using TeeScore.Contracts;
+using TeeScore.Domain;
 using TeeScore.DTO;
 using TeeScore.ViewModels;
 using Xamarin.Forms;
@@ -28,7 +29,6 @@ namespace TeeScore.Pages
             _vm = App.IOC.PlayGame;
             BindingContext = _vm;
 
-            SetToolbaritems();
         }
 
         protected override async void OnAppearing()
@@ -38,6 +38,7 @@ namespace TeeScore.Pages
             {
                 case PageState.New:
                     await _vm.LoadAsync(_gameId);
+                    SetToolbaritems();
                     break;
                 case PageState.Reappearing:
                     break;
@@ -58,7 +59,11 @@ namespace TeeScore.Pages
 
             ToolbarItems.Add(infoItem);
             ToolbarItems.Add(scoreItem);
-            ToolbarItems.Add(finishItem);
+
+            if (_vm.Game.Game.FinishedAt == DomainBase.EmptyDate)
+            {
+                ToolbarItems.Add(finishItem);
+            }
         }
 
         private void ShowScore()

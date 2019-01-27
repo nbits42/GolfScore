@@ -50,7 +50,7 @@
                             </Grid.RowDefinitions>
                             <xForms:SfListView Grid.Row="0" ItemsSource="{Binding Tees}" 
                                                SelectedItem="{Binding CurrentTee, Mode=TwoWay}" 
-                                               BackgroundColor="White"
+                                               BackgroundColor="{StaticResource PageBackgroundColor}"
                                                SelectionBackgroundColor="{StaticResource SelectedItemBackgroundColor}" 
                                                SelectionChanged="SfListView_OnSelectionChanged"
                                                Padding="8,3,8,3" 
@@ -138,7 +138,7 @@
                 </tabView:SfTabItem>
                 <tabView:SfTabItem>
                     <tabView:SfTabItem.Content>
-                        <Grid BackgroundColor="LightGreen">
+                        <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"></RowDefinition>
                                 <RowDefinition Height="20"></RowDefinition>
