@@ -6,6 +6,7 @@
              xmlns:xNumericUpDown="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
              xmlns:converters="clr-namespace:TeeScore.Converters;assembly=TeeScore"
              xmlns:extensions="clr-namespace:TeeScore.Extensions;assembly=TeeScore"
+             xmlns:forms="clr-namespace:Xam.Forms;assembly=Xam.Forms.QRCode"
              x:Class="TeeScore.Pages.NewGamePage"
              BackgroundColor="{StaticResource PageBackgroundColor}"
              Title="{extensions:Translate title_new_game}">
@@ -105,11 +106,22 @@
                                 <Picker ItemsSource="{Binding PlayerSelections}" SelectedIndex="{Binding SelectedPlayerSelectionIndex, Mode=TwoWay}"></Picker>
                             </StackLayout>
                             <!-- By invitation number -->
-                            <StackLayout Grid.Row="1" Orientation="Horizontal" IsVisible="{Binding HasAutomaticPlayerSelection, Mode=TwoWay}">
+                            <StackLayout Grid.Row="1" Orientation="Horizontal" IsVisible="{Binding ByInvitationNumber, Mode=TwoWay}">
                                 <Frame  IsClippedToBounds="True" Style="{StaticResource BorderedFrameStyle}" HorizontalOptions="CenterAndExpand" >
                                     <Label Text="{Binding InvitationNumber, Mode=TwoWay}" Style="{StaticResource LargeLabelStyle}" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" WidthRequest="150"></Label>
                                 </Frame>
                                 <Label Text="{extensions:Translate lbl_game_number}" Style="{StaticResource TinyLabelStyle}" VerticalOptions="CenterAndExpand"></Label>
+                            </StackLayout>
+                            <!-- By QrCode -->
+                            <StackLayout Grid.Row="1">
+                                <forms:QRCode 
+                                    Content="{Binding QrCodeContent, Mode=TwoWay}"
+                                    Color="{StaticResource ButtonBackgroundColor}" 
+                                    Level="H" 
+                                    WidthRequest="200" 
+                                    HeightRequest="200" 
+                                    VerticalOptions="Center" 
+                                    HorizontalOptions="Center" />
                             </StackLayout>
                             <Button  Grid.Row="2" Text="{extensions:Translate btn_start}" 
                                      BackgroundColor="{StaticResource ButtonBackgroundColor}" 

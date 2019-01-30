@@ -3,6 +3,8 @@ using GlobalContracts.Enumerations;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -51,6 +53,9 @@ namespace TeeScore.ViewModels
         private string _startText;
         private bool _startButtonIsVisible;
         private bool _startingIsBusy;
+        private string _qrCodeContent;
+        private bool _byQrCode;
+        private bool _byInvitationNumber;
 
 
         public NewGameViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
@@ -68,6 +73,7 @@ namespace TeeScore.ViewModels
 
             _myGamePlayer = null;
             _doCheck = false;
+            _qrCodeContent = null;
 
             Settings.CurrentScoreIx = 0;
             Game = new NewGameDto();
@@ -112,6 +118,46 @@ namespace TeeScore.ViewModels
             StartingIsBusy = false;
         }
 
+        /* =========================================== property: ByInvitationNumber ====================================== */
+        /// <summary>
+        /// Sets and gets the ByInvitationNumber property.
+        /// </summary>
+        public bool ByInvitationNumber
+        {
+            get => _byInvitationNumber;
+            set
+            {
+                if (value == _byInvitationNumber)
+                {
+                    return;
+                }
+
+                _byInvitationNumber = value;
+                RaisePropertyChanged();
+            }
+        }
+
+/* =========================================== property: ByQrCode ====================================== */
+        /// <summary>
+        /// Sets and gets the ByQrCode property.
+        /// </summary>
+        public bool ByQrCode
+        {
+            get => _byQrCode;
+            set
+            {
+                if (value == _byQrCode)
+                {
+                    return;
+                }
+
+                _byQrCode = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+
         private VenueDto FindVenue(VenueDto gameVenue)
         {
             return Venues.FirstOrDefault(x => x.Id == gameVenue.Id);
@@ -148,14 +194,17 @@ namespace TeeScore.ViewModels
                     break;
                 case nameof(SelectedPlayerSelectionIndex):
                     _playerSelection = _playerSelectionList[SelectedPlayerSelectionIndex].Value;
-
-                    if (_playerSelection == PlayerSelection.ByInvitationNumber)
+                    if (_invitationNumber == 0)
                     {
-                        if (_invitationNumber == 0)
-                        {
-                            InvitationNumber = GenerateInvitationNumber();
-                        }
+                        InvitationNumber = GenerateInvitationNumber();
                     }
+                    if (_qrCodeContent == null)
+                    {
+                        QrCodeContent = $"http://nbits.nl.teescore/{InvitationNumber}";
+                    }
+
+                    ByInvitationNumber = _playerSelection == PlayerSelection.ByInvitationNumber;
+                    ByQrCode = _playerSelection == PlayerSelection.ByQrCode;
                     CheckNextPage();
                     break;
                 case nameof(Players):
@@ -722,10 +771,11 @@ namespace TeeScore.ViewModels
         private async Task ContinuousPlayerPolling()
         {
             var startTime = DateTime.Now;
-            var maxWaitMinutes = 10;
+            var maxWaitMinutes = 5;
             InvitationIsRunning = true;
             while (InvitationIsRunning)
             {
+                await DataService.SyncAsync().ConfigureAwait(true);
                 var players = await DataService.GetPlayersForGame(Game.Game.Id).ConfigureAwait(true);
                 if (players.Count == PlayersCount)
                 {
@@ -886,6 +936,26 @@ namespace TeeScore.ViewModels
             await DataService.SyncAsync();
             //OnGameStarted();
             StartText = Translations.Labels.lbl_starting_starting;
+        }
+
+
+        /* =========================================== property: QrCodeContent ====================================== */
+        /// <summary>
+        /// Sets and gets the QrCodeContent property.
+        /// </summary>
+        public string QrCodeContent
+        {
+            get => _qrCodeContent;
+            set
+            {
+                if (value == _qrCodeContent)
+                {
+                    return;
+                }
+
+                _qrCodeContent = value;
+                RaisePropertyChanged();
+            }
         }
 
 
