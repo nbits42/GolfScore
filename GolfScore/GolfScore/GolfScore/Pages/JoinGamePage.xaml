@@ -20,8 +20,14 @@
                     </Grid.ColumnDefinitions>
                     <Entry Grid.Column="0" Text="{Binding InvitationNumber, Mode=TwoWay}" WidthRequest="200" Style="{StaticResource EditorStyle}" Keyboard="Numeric" FontSize="Large" MaxLength="6">
                     </Entry>
-                    <Button Grid.Column="1" Text="{extensions:Translate btn_join}" Style="{StaticResource DialogButtonStyle}"></Button>
+                    <Button Grid.Column="1" Text="{extensions:Translate btn_join}" Style="{StaticResource DialogButtonStyle}" Command="{Binding JoinGameCommand}"></Button>
                 </Grid>
+                <StackLayout IsVisible="{Binding ShowGameData, Mode=TwoWay}">
+                    <Label Text="{extensions:Translate lbl_joining}"></Label>
+                    <Label Text="{Binding GameType, Mode=TwoWay}" Margin="10,0,0,0"></Label>
+                    <Label Text="{Binding Venue, Mode=TwoWay}" Margin="10,0,0,0"></Label>
+                    <Label Text="{Binding GameDate, Mode=TwoWay, StringFormat={StaticResource FormatDateShort}}" Margin="10,0,0,0"></Label>
+                </StackLayout>
             </StackLayout>
             <ActivityIndicator Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="140" Color="{StaticResource ButtonBackgroundColor}" IsRunning="{Binding IsWaiting, Mode=TwoWay}"/>
         </Grid>

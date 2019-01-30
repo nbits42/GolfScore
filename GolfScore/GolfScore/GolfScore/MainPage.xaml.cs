@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using GlobalContracts.Enumerations;
 using Syncfusion.ListView.XForms;
 using Syncfusion.XForms.PopupLayout;
 using TeeScore.Domain;
+using TeeScore.Helpers;
 using TeeScore.Pages;
 using TeeScore.Services;
 using TeeScore.ViewModels;
@@ -16,7 +18,7 @@ namespace TeeScore
     public partial class MainPage : ContentPage
     {
         private readonly MainViewModel _viewModel;
-        private SfPopupLayout _gamePopup;
+        private readonly SfPopupLayout _gamePopup;
 
         public MainPage()
         {
@@ -25,6 +27,7 @@ namespace TeeScore
 
             BindingContext = _viewModel;
             ToolbarItems.Add(new ToolbarItem("Settings", "settings.png", ShowSettingsPage));
+            FloatingActionButtonAdd.IsVisible = false;
             FloatingActionButtonAdd.IsEnabled = false;
             FloatingActionButtonAdd.Clicked = AddButtonClicked;
             _gamePopup = CreateGamePopup();
@@ -76,11 +79,21 @@ namespace TeeScore
 
         private async void JoinGameButton_Clicked(object sender, EventArgs e)
         {
+            await JoinGame();
+        }
+
+        private async Task JoinGame()
+        {
             var joinGamePage = new JoinGamePage();
             await Navigation.PushAsync(joinGamePage).ConfigureAwait(true);
         }
 
         private async void NewGameButton_Clicked(object sender, EventArgs e)
+        {
+            await NewGame();
+        }
+
+        private async Task NewGame()
         {
             var newGamePage = new NewGamePage();
             await Navigation.PushAsync(newGamePage).ConfigureAwait(true);
@@ -102,15 +115,21 @@ namespace TeeScore
             }
             else
             {
+                FloatingActionButtonAdd.IsVisible = true;
                 FloatingActionButtonAdd.IsEnabled = true;
+
+                if (!string.IsNullOrEmpty(Settings.StartGameId))
+                {
+                    var gameId = Settings.StartGameId;
+                    Settings.StartGameId = string.Empty;
+                    await PlayGame(gameId);
+                }
             }
         }
 
         private void AddButtonClicked(object sender, EventArgs e)
         {
             _gamePopup.Show();
-            //var newGamePage = new NewGamePage();
-            //await Navigation.PushAsync(newGamePage).ConfigureAwait(true);
         }
 
         private async void SfListView_OnSwipeEnded(object sender, SwipeEndedEventArgs e)
@@ -147,10 +166,15 @@ namespace TeeScore
                 }
                 else
                 {
-                    var playGamePage = new PlayGamePage(game.Id);
-                    await Navigation.PushAsync(playGamePage).ConfigureAwait(true);
+                    await PlayGame(game.Id);
                 }
             }
+        }
+
+        private async Task PlayGame(string gameId)
+        {
+            var playGamePage = new PlayGamePage(gameId);
+            await Navigation.PushAsync(playGamePage).ConfigureAwait(true);
         }
     }
 }

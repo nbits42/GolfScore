@@ -25,5 +25,6 @@ namespace TeeScore.Contracts
         Task<NewGameDto> GetNewGame(string gameId);
         Task DeleteGamePlayer(string gameId, string playerId);
         Task SyncAsync();
+        Task<Game> GetGame(int invitationNumber);
     }
 }

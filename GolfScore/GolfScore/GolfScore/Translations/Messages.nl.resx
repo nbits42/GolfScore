@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="GameFoundByInvitationNumber" xml:space="preserve">
+    <value>Spel gevonden:{3}{4}{0}{3}{4}{1}{3}{4}{2:d}{3}{3}Is dit het spel waaraan u wilt meedoen?</value>
+  </data>
+  <data name="GameNotFoundByInvitationNumber" xml:space="preserve">
+    <value>Er is geen spel met dit uitnodigingsnummer</value>
+  </data>
   <data name="GamePlayerExists" xml:space="preserve">
     <value>Deze speler doet al mee</value>
   </data>
@@ -125,6 +131,9 @@
   </data>
   <data name="NameIsRequired" xml:space="preserve">
     <value>Naam is verplicht</value>
+  </data>
+  <data name="PlayerAlreadyJoined" xml:space="preserve">
+    <value>U doet al mee met dit spel!</value>
   </data>
   <data name="VenueExists" xml:space="preserve">
     <value>Deze plaats bestaat al</value>

@@ -41,6 +41,17 @@ namespace TeeScore.Helpers
             set => AppSettings.AddOrUpdateValue(CurrentGameIdKey, value);
         }
 
+        /* ------------------- StartGameId  -------------------- */
+
+        private const string StartGameIdKey = "StartGameId_key";
+        private static readonly string StartGameIdDefault = null;
+
+        public static string StartGameId
+        {
+            get => AppSettings.GetValueOrDefault(StartGameIdKey, StartGameIdDefault);
+            set => AppSettings.AddOrUpdateValue(StartGameIdKey, value);
+        }
+
         /* ------------------- LastGameType  -------------------- */
 
         private const string LastGameTypeKey = "LastGameType_key";

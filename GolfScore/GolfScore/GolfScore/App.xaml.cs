@@ -18,7 +18,7 @@ namespace TeeScore
         public static DeviceType DeviceType = DeviceType.Droid;
         public static ICalendarService CalendarService;
 
-        public static bool AutomapperInitialized;
+        public static bool AutoMapperInitialized;
         public static Ioc IOC => _ioc ?? (_ioc = new Ioc());
 
         public App()
@@ -26,7 +26,7 @@ namespace TeeScore
             // https://www.syncfusion.com/account/downloads  & keys
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTI0MTZAMzEzNjJlMzQyZTMwWmJEWFBiZGhoSlcraHZuYVJUUitKU3ArcmR6c3Rwc0s3RjBNVUwrZk55UT0="); // version 16.4.*
 
-            // Settingup for translation
+            // Setting up for translation
             if (Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Android)
             {
                 var ci = DependencyService.Get<ILocalize>().GetCurrentCultureInfo();
@@ -48,13 +48,13 @@ namespace TeeScore
                     break;
             }
 
-            if (!AutomapperInitialized)
+            if (!AutoMapperInitialized)
             {
                 Mapper.Initialize(cfg =>
                 {
                     cfg.AddProfile<DefaultProfile>();
                 });
-                AutomapperInitialized = true;
+                AutoMapperInitialized = true;
             }
 
             CalendarService = DependencyService.Get<ICalendarService>();

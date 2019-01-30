@@ -225,4 +225,16 @@
   <data name="lbl_tee" xml:space="preserve">
     <value>Tee</value>
   </data>
+  <data name="btn_no" xml:space="preserve">
+    <value>Nee</value>
+  </data>
+  <data name="btn_yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="lbl_joining" xml:space="preserve">
+    <value>Meespelen met:</value>
+  </data>
+  <data name="title_join_game" xml:space="preserve">
+    <value>Speel mee</value>
+  </data>
 </root>

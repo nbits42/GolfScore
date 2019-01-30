@@ -219,7 +219,22 @@
     <Style x:Key="EntryStyle" TargetType="{x:Type Entry}">
         <Setter Property="FontFamily" Value="Roboto"></Setter>
         <Setter Property="FontSize" Value="Small"></Setter>
-        <!--<Setter Property="validation:BackgroundColorBehavior.ApplyBackgroundColor"  Value="True" />-->
-        <!--<Setter Property="validation:BackgroundColorBehavior.BackgroundColor" Value="{StaticResource EntryLineColor}" />-->
     </Style>
+
+  <!-- formatting strings -->
+    <x:String x:Key="FormatDatetimeLong">ddMMMyy HH:mm:ss</x:String>
+    <x:String x:Key="FormatDateLong">ddMMMyy</x:String>
+    <x:String x:Key="FormatDateShort">dd-MM-yyyy</x:String>
+    <x:String x:Key="FormatTimeWithoutSeconds">{0:h:mm tt}</x:String>
+    <x:String x:Key="FormatDatetimeWithoutSeconds">{0:M/d/yy h:mm tt}</x:String>
+    <x:String x:Key="FormatDecimalZeroPlaces">{0:0}</x:String>
+    <x:String x:Key="FormatDecimalOnePlaces">{0:0.0}</x:String>
+    <x:String x:Key="FormatDecimalTwoPlaces">{0:0.00}</x:String>
+    <x:String x:Key="FormatDecimalThreePlaces">{0:0.000}</x:String>
+    <x:String x:Key="FormatDecimalFourPlaces">{0:0.0000}</x:String>
+    <x:String x:Key="FormatPhoneNumber">{0:(###) ### ####}</x:String>
+    <x:String x:Key="FormatMobileNumber">{0:(##) #### ####}</x:String>
+    <x:String x:Key="FormatCurrencyUsa">{0:$#,##0.00;($#,##0.00);Zero}</x:String>
+    <x:String x:Key="FormatCurrencyEur">{0:€#,##0.00;(€#,##0.00);Zero}</x:String>
+    <x:String x:Key="FormatPercent">{0:0%}</x:String>
 </ResourceDictionary>

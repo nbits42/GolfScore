@@ -181,6 +181,13 @@ namespace TeeScore.Services
             }
         }
 
+        public async Task<Game> GetGame(int invitationNumber)
+        {
+            await SyncAsync();
+            var games = await GamesTable.Where(x => x.InvitationNumber == invitationNumber).ToListAsync();
+            return games.FirstOrDefault();
+        }
+
         public async Task<PlayerDto> GetPlayer(string myPlayerId)
         {
             return Mapper.Map<PlayerDto>(await PlayersTable.LookupAsync(myPlayerId).ConfigureAwait(false));

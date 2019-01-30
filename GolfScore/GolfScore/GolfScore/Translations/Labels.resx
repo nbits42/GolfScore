@@ -237,4 +237,13 @@
   <data name="title_join_game" xml:space="preserve">
     <value>Join game</value>
   </data>
+  <data name="btn_no" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="btn_yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="lbl_joining" xml:space="preserve">
+    <value>Joining:</value>
+  </data>
 </root>

@@ -853,7 +853,7 @@ namespace TeeScore.ViewModels
             Settings.LastGameType = Game.Game.GameType;
             Settings.LastPlayersCount = Game.Game.InvitedPlayersCount;
             Settings.LastTeeCount = Game.Game.TeeCount;
-            Settings.CurrentGameId = Game.Game.Id;
+            Settings.StartGameId = Game.Game.Id;
 
             Game.Game.GameStatus = GameStatus.Started;
             Game.Game.CurrentTee = (Game.Game.StartTee - 1 ) * Game.Game.InvitedPlayersCount;

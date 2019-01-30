@@ -97,6 +97,15 @@ namespace TeeScore.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        internal static string btn_no {
+            get {
+                return ResourceManager.GetString("btn_no", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         internal static string btn_OK {
@@ -111,6 +120,15 @@ namespace TeeScore.Translations {
         internal static string btn_start {
             get {
                 return ResourceManager.GetString("btn_start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        internal static string btn_yes {
+            get {
+                return ResourceManager.GetString("btn_yes", resourceCulture);
             }
         }
         
@@ -237,6 +255,15 @@ namespace TeeScore.Translations {
         internal static string lbl_game_type {
             get {
                 return ResourceManager.GetString("lbl_game_type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Joining:.
+        /// </summary>
+        internal static string lbl_joining {
+            get {
+                return ResourceManager.GetString("lbl_joining", resourceCulture);
             }
         }
         

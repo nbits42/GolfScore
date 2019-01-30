@@ -61,6 +61,24 @@ namespace TeeScore.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Found game:{3}{4}{0}{3}{4}{1}{3}{4}{2:d}{3}{3}Is this the game you want to join?.
+        /// </summary>
+        internal static string GameFoundByInvitationNumber {
+            get {
+                return ResourceManager.GetString("GameFoundByInvitationNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No game with this invitation number exists.
+        /// </summary>
+        internal static string GameNotFoundByInvitationNumber {
+            get {
+                return ResourceManager.GetString("GameNotFoundByInvitationNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This player is already on your game.
         /// </summary>
         internal static string GamePlayerExists {
@@ -84,6 +102,15 @@ namespace TeeScore.Translations {
         internal static string NameIsRequired {
             get {
                 return ResourceManager.GetString("NameIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You already joined this game!.
+        /// </summary>
+        internal static string PlayerAlreadyJoined {
+            get {
+                return ResourceManager.GetString("PlayerAlreadyJoined", resourceCulture);
             }
         }
         
