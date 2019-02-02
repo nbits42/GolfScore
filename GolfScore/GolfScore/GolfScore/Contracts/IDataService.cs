@@ -19,12 +19,13 @@ namespace TeeScore.Contracts
         Task<GamePlayer> SaveGamePlayer(GamePlayer gamePlayer, bool synchronize = false);
         Task<GamePlayer> GetGamePlayer(string gameId, string playerId);
         Task<List<PlayerDto>> GetKnownPlayers(string playerId);
-        Task<PlayGameDto> GetGame(string gameId);
+        Task<PlayGameDto> GetPlayGame(string gameId);
         Task<TeeDto> SaveTee(TeeDto tee, bool synchronize = false);
         Task<ScoreDto> SaveScore(ScoreDto teeScore, bool synchronize = false);
         Task<NewGameDto> GetNewGame(string gameId);
-        Task DeleteGamePlayer(string gameId, string playerId);
+        Task DeleteGamePlayer(string gameId, string playerId, bool synchronize = false);
         Task SyncAsync();
         Task<Game> GetGame(int invitationNumber);
+        Task<Game> GetGame(string gameId);
     }
 }

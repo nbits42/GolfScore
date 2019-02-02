@@ -111,6 +111,8 @@ namespace TeeScore.ViewModels
                 }
                 await LoadMyPlayerAsync().ConfigureAwait(true);
                 await LoadGamesAsync().ConfigureAwait(true);
+
+                await InitializeTimer();
             }
             catch (Exception e)
             {
@@ -118,6 +120,17 @@ namespace TeeScore.ViewModels
             }
 
             IsBusy = false;
+        }
+
+        private async Task InitializeTimer()
+        {
+            await WaitAndExecute(2000, async () => { await LoadGamesAsync(); });
+        }
+
+        private async Task WaitAndExecute(int milisecs, Action action)
+        {
+            await Task.Delay(milisecs);
+            action();
         }
 
         private async Task LoadMyPlayerAsync()
@@ -134,6 +147,11 @@ namespace TeeScore.ViewModels
             var playerId = Settings.MyPlayerId;
 
             Games = new ObservableCollection<Game>(await DataService.GetGames(playerId).ConfigureAwait(true));
+        }
+
+        public async Task<Game> GetGame(string gameId)
+        {
+            return await DataService.GetGame(gameId);
         }
     }
 }

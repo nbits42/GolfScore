@@ -241,6 +241,24 @@ namespace TeeScore.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Finished at.
+        /// </summary>
+        internal static string lbl_finished {
+            get {
+                return ResourceManager.GetString("lbl_finished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The game has not been started yet.
+        /// </summary>
+        internal static string lbl_game_not_started {
+            get {
+                return ResourceManager.GetString("lbl_game_not_started", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pass this number to the other players. They can enter this number at the &apos;Join Game&apos; page..
         /// </summary>
         internal static string lbl_game_number {
@@ -250,11 +268,29 @@ namespace TeeScore.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The game is still busy.
+        /// </summary>
+        internal static string lbl_game_started_not_finished {
+            get {
+                return ResourceManager.GetString("lbl_game_started_not_finished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Game type.
         /// </summary>
         internal static string lbl_game_type {
             get {
                 return ResourceManager.GetString("lbl_game_type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invitation nuber.
+        /// </summary>
+        internal static string lbl_invitation_number {
+            get {
+                return ResourceManager.GetString("lbl_invitation_number", resourceCulture);
             }
         }
         
@@ -417,6 +453,15 @@ namespace TeeScore.Translations {
         internal static string title_join_game {
             get {
                 return ResourceManager.GetString("title_join_game", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Join with QR Code.
+        /// </summary>
+        internal static string title_join_with_qr_code {
+            get {
+                return ResourceManager.GetString("title_join_with_qr_code", resourceCulture);
             }
         }
         

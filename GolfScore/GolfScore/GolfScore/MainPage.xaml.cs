@@ -84,7 +84,7 @@ namespace TeeScore
 
         private async Task JoinGame()
         {
-            var joinGamePage = new JoinGamePage();
+            var joinGamePage = new JoinGamePageByQr();
             await Navigation.PushAsync(joinGamePage).ConfigureAwait(true);
         }
 
@@ -159,7 +159,8 @@ namespace TeeScore
         {
             if (e.ItemData is Game game)
             {
-                if (game.GameStatus < GameStatus.Started)
+                var refreshedGame = await _viewModel.GetGame(game.Id);
+                if (refreshedGame.GameStatus < GameStatus.Started)
                 {
                     var newGamePage = new NewGamePage(game.Id);
                     await Navigation.PushAsync(newGamePage).ConfigureAwait(true);

@@ -7,6 +7,7 @@ using TeeScore.Contracts;
 using TeeScore.Domain;
 using TeeScore.DTO;
 using TeeScore.Helpers;
+using TeeScore.Translations;
 
 namespace TeeScore.ViewModels
 {
@@ -36,7 +37,7 @@ namespace TeeScore.ViewModels
 
         public async Task LoadAsync(string gameId)
         {
-            var gameDto = await DataService.GetGame(gameId);
+            var gameDto = await DataService.GetPlayGame(gameId);
 
             Tees = new ObservableCollection<TeeDto>(gameDto.Tees.OrderBy(x => x.Number));
             foreach (var teeDto in Tees)
@@ -63,13 +64,17 @@ namespace TeeScore.ViewModels
 
             Scores = new ObservableCollection<ScoreDto>(scores.OrderBy(x => x.TeeNumber).ThenBy(x => x.PlayerAbbreviation));
             Game = gameDto;
+            
             CurrentScore = Scores[Game.Game.CurrentTee];
             CurrentScore.ScoreChanged += CurrentScore_ScoreChanged;
             CurrentTee = Tees.First(x => x.Id == CurrentScore.TeeId);
             IsBackEnabled = false;
             IsNextEnabled = true;
-            ScoringIsEnabled = Game.Game.FinishedAt == DomainBase.EmptyDate;
+            ScoringIsEnabled = DomainBase.IsEmpty( Game.Game.FinishedAt);
             Title = $"{Game.Game.GameType} @ {Game.Venue.Name}";
+
+            RaisePropertyChanged(nameof(GameStartTime));
+            RaisePropertyChanged(nameof(GameFinishedTime));
         }
 
         private void CurrentScore_ScoreChanged(object sender, System.EventArgs e)
@@ -97,6 +102,47 @@ namespace TeeScore.ViewModels
             }
         }
 
+        public string GameStartTime => GetStartTime();
+
+        private string GetStartTime()
+        {
+            if (Game == null)
+            {
+                return string.Empty;
+            }
+            if (DomainBase.IsEmpty(Game.Game.StartedAt))
+            {
+                return Labels.lbl_game_not_started;
+            }
+
+            return $"{GetDateString(Game.Game.StartedAt)}{Game.Game.StartedAt:t}";
+        }
+
+        private string GetDateString(DateTime date)
+        {
+            return Game.Game.StartedAt.Date == DateTime.Today
+                ? string.Empty
+                : Game.Game.StartedAt.ToShortDateString() + " ";
+        }
+
+        public string GameFinishedTime => GetFinishedTime();
+
+        private string GetFinishedTime()
+        {
+            if (Game == null)
+            {
+                return string.Empty;
+            }
+            if (DomainBase.IsEmpty(Game.Game.StartedAt))
+            {
+                return string.Empty;
+            }
+            if (DomainBase.IsEmpty(Game.Game.FinishedAt))
+            {
+                return Labels.lbl_game_started_not_finished;
+            }
+            return $"{GetDateString(Game.Game.FinishedAt)}{Game.Game.FinishedAt:t}";
+        }
 
 
         /* =========================================== property: Tees ====================================== */
@@ -240,9 +286,11 @@ namespace TeeScore.ViewModels
 
         private void SaveScore()
         {
-            if (Game.Game.StartedAt == DomainBase.EmptyDate)
+            if (DomainBase.IsEmpty(Game.Game.StartedAt))
             {
                 Game.Game.StartedAt = DateTime.Now;
+                RaisePropertyChanged(nameof(GameStartTime));
+                RaisePropertyChanged(nameof(GameFinishedTime));
             }
             Task.Run(async () => await DataService.SaveGame(Game.Game, true).ConfigureAwait(false));
             Task.Run(async () => await DataService.SaveScore(CurrentScore, true).ConfigureAwait(false));
@@ -437,6 +485,7 @@ namespace TeeScore.ViewModels
             {
                 ScoringIsEnabled = false;
                 Game.Game.FinishedAt = DateTime.Now;
+                RaisePropertyChanged(nameof(GameFinishedTime));
                 SaveScore();
             }
         }

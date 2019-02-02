@@ -70,6 +70,15 @@ namespace TeeScore.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://teescore.nbits.nl/.
+        /// </summary>
+        public static string QrCodeUrl {
+            get {
+                return ResourceManager.GetString("QrCodeUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://teescore.azurewebsites.net.
         /// </summary>
         public static string ReleaseServiceUrl {

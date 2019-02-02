@@ -188,6 +188,12 @@ namespace TeeScore.Services
             return games.FirstOrDefault();
         }
 
+        public async Task<Game> GetGame(string gameId)
+        {
+            await SyncAsync();
+            return await GamesTable.LookupAsync(gameId);
+        }
+
         public async Task<PlayerDto> GetPlayer(string myPlayerId)
         {
             return Mapper.Map<PlayerDto>(await PlayersTable.LookupAsync(myPlayerId).ConfigureAwait(false));
@@ -285,7 +291,7 @@ namespace TeeScore.Services
             return knownPlayers;
         }
 
-        public async Task<PlayGameDto> GetGame(string gameId)
+        public async Task<PlayGameDto> GetPlayGame(string gameId)
         {
             var result = new PlayGameDto
             {
@@ -309,12 +315,13 @@ namespace TeeScore.Services
             return result;
         }
 
-        public async Task DeleteGamePlayer(string gameId, string playerId)
+        public async Task DeleteGamePlayer(string gameId, string playerId, bool synchronize = false)
         {
             var gamePlayer = await GetGamePlayer(gameId, playerId).ConfigureAwait(false);
             if (gamePlayer != null)
             {
                 await GamePlayersTable.DeleteAsync(gamePlayer).ConfigureAwait(false);
+                await SyncAsync();
             }
         }
 

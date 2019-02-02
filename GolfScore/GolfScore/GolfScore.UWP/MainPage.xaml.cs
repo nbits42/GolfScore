@@ -20,7 +20,7 @@ namespace GolfScore.UWP
         public MainPage()
         {
             this.InitializeComponent();
-
+            ZXing.Net.Mobile.Forms.WindowsUniversal.ZXingScannerViewRenderer.Init();
             LoadApplication(new TeeScore.App());
         }
     }

@@ -120,6 +120,9 @@
   <data name="DebugServiceUrl" xml:space="preserve">
     <value>http://nbits1/teescoreservice</value>
   </data>
+  <data name="QrCodeUrl" xml:space="preserve">
+    <value>https://teescore.nbits.nl/</value>
+  </data>
   <data name="ReleaseServiceUrl" xml:space="preserve">
     <value>https://teescore.azurewebsites.net</value>
   </data>

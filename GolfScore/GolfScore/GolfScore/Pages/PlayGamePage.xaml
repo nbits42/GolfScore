@@ -28,14 +28,17 @@
                                     <RowDefinition></RowDefinition>
                                     <RowDefinition></RowDefinition>
                                     <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
                                 </Grid.RowDefinitions>
 
                                 <Label Grid.Row="0" Grid.Column="0"  Text="{extensions:Translate lbl_started}" Style="{StaticResource SmallLabelStyle}" ></Label>
-                                <Label Grid.Row="0" Grid.Column="1"  Text="{Binding Game.Game.StartedAt, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
-                                <Label Grid.Row="1" Grid.Column="0"  Text="{extensions:Translate lbl_current_tee}" Style="{StaticResource SmallLabelStyle}"></Label>
-                                <Label Grid.Row="1" Grid.Column="1"  Text="{Binding CurrentScore.TeeNumber, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
-                                <Label Grid.Row="2" Grid.Column="0"  Text="{extensions:Translate lbl_current_player}" Style="{StaticResource SmallLabelStyle}" ></Label>
-                                <Label Grid.Row="2" Grid.Column="1"  Text="{Binding CurrentScore.Player.Name, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
+                                <Label Grid.Row="0" Grid.Column="1"  Text="{Binding GameStartTime, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
+                                <Label Grid.Row="1" Grid.Column="0"  Text="{extensions:Translate lbl_finished}" Style="{StaticResource SmallLabelStyle}" ></Label>
+                                <Label Grid.Row="1" Grid.Column="1"  Text="{Binding GameFinishedTime, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
+                                <Label Grid.Row="2" Grid.Column="0"  Text="{extensions:Translate lbl_current_tee}" Style="{StaticResource SmallLabelStyle}"></Label>
+                                <Label Grid.Row="2" Grid.Column="1"  Text="{Binding CurrentScore.TeeNumber, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
+                                <Label Grid.Row="3" Grid.Column="0"  Text="{extensions:Translate lbl_current_player}" Style="{StaticResource SmallLabelStyle}" ></Label>
+                                <Label Grid.Row="3" Grid.Column="1"  Text="{Binding CurrentScore.Player.Name, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
 
                             </Grid>
                         </StackLayout>

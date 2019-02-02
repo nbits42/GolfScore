@@ -88,6 +88,24 @@ namespace TeeScore.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid invitation number.
+        /// </summary>
+        internal static string InvalidInvitationNumber {
+            get {
+                return ResourceManager.GetString("InvalidInvitationNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid QR Code.
+        /// </summary>
+        internal static string InvalidQrCode {
+            get {
+                return ResourceManager.GetString("InvalidQrCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Location is required.
         /// </summary>
         internal static string LocationIsRequired {
@@ -111,6 +129,15 @@ namespace TeeScore.Translations {
         internal static string PlayerAlreadyJoined {
             get {
                 return ResourceManager.GetString("PlayerAlreadyJoined", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The scan returned no data.
+        /// </summary>
+        internal static string ScanReturnedNoData {
+            get {
+                return ResourceManager.GetString("ScanReturnedNoData", resourceCulture);
             }
         }
         

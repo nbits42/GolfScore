@@ -16,6 +16,7 @@ namespace TeeScore.Services
         public VenueViewModel Venue => SimpleIoc.Default.GetInstance<VenueViewModel>();
         public GamePlayerViewModel GamePlayer => SimpleIoc.Default.GetInstance<GamePlayerViewModel>();
         public JoinGameViewModel JoinGame => SimpleIoc.Default.GetInstance<JoinGameViewModel>();
+        public IDialogService DialogService => SimpleIoc.Default.GetInstance<IDialogService>();
 
         public Ioc()
         {

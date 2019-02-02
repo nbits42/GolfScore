@@ -3,6 +3,7 @@ using GlobalContracts.Enumerations;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -200,7 +201,7 @@ namespace TeeScore.ViewModels
                     }
                     if (_qrCodeContent == null)
                     {
-                        QrCodeContent = $"http://nbits.nl.teescore/{InvitationNumber}";
+                        QrCodeContent = $"{Properties.Resources.QrCodeUrl}{InvitationNumber}";
                     }
 
                     ByInvitationNumber = _playerSelection == PlayerSelection.ByInvitationNumber;
@@ -773,10 +774,15 @@ namespace TeeScore.ViewModels
             var startTime = DateTime.Now;
             var maxWaitMinutes = 5;
             InvitationIsRunning = true;
+            var stopwatch = new Stopwatch();
+            var pollCount = 0;
             while (InvitationIsRunning)
             {
+                stopwatch.Start();
                 await DataService.SyncAsync().ConfigureAwait(true);
                 var players = await DataService.GetPlayersForGame(Game.Game.Id).ConfigureAwait(true);
+                stopwatch.Stop();
+                Debug.Write($"{pollCount++} Poll for players. Time elapsed: {stopwatch.Elapsed.TotalSeconds}");
                 if (players.Count == PlayersCount)
                 {
                     InvitationIsRunning = false;

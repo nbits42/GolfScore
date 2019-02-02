@@ -60,7 +60,7 @@ namespace TeeScore.Pages
             ToolbarItems.Add(infoItem);
             ToolbarItems.Add(scoreItem);
 
-            if (_vm.Game.Game.FinishedAt == DomainBase.EmptyDate)
+            if (DomainBase.IsEmpty(_vm.Game.Game.FinishedAt))
             {
                 ToolbarItems.Add(finishItem);
             }

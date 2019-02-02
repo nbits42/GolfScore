@@ -22,8 +22,8 @@
                     </Entry>
                     <Button Grid.Column="1" Text="{extensions:Translate btn_join}" Style="{StaticResource DialogButtonStyle}" Command="{Binding JoinGameCommand}"></Button>
                 </Grid>
-                <StackLayout IsVisible="{Binding ShowGameData, Mode=TwoWay}" Margin="20,10,0,0">
-                    <Label Text="{extensions:Translate lbl_joining}"></Label>
+                <StackLayout IsVisible="{Binding ShowGameData, Mode=TwoWay}" Margin="20,20,0,0">
+                    <Label Text="{extensions:Translate lbl_joining}" FontAttributes="Bold"></Label>
                     <Label Text="{Binding GameType, Mode=TwoWay}" Margin="10,0,0,0"></Label>
                     <Label Text="{Binding Venue, Mode=TwoWay}" Margin="10,0,0,0"></Label>
                     <Label Text="{Binding GameDate, Mode=TwoWay, StringFormat={StaticResource FormatDateShort}}" Margin="10,0,0,0"></Label>

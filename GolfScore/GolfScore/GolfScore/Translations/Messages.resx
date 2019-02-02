@@ -126,6 +126,12 @@
   <data name="GamePlayerExists" xml:space="preserve">
     <value>This player is already on your game</value>
   </data>
+  <data name="InvalidInvitationNumber" xml:space="preserve">
+    <value>Invalid invitation number</value>
+  </data>
+  <data name="InvalidQrCode" xml:space="preserve">
+    <value>Invalid QR Code</value>
+  </data>
   <data name="LocationIsRequired" xml:space="preserve">
     <value>Location is required</value>
   </data>
@@ -134,6 +140,9 @@
   </data>
   <data name="PlayerAlreadyJoined" xml:space="preserve">
     <value>You already joined this game!</value>
+  </data>
+  <data name="ScanReturnedNoData" xml:space="preserve">
+    <value>The scan returned no data</value>
   </data>
   <data name="VenueExists" xml:space="preserve">
     <value>This venue already exists</value>

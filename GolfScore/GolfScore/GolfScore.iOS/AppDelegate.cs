@@ -28,6 +28,7 @@ namespace GolfScore.iOS
             CurrentPlatform.Init();
             global::Xamarin.Forms.Forms.Init();
             SfListViewRenderer.Init();
+            ZXing.Net.Mobile.Forms.iOS.Platform.Init();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

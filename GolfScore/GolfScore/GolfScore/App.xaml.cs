@@ -23,6 +23,8 @@ namespace TeeScore
 
         public App()
         {
+            LogWarningsToApplicationOutput = true;
+
             // https://www.syncfusion.com/account/downloads  & keys
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTI0MTZAMzEzNjJlMzQyZTMwWmJEWFBiZGhoSlcraHZuYVJUUitKU3ArcmR6c3Rwc0s3RjBNVUwrZk55UT0="); // version 16.4.*
 
