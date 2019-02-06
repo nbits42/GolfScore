@@ -18,6 +18,7 @@ namespace TeeScore.Contracts
         Task<List<VenueDto>> GetVenues();
         Task<GamePlayer> SaveGamePlayer(GamePlayer gamePlayer, bool synchronize = false);
         Task<GamePlayer> GetGamePlayer(string gameId, string playerId);
+        Task<List<GamePlayer>> GetGamePlayers(string gameId);
         Task<List<PlayerDto>> GetKnownPlayers(string playerId);
         Task<PlayGameDto> GetPlayGame(string gameId);
         Task<TeeDto> SaveTee(TeeDto tee, bool synchronize = false);

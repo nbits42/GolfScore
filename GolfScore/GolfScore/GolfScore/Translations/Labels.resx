@@ -261,4 +261,13 @@
   <data name="lbl_game_started_not_finished" xml:space="preserve">
     <value>The game is still busy</value>
   </data>
+  <data name="lbl_scanning_and_analyzing" xml:space="preserve">
+    <value>Scanning and analyzing a QR Code</value>
+  </data>
+  <data name="lbl_waiting_for_other_players" xml:space="preserve">
+    <value>Waiting for other players to join</value>
+  </data>
+  <data name="title_scan_qr_code" xml:space="preserve">
+    <value>Scan the QR Code on the initiators mobile phone</value>
+  </data>
 </root>

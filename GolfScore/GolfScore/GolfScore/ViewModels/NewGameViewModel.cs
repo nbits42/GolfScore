@@ -764,7 +764,7 @@ namespace TeeScore.ViewModels
                     GameId = Game.Game.Id,
                     PlayerId = MyPlayer.Id
                 };
-                _myGamePlayer = await DataService.SaveGamePlayer(_myGamePlayer).ConfigureAwait(false);
+                _myGamePlayer = await DataService.SaveGamePlayer(_myGamePlayer, true).ConfigureAwait(false);
             }
             Settings.CurrentGameId = Game.Game.Id;
         }
@@ -774,15 +774,12 @@ namespace TeeScore.ViewModels
             var startTime = DateTime.Now;
             var maxWaitMinutes = 5;
             InvitationIsRunning = true;
-            var stopwatch = new Stopwatch();
-            var pollCount = 0;
             while (InvitationIsRunning)
             {
-                stopwatch.Start();
                 await DataService.SyncAsync().ConfigureAwait(true);
                 var players = await DataService.GetPlayersForGame(Game.Game.Id).ConfigureAwait(true);
-                stopwatch.Stop();
-                Debug.Write($"{pollCount++} Poll for players. Time elapsed: {stopwatch.Elapsed.TotalSeconds}");
+                Game.Players = players; 
+                Players = new ObservableCollection<PlayerDto>(players);
                 if (players.Count == PlayersCount)
                 {
                     InvitationIsRunning = false;
@@ -911,7 +908,6 @@ namespace TeeScore.ViewModels
             Settings.LastTeeCount = Game.Game.TeeCount;
             Settings.StartGameId = Game.Game.Id;
 
-            Game.Game.GameStatus = GameStatus.Started;
             Game.Game.CurrentTee = (Game.Game.StartTee - 1 ) * Game.Game.InvitedPlayersCount;
             await SaveGame();
 
@@ -936,10 +932,10 @@ namespace TeeScore.ViewModels
                     await DataService.SaveScore(teeScore);
                 }
             }
-
             StartText = Translations.Labels.lbl_starting_saving_data;
 
-            await DataService.SyncAsync();
+            Game.Game.GameStatus = GameStatus.Started;
+            await SaveGame();
             //OnGameStarted();
             StartText = Translations.Labels.lbl_starting_starting;
         }

@@ -8,6 +8,7 @@ namespace TeeScore.Domain
         public string AvatarUrl { get; set; }
         public string ImageUrl { get; set; }
         public string Name { get; set; }
+        public string EmailAddress { get; set; }
 
         internal void Clear()
         {

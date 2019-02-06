@@ -96,6 +96,8 @@ namespace TeeScore.DTO
             }
         }
 
+        public string PublicImageUrl { get; set; }
+
         /* =========================================== property: Lat ====================================== */
         /// <summary>
         /// Sets and gets the Lat property.
@@ -190,6 +192,8 @@ namespace TeeScore.DTO
                 RaisePropertyChanged();
             }
         }
+
+        public string PublicThumbnailUrl { get; set; }
 
 
 /* =========================================== property: OwnerId ====================================== */

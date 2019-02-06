@@ -71,6 +71,8 @@ namespace TeeScore.DTO
             }
         }
 
+        public string EmailAddress { get; set; }
+
         /* =========================================== property: Abbreviation ====================================== */
         /// <summary>
         /// Sets and gets the Abbreviation property.

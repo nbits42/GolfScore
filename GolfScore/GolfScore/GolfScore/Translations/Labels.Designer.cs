@@ -331,6 +331,15 @@ namespace TeeScore.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scanning and analyzing a QR Code.
+        /// </summary>
+        internal static string lbl_scanning_and_analyzing {
+            get {
+                return ResourceManager.GetString("lbl_scanning_and_analyzing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select other players.
         /// </summary>
         internal static string lbl_select_other_players {
@@ -412,6 +421,15 @@ namespace TeeScore.Translations {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Waiting for other players to join.
+        /// </summary>
+        internal static string lbl_waiting_for_other_players {
+            get {
+                return ResourceManager.GetString("lbl_waiting_for_other_players", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to By invitation number.
         /// </summary>
         internal static string PlayerSelection_ByInvitationNumber {
@@ -489,6 +507,15 @@ namespace TeeScore.Translations {
         internal static string title_new_venue {
             get {
                 return ResourceManager.GetString("title_new_venue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scan the QR Code on the initiators mobile phone.
+        /// </summary>
+        internal static string title_scan_qr_code {
+            get {
+                return ResourceManager.GetString("title_scan_qr_code", resourceCulture);
             }
         }
     }

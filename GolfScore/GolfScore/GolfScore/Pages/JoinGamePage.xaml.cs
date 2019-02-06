@@ -25,5 +25,10 @@ namespace TeeScore.Pages
             base.OnAppearing();
             _vm.ShowGameData = false;
         }
+
+        private async void StartGame_OnClicked(object sender, EventArgs e)
+        {
+            await Navigation.PopToRootAsync(true);
+        }
     }
 }

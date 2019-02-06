@@ -9,11 +9,11 @@
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="300"></RowDefinition>
+                <RowDefinition Height="200"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="150"></RowDefinition>
             </Grid.RowDefinitions>
-            <StackLayout Grid.Row="0" BackgroundColor="Black" IsVisible="{Binding IsScanning, Mode=TwoWay}">
+            <StackLayout Grid.Row="0" BackgroundColor="{StaticResource PageBackgroundColor}" IsVisible="{Binding IsScanning, Mode=TwoWay}">
                 <forms:ZXingScannerView x:Name="ScannerView" 
                                         HorizontalOptions="Center"
                                         VerticalOptions="Center"
@@ -21,20 +21,11 @@
                                         Result="{Binding ScanResult, Mode=TwoWay}" 
                                         IsScanning="{Binding IsScanning, Mode=TwoWay}"
                                         IsAnalyzing="{Binding IsAnalyzing, Mode=TwoWay}"
-                                        WidthRequest="300" 
-                                        HeightRequest="300"/>
-                <forms:ZXingDefaultOverlay TopText="Scan the QR Code on the initiators mobile phone" BottomText="" ShowFlashButton="False" Opacity="1.0"></forms:ZXingDefaultOverlay>
+                                        WidthRequest="200" 
+                                        HeightRequest="200"/>
+                <forms:ZXingDefaultOverlay TopText="{extensions:Translate title_scan_qr_code}" BottomText="" ShowFlashButton="False" Opacity="1.0"></forms:ZXingDefaultOverlay>
             </StackLayout>
             <StackLayout Grid.Row="1">
-                <Label Margin="20,40,20,0" Text="{extensions:Translate lbl_invitation_number}" Style="{StaticResource TinyLabelStyle}"></Label>
-                <Grid Margin="20,0,20,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="100"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Entry Grid.Column="0" Text="{Binding InvitationNumber, Mode=TwoWay}" WidthRequest="200" Style="{StaticResource EditorStyle}" Keyboard="Numeric" FontSize="Large" MaxLength="6" IsEnabled="False">
-                    </Entry>
-                </Grid>
                 <StackLayout IsVisible="{Binding ShowGameData, Mode=TwoWay}" Margin="20,20,0,0">
                     <Label Text="{extensions:Translate lbl_joining}" FontAttributes="Bold"></Label>
                     <Label Text="{Binding GameType, Mode=TwoWay}" Margin="10,0,0,0"></Label>
@@ -42,7 +33,15 @@
                     <Label Text="{Binding GameDate, Mode=TwoWay, StringFormat={StaticResource FormatDateShort}}" Margin="10,0,0,0"></Label>
                 </StackLayout>
             </StackLayout>
-            <ActivityIndicator Grid.Row="2" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="140" Color="{StaticResource ButtonBackgroundColor}" IsRunning="{Binding IsWaiting, Mode=TwoWay}"/>
+            <StackLayout Grid.Row="2">
+                <Label Text="Waiting for other players to join" Style="{StaticResource TinyLabelStyle}" HorizontalOptions="Center" IsVisible="{Binding IsWaiting, Mode=TwoWay}"></Label>
+                <ActivityIndicator  VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="140" Color="{StaticResource ButtonBackgroundColor}" IsRunning="{Binding IsWaiting, Mode=TwoWay}"/>
+                <ImageButton Clicked="StartGame_OnClicked" 
+                             Source="start_game.png" 
+                             Style="{StaticResource RoundImageButtonStyle}" 
+                             CornerRadius="50" 
+                             IsVisible="{Binding StartButtonIsVisible, Mode=TwoWay}"></ImageButton>
+            </StackLayout>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

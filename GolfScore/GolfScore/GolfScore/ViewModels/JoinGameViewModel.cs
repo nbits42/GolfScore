@@ -29,6 +29,8 @@ namespace TeeScore.ViewModels
         private bool _isScanning;
         private Game _game;
         private bool _startGame;
+        private bool _startButtonIsVisible;
+        private string _waitingText;
 
         public JoinGameViewModel(IDataService dataService, INavigationService navigationService, IDialogService dialogService) : base(dataService, navigationService)
         {
@@ -225,6 +227,10 @@ namespace TeeScore.ViewModels
 
                 _isScanning = value;
                 RaisePropertyChanged();
+
+                WaitingText = value 
+                    ? Labels.lbl_scanning_and_analyzing 
+                    : Labels.lbl_waiting_for_other_players;
             }
         }
 
@@ -279,10 +285,12 @@ namespace TeeScore.ViewModels
                 return;
             }
 
-            var players = await DataService.GetPlayersForGame(game.Id);
-            if (players.Any(x => x.Id == Settings.MyPlayerId))
+            Game = game;
+            var players = await DataService.GetGamePlayers(game.Id);
+            if (players.Any(x => x.PlayerId == Settings.MyPlayerId))
             {
                 _dialogService.ShowError(Messages.PlayerAlreadyJoined, Labels.title_join_game);
+                return;
             }
 
             var result = await _dialogService.ShowMessage(string.Format(Messages.GameFoundByInvitationNumber, game.GameTypeName, game.VenueName, game.GameDate, Environment.NewLine, "    "),
@@ -301,6 +309,8 @@ namespace TeeScore.ViewModels
             IsWaiting = true;
 
             await SaveMeAsGamePlayer(game.Id);
+            await ContinuousPlayerPolling();
+
         }
 
         /* =========================================== property: Game ====================================== */
@@ -345,14 +355,16 @@ namespace TeeScore.ViewModels
             while (IsWaiting)
             {
                 stopwatch.Start();
-                await DataService.SyncAsync().ConfigureAwait(true);
-                var players = await DataService.GetPlayersForGame(Game.Id).ConfigureAwait(true);
+                await DataService.SyncAsync().ConfigureAwait(false);
+                var players = await DataService.GetGamePlayers(Game.Id).ConfigureAwait(false);
                 stopwatch.Stop();
                 Debug.Write($"{pollCount++} Poll for players. Time elapsed: {stopwatch.Elapsed.TotalSeconds}");
                 if (players.Count == Game.InvitedPlayersCount)
                 {
+                    Settings.StartGameId = Game.Id;
+                    await WaitForGameStartAsync().ConfigureAwait(true);
                     IsWaiting = false;
-                    StartGame = true;
+                    StartButtonIsVisible = true;
                 }
 
                 if (_isWaiting)
@@ -370,24 +382,59 @@ namespace TeeScore.ViewModels
             }
         }
 
-        /* =========================================== property: StartGame ====================================== */
-        /// <summary>
-        /// Sets and gets the StartGame property.
-        /// </summary>
-        public bool StartGame
+        private async Task WaitForGameStartAsync()
         {
-            get => _startGame;
+            while (true)
+            {
+                await DataService.SyncAsync();
+                var game = await DataService.GetGame(Game.Id);
+                if (game.GameStatus == GameStatus.Started)
+                {
+                    break;
+                }
+                await Task.Delay(TimeSpan.FromSeconds(5));
+            }            
+        }
+
+/* =========================================== property: StartButtonIsVisible ====================================== */
+        /// <summary>
+        /// Sets and gets the StartButtonIsVisible property.
+        /// </summary>
+        public bool StartButtonIsVisible
+        {
+            get => _startButtonIsVisible;
             set
             {
-                if (value == _startGame)
+                if (value == _startButtonIsVisible)
                 {
                     return;
                 }
 
-                _startGame = value;
+                _startButtonIsVisible = value;
                 RaisePropertyChanged();
             }
         }
+
+        /* =========================================== property: WaitingText ====================================== */
+        /// <summary>
+        /// Sets and gets the WaitingText property.
+        /// </summary>
+        public string WaitingText
+        {
+            get => _waitingText;
+            set
+            {
+                if (value == _waitingText)
+                {
+                    return;
+                }
+
+                _waitingText = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
 
 
     }

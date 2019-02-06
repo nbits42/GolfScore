@@ -14,6 +14,7 @@ namespace TeeScore.Domain
         public string GameId { get; set; }
         public string PlayerId { get; set; }
         public PlayerRole PlayerRole { get; set; }
+        public PlayerSelection PlayerSelection { get; set; }
         public bool Hide { get; set; }
     }
 }

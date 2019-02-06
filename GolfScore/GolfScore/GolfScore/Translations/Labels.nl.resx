@@ -237,4 +237,13 @@
   <data name="title_join_game" xml:space="preserve">
     <value>Speel mee</value>
   </data>
+  <data name="lbl_scanning_and_analyzing" xml:space="preserve">
+    <value>Scannen en analyseren QR Code</value>
+  </data>
+  <data name="lbl_waiting_for_other_players" xml:space="preserve">
+    <value>Wachten op de andere spelers</value>
+  </data>
+  <data name="title_scan_qr_code" xml:space="preserve">
+    <value>Scan de QR Code vanaf de andere telefoon</value>
+  </data>
 </root>

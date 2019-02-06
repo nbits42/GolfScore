@@ -272,6 +272,11 @@ namespace TeeScore.Services
             return result.FirstOrDefault();
         }
 
+        public async Task<List<GamePlayer>> GetGamePlayers(string gameId)
+        {
+            return await GamePlayersTable.Where(x => x.GameId == gameId).ToListAsync();
+        }
+
         public async Task<List<PlayerDto>> GetKnownPlayers(string playerId)
         {
             var myGames = await GetGames(playerId);

@@ -46,7 +46,7 @@ namespace TeeScore
                     VerticalOptions = LayoutOptions.StartAndExpand,
                     PopupStyle = new PopupStyle {CornerRadius = 20},
                     AnimationMode = AnimationMode.Fade,
-                    HeightRequest = 100,
+                    HeightRequest = 200,
                     WidthRequest = 200,
                     BackgroundColor = Color.White,
                     ContentTemplate = new DataTemplate(() =>
@@ -63,28 +63,57 @@ namespace TeeScore
                         };
                         newGameButton.Clicked+=NewGameButton_Clicked;
 
-                        var joinGameButton = new Button
+                        var joinLabel = new Label
                         {
                             Text = "Join game",
+                            Style = StylingService.GetStyle("SmallLabelStyle"),
+                            HorizontalOptions = LayoutOptions.CenterAndExpand,
+                            HorizontalTextAlignment = TextAlignment.Center,
+                            Margin = new Thickness(0,5,0,5)
+                        };
+
+                        var joinQrGameButton = new Button
+                        {
+                            Text = "with QR Code",
                             Style = StylingService.GetStyle("PopupButtonStyle"),
                         };
-                        joinGameButton.Clicked+=JoinGameButton_Clicked;
+                        joinQrGameButton.Clicked+=JoinQrGameButton_Clicked;
+
+                        var joinInvitationGameButton = new Button
+                        {
+                            Text = "with Invitiation number",
+                            Style = StylingService.GetStyle("PopupButtonStyle"),
+                        };
+                        joinInvitationGameButton.Clicked+=JoinInvitationGameButton_Clicked;
 
                         stack.Children.Add(newGameButton);
-                        stack.Children.Add(joinGameButton);
+                        stack.Children.Add(joinLabel);
+                        stack.Children.Add(joinQrGameButton);
+                        stack.Children.Add(joinInvitationGameButton);
                         return stack;
                     })
                 }
         };
 
-        private async void JoinGameButton_Clicked(object sender, EventArgs e)
+        private async void JoinInvitationGameButton_Clicked(object sender, EventArgs e)
         {
-            await JoinGame();
+            await JoinInvitationGame();
         }
 
-        private async Task JoinGame()
+        private async void JoinQrGameButton_Clicked(object sender, EventArgs e)
+        {
+            await JoinQrGame();
+        }
+
+        private async Task JoinQrGame()
         {
             var joinGamePage = new JoinGamePageByQr();
+            await Navigation.PushAsync(joinGamePage).ConfigureAwait(true);
+        }
+
+        private async Task JoinInvitationGame()
+        {
+            var joinGamePage = new JoinGamePage();
             await Navigation.PushAsync(joinGamePage).ConfigureAwait(true);
         }
 
@@ -108,7 +137,9 @@ namespace TeeScore
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            _viewModel.Active = false;
             await _viewModel.LoadAsync().ConfigureAwait(true);
+            _viewModel.Active = true;
             if (string.IsNullOrEmpty(_viewModel.MyPlayer?.Id))
             {
                 ShowSettingsPage();
@@ -122,9 +153,15 @@ namespace TeeScore
                 {
                     var gameId = Settings.StartGameId;
                     Settings.StartGameId = string.Empty;
-                    await PlayGame(gameId);
+                    await PlayGame(gameId).ConfigureAwait(true);
                 }
             }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _viewModel.Active = false;
         }
 
         private void AddButtonClicked(object sender, EventArgs e)

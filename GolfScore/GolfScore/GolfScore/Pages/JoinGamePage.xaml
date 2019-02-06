@@ -29,7 +29,15 @@
                     <Label Text="{Binding GameDate, Mode=TwoWay, StringFormat={StaticResource FormatDateShort}}" Margin="10,0,0,0"></Label>
                 </StackLayout>
             </StackLayout>
-            <ActivityIndicator Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="140" Color="{StaticResource ButtonBackgroundColor}" IsRunning="{Binding IsWaiting, Mode=TwoWay}"/>
+            <StackLayout Grid.Row="1">
+                <Label Text="Waiting for other players to join" Style="{StaticResource TinyLabelStyle}" HorizontalOptions="Center" IsVisible="{Binding IsWaiting, Mode=TwoWay}"></Label>
+                <ActivityIndicator  VerticalOptions="Center" HorizontalOptions="Center" WidthRequest="140" Color="{StaticResource ButtonBackgroundColor}" IsRunning="{Binding IsWaiting, Mode=TwoWay}"/>
+                <ImageButton Clicked="StartGame_OnClicked" 
+                             Source="start_game.png" 
+                             Style="{StaticResource RoundImageButtonStyle}" 
+                             CornerRadius="50" 
+                             IsVisible="{Binding StartButtonIsVisible, Mode=TwoWay}"></ImageButton>
+            </StackLayout>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

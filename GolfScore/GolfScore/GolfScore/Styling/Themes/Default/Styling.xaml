@@ -222,9 +222,9 @@
     </Style>
 
   <!-- formatting strings -->
-    <x:String x:Key="FormatDatetimeLong">ddMMMyy HH:mm:ss</x:String>
-    <x:String x:Key="FormatDateLong">ddMMMyy</x:String>
-    <x:String x:Key="FormatDateShort">dd-MM-yyyy</x:String>
+    <x:String x:Key="FormatDatetimeLong">{0:ddMMMyy HH:mm:ss}</x:String>
+    <x:String x:Key="FormatDateLong">{0:ddMMMyy}</x:String>
+    <x:String x:Key="FormatDateShort">{0:dd-MM-yyyy}</x:String>
     <x:String x:Key="FormatTimeWithoutSeconds">{0:h:mm tt}</x:String>
     <x:String x:Key="FormatDatetimeWithoutSeconds">{0:M/d/yy h:mm tt}</x:String>
     <x:String x:Key="FormatDecimalZeroPlaces">{0:0}</x:String>

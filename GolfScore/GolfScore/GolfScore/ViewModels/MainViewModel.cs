@@ -15,6 +15,7 @@ namespace TeeScore.ViewModels
         private bool _isInitialized;
         private ObservableCollection<Game> _games;
         private bool _isBusy;
+        private bool _active;
 
         public MainViewModel(IDataService dataService, INavigationService navigationService) : base(dataService, navigationService)
         {
@@ -96,6 +97,7 @@ namespace TeeScore.ViewModels
             if (gamePlayer != null)
             {
                 gamePlayer.Hide = true;
+                await DataService.SyncAsync();
                 await DataService.SaveGamePlayer(gamePlayer);
             }
         }
@@ -110,9 +112,7 @@ namespace TeeScore.ViewModels
                     _isInitialized = true;
                 }
                 await LoadMyPlayerAsync().ConfigureAwait(true);
-                await LoadGamesAsync().ConfigureAwait(true);
-
-                await InitializeTimer();
+                await LoadGamesAsync();
             }
             catch (Exception e)
             {
@@ -122,16 +122,40 @@ namespace TeeScore.ViewModels
             IsBusy = false;
         }
 
-        private async Task InitializeTimer()
+        private async Task ContinuousGamePolling()
         {
-            await WaitAndExecute(2000, async () => { await LoadGamesAsync(); });
+            while (Active)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(5));
+                await LoadGamesAsync();
+            }
         }
 
-        private async Task WaitAndExecute(int milisecs, Action action)
+        /* =========================================== property: Active ====================================== */
+        /// <summary>
+        /// Sets and gets the Active property.
+        /// </summary>
+        public bool Active
         {
-            await Task.Delay(milisecs);
-            action();
+            get => _active;
+            set
+            {
+                if (value == _active)
+                {
+                    return;
+                }
+
+                _active = value;
+                RaisePropertyChanged();
+
+                if (value)
+                {
+                    Task.Run(() => ContinuousGamePolling().ConfigureAwait(true));
+                }
+            }
         }
+
+
 
         private async Task LoadMyPlayerAsync()
         {
