@@ -92,7 +92,7 @@ namespace TeeScore.Pages
         }
 
 
-        private void TabView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void TabView_OnSelectionChanged(object sender, Syncfusion.XForms.TabView.SelectionChangedEventArgs e)
         {
             SetToolbaritems();
         }

@@ -1,6 +1,8 @@
 ﻿using GlobalContracts.Enumerations;
 using GlobalContracts.Interfaces;
 using System;
+using System.Linq;
+using System.Text;
 using TeeScore.Services;
 
 namespace TeeScore.Domain
@@ -27,6 +29,19 @@ namespace TeeScore.Domain
         public string ScoresJson { get; set; }
 
         public string GameTypeName => TranslationService.Translate($"GameType_{GameType}");
+        public string Shortcut
+        {
+            get
+            {
+                var parts = VenueName.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var shortcut = new StringBuilder();
+                foreach (var part in parts.Take(2))
+                {
+                    shortcut.Append(part[0]);
+                }
+                return shortcut.ToString();
+            }
+        }
 
         #endregion
 

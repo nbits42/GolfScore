@@ -13,34 +13,43 @@
             <tabView:TabItemCollection>
                 <tabView:SfTabItem Title="1">
                     <tabView:SfTabItem.Content>
-                        <StackLayout Padding="8,3,8,3">
-                            <Label Text="{Binding Game.Game.GameDate}" Style="{StaticResource TinyLabelStyle}"></Label>
-                            <Label Text="{Binding Game.Venue.Name}" Style="{StaticResource LargeLabelStyle}"></Label>
-                            <Label Text="{Binding Game.Venue.Location}" Style="{StaticResource SmallLabelStyle}"></Label>
-                            <Label Text="{Binding Game.Game.PlayerNames}" Style="{StaticResource SmallLabelStyle}"></Label>
-                            <BoxView Color="{StaticResource ButtonBackgroundColor}" HeightRequest="2"></BoxView>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition></RowDefinition>
-                                    <RowDefinition></RowDefinition>
-                                    <RowDefinition></RowDefinition>
-                                    <RowDefinition></RowDefinition>
-                                </Grid.RowDefinitions>
+                        <StackLayout>
+                            <StackLayout Orientation="Horizontal" Padding="8,3,8,3" Spacing="0">
+                                <Frame  BackgroundColor="{StaticResource ButtonBackgroundColor}" CornerRadius="40" Margin="2" HorizontalOptions="Start" VerticalOptions="Center">
+                                    <Label Text="{Binding Game.Game.Shortcut, Mode=TwoWay}" FontSize="20" TextColor="White" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"></Label>
+                                </Frame>
+                                <StackLayout Padding="8,3,3,0">
+                                    <Label Text="{Binding Game.Game.GameDate}" Style="{StaticResource TinyLabelStyle}" Margin="0"></Label>
+                                    <Label Text="{Binding Game.Venue.Name}" Style="{StaticResource LargeLabelStyle}" Margin="0"></Label>
+                                    <Label Text="{Binding Game.Venue.Location}" Style="{StaticResource SmallLabelStyle}" Margin="0"></Label>
+                                    <Label Text="{Binding Game.Game.PlayerNames}" Style="{StaticResource SmallLabelStyle}" Margin="0"></Label>
+                                </StackLayout>
+                            </StackLayout>
+                            <StackLayout Padding="8,3,8,3">
+                                <BoxView Color="{StaticResource ButtonBackgroundColor}" HeightRequest="2"></BoxView>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                    </Grid.RowDefinitions>
 
-                                <Label Grid.Row="0" Grid.Column="0"  Text="{extensions:Translate lbl_started}" Style="{StaticResource SmallLabelStyle}" ></Label>
-                                <Label Grid.Row="0" Grid.Column="1"  Text="{Binding GameStartTime, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
-                                <Label Grid.Row="1" Grid.Column="0"  Text="{extensions:Translate lbl_finished}" Style="{StaticResource SmallLabelStyle}" ></Label>
-                                <Label Grid.Row="1" Grid.Column="1"  Text="{Binding GameFinishedTime, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
-                                <Label Grid.Row="2" Grid.Column="0"  Text="{extensions:Translate lbl_current_tee}" Style="{StaticResource SmallLabelStyle}"></Label>
-                                <Label Grid.Row="2" Grid.Column="1"  Text="{Binding CurrentScore.TeeNumber, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
-                                <Label Grid.Row="3" Grid.Column="0"  Text="{extensions:Translate lbl_current_player}" Style="{StaticResource SmallLabelStyle}" ></Label>
-                                <Label Grid.Row="3" Grid.Column="1"  Text="{Binding CurrentScore.Player.Name, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
+                                    <Label Grid.Row="0" Grid.Column="0"  Text="{extensions:Translate lbl_started}" Style="{StaticResource SmallLabelStyle}" ></Label>
+                                    <Label Grid.Row="0" Grid.Column="1"  Text="{Binding GameStartTime, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
+                                    <Label Grid.Row="1" Grid.Column="0"  Text="{extensions:Translate lbl_finished}" Style="{StaticResource SmallLabelStyle}" ></Label>
+                                    <Label Grid.Row="1" Grid.Column="1"  Text="{Binding GameFinishedTime, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
+                                    <Label Grid.Row="2" Grid.Column="0"  Text="{extensions:Translate lbl_current_tee}" Style="{StaticResource SmallLabelStyle}"></Label>
+                                    <Label Grid.Row="2" Grid.Column="1"  Text="{Binding CurrentScore.TeeNumber, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
+                                    <Label Grid.Row="3" Grid.Column="0"  Text="{extensions:Translate lbl_current_player}" Style="{StaticResource SmallLabelStyle}" ></Label>
+                                    <Label Grid.Row="3" Grid.Column="1"  Text="{Binding CurrentScore.Player.Name, Mode=TwoWay}" Style="{StaticResource SmallLabelStyle}"></Label>
 
-                            </Grid>
+                                </Grid>
+                            </StackLayout>
                         </StackLayout>
                     </tabView:SfTabItem.Content>
                 </tabView:SfTabItem>
@@ -132,7 +141,7 @@
                                         <ColumnDefinition Width="100"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
                                     <ImageButton Grid.Column="0" Source="back.png" BackgroundColor="{StaticResource ButtonBackgroundColor}" Command="{Binding BackCommand}" IsEnabled="{Binding IsBackEnabled, Mode=TwoWay}" ></ImageButton>
-                                    <xForms1:SfNumericUpDown  Grid.Column="1" Minimum="0" Maximum="7" Value="{Binding CurrentScore.Putts, Mode=TwoWay}" MaximumDecimalDigits="0" TextColor="{StaticResource NormalTextColor}" IsEnabled="{Binding ScoringIsEnabled, Mode=TwoWay}"></xForms1:SfNumericUpDown>
+                                    <xForms1:SfNumericUpDown  Grid.Column="1" Minimum="0" Maximum="7" Value="{Binding CurrentScore.Putts, Mode=TwoWay}" MaximumDecimalDigits="0" TextColor="{StaticResource NormalTextColor}" IsEnabled="{Binding ScoringIsEnabled, Mode=TwoWay}" SpinButtonAlignment="Both" TextAlignment="Center"></xForms1:SfNumericUpDown>
                                     <ImageButton Grid.Column="2" Source="next.png" BackgroundColor="{StaticResource ButtonBackgroundColor}" Command="{Binding NextCommand}" IsEnabled="{Binding IsNextEnabled, Mode=TwoWay}" ></ImageButton>
                                 </Grid>
                             </StackLayout>

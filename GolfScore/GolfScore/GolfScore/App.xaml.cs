@@ -4,6 +4,7 @@ using Microsoft.WindowsAzure.MobileServices;
 using TeeScore.Contracts;
 using TeeScore.Mapping;
 using TeeScore.Services;
+using TeeScore.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -17,7 +18,7 @@ namespace TeeScore
         public static CultureInfo CurrentCulture;
         public static DeviceType DeviceType = DeviceType.Droid;
         public static ICalendarService CalendarService;
-
+        public static MainViewModel viewModel;
         public static bool AutoMapperInitialized;
         public static Ioc IOC => _ioc ?? (_ioc = new Ioc());
 
@@ -27,6 +28,7 @@ namespace TeeScore
 
             // https://www.syncfusion.com/account/downloads  & keys
             Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTI0MTZAMzEzNjJlMzQyZTMwWmJEWFBiZGhoSlcraHZuYVJUUitKU3ArcmR6c3Rwc0s3RjBNVUwrZk55UT0="); // version 16.4.*
+
 
             // Setting up for translation
             if (Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Android)
@@ -50,6 +52,8 @@ namespace TeeScore
                     break;
             }
 
+            viewModel = IOC.Main;
+
             if (!AutoMapperInitialized)
             {
                 Mapper.Initialize(cfg =>
@@ -69,9 +73,10 @@ namespace TeeScore
             ((NavigationPage) MainPage).BarTextColor = (Color)Resources["PageHeadingTextColor"];
         }
 
-        protected override void OnStart()
+        protected override async void OnStart()
         {
             // Handle when your app starts
+            await viewModel.LoadAsync().ConfigureAwait(false);
         }
 
         protected override void OnSleep()
@@ -79,9 +84,10 @@ namespace TeeScore
             // Handle when your app sleeps
         }
 
-        protected override void OnResume()
+        protected override async void OnResume()
         {
             // Handle when your app resumes
+            await viewModel.LoadAsync().ConfigureAwait(false);
         }
 
         public static MobileServiceClient MobileService

@@ -3,19 +3,13 @@ using GlobalContracts.Enumerations;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using TeeScore.Contracts;
 using TeeScore.Domain;
 using TeeScore.DTO;
 using TeeScore.Helpers;
 using TeeScore.Services;
-using TeeScore.Validation;
-using Xamarin.Forms;
 
 namespace TeeScore.ViewModels
 {
@@ -82,10 +76,12 @@ namespace TeeScore.ViewModels
             GameType = Settings.LastGameType;
             TeeCount = Settings.LastTeeCount;
             StartTee = 1;
-            InvitationNumber = 0;
+
+            InvitationNumber = GenerateInvitationNumber();
+            QrCodeContent = $"{Properties.Resources.QrCodeUrl}{InvitationNumber}";
+
             PlayersCount = Settings.LastPlayersCount;
             Players.Clear();
-
             Players.Add(MyPlayer);
 
             CurrentPage = CreateGamePage.VenueSelection;
@@ -102,13 +98,25 @@ namespace TeeScore.ViewModels
 
             _doCheck = false;
             Settings.CurrentScoreIx = 0;
-            _myGamePlayer = new GamePlayer {GameId = Game.Game.Id, PlayerId = MyPlayer.Id};
+            _myGamePlayer = new GamePlayer { GameId = Game.Game.Id, PlayerId = MyPlayer.Id };
             Game = await GetGame(gameId).ConfigureAwait(true);
             Players = new ObservableCollection<PlayerDto>(Game.Players);
             SelectedGameTypeIndex = _gameTypesList.FindIndex(x => x.Value == Game.Game.GameType);
             SelectedPlayerSelectionIndex = _playerSelectionList.FindIndex(x => x.Value == Game.Game.PlayerSelection);
             TeeCount = Game.Game.TeeCount;
             StartTee = Game.Game.StartTee;
+
+            if (InvitationNumber == 0)
+            {
+                InvitationNumber = GenerateInvitationNumber();
+            }
+            if (QrCodeContent == null)
+            {
+                QrCodeContent = $"{Properties.Resources.QrCodeUrl}{InvitationNumber}";
+            }
+
+
+
             PlayersCount = Game.Game.InvitedPlayersCount;
 
             _doCheck = true;
@@ -138,7 +146,7 @@ namespace TeeScore.ViewModels
             }
         }
 
-/* =========================================== property: ByQrCode ====================================== */
+        /* =========================================== property: ByQrCode ====================================== */
         /// <summary>
         /// Sets and gets the ByQrCode property.
         /// </summary>
@@ -195,15 +203,6 @@ namespace TeeScore.ViewModels
                     break;
                 case nameof(SelectedPlayerSelectionIndex):
                     _playerSelection = _playerSelectionList[SelectedPlayerSelectionIndex].Value;
-                    if (_invitationNumber == 0)
-                    {
-                        InvitationNumber = GenerateInvitationNumber();
-                    }
-                    if (_qrCodeContent == null)
-                    {
-                        QrCodeContent = $"{Properties.Resources.QrCodeUrl}{InvitationNumber}";
-                    }
-
                     ByInvitationNumber = _playerSelection == PlayerSelection.ByInvitationNumber;
                     ByQrCode = _playerSelection == PlayerSelection.ByQrCode;
                     CheckNextPage();
@@ -211,8 +210,8 @@ namespace TeeScore.ViewModels
                 case nameof(Players):
                     CheckNextPage();
                     break;
-                
-           }
+
+            }
         }
 
         private int GenerateInvitationNumber()
@@ -308,7 +307,7 @@ namespace TeeScore.ViewModels
             {
                 MyPlayer = await DataService.GetPlayer(Settings.MyPlayerId).ConfigureAwait(true);
             }
-            
+
         }
 
         /* =========================================== property: Venues ====================================== */
@@ -484,7 +483,7 @@ namespace TeeScore.ViewModels
                 RaisePropertyChanged();
             }
         }
-        
+
 
         /* =========================================== RelayCommand: NextPageCommand ====================================== */
         /// <summary>
@@ -778,7 +777,7 @@ namespace TeeScore.ViewModels
             {
                 await DataService.SyncAsync().ConfigureAwait(true);
                 var players = await DataService.GetPlayersForGame(Game.Game.Id).ConfigureAwait(true);
-                Game.Players = players; 
+                Game.Players = players;
                 Players = new ObservableCollection<PlayerDto>(players);
                 if (players.Count == PlayersCount)
                 {
@@ -908,7 +907,7 @@ namespace TeeScore.ViewModels
             Settings.LastTeeCount = Game.Game.TeeCount;
             Settings.StartGameId = Game.Game.Id;
 
-            Game.Game.CurrentTee = (Game.Game.StartTee - 1 ) * Game.Game.InvitedPlayersCount;
+            Game.Game.CurrentTee = (Game.Game.StartTee - 1) * Game.Game.InvitedPlayersCount;
             await SaveGame();
 
             for (var i = 1; i <= Game.Game.TeeCount; i++)
@@ -919,7 +918,7 @@ namespace TeeScore.ViewModels
                     Number = i.ToString("D2")
                 };
                 tee = await DataService.SaveTee(tee);
-                foreach (var player in Game.Players.OrderBy(x=>x.Abbreviation))
+                foreach (var player in Game.Players.OrderBy(x => x.Abbreviation))
                 {
                     var teeScore = new ScoreDto
                     {

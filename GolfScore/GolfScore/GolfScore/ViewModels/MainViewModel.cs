@@ -61,7 +61,7 @@ namespace TeeScore.ViewModels
         }
 
 
-/* =========================================== property: Games ====================================== */
+        /* =========================================== property: Games ====================================== */
         /// <summary>
         /// Sets and gets the Games property.
         /// </summary>
@@ -86,9 +86,17 @@ namespace TeeScore.ViewModels
             {
                 return;
             }
+            Active = false;
+            try
+            {
 
-            Games.Remove(item);
-            await HideGamePlayerAsync(item, MyPlayer);
+                Games.Remove(item);
+                await HideGamePlayerAsync(item, MyPlayer);
+            }
+            finally
+            {
+                Active = true;
+            }
         }
 
         private async Task HideGamePlayerAsync(Game item, PlayerDto player)
@@ -98,7 +106,7 @@ namespace TeeScore.ViewModels
             {
                 gamePlayer.Hide = true;
                 await DataService.SyncAsync();
-                await DataService.SaveGamePlayer(gamePlayer);
+                await DataService.SaveGamePlayer(gamePlayer, true);
             }
         }
 
@@ -122,12 +130,15 @@ namespace TeeScore.ViewModels
             IsBusy = false;
         }
 
-        private async Task ContinuousGamePolling()
+        private async Task DoContinuousGamePolling()
         {
             while (Active)
             {
                 await Task.Delay(TimeSpan.FromSeconds(5));
-                await LoadGamesAsync();
+                if (Active)
+                {
+                    await LoadGamesAsync();
+                }
             }
         }
 
@@ -150,7 +161,7 @@ namespace TeeScore.ViewModels
 
                 if (value)
                 {
-                    Task.Run(() => ContinuousGamePolling().ConfigureAwait(true));
+                    Task.Run(() => DoContinuousGamePolling().ConfigureAwait(true));
                 }
             }
         }

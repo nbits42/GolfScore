@@ -137,10 +137,8 @@ namespace TeeScore
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            _viewModel.Active = false;
-            await _viewModel.LoadAsync().ConfigureAwait(true);
             _viewModel.Active = true;
-            if (string.IsNullOrEmpty(_viewModel.MyPlayer?.Id))
+            if (string.IsNullOrEmpty(Settings.MyPlayerId))
             {
                 ShowSettingsPage();
             }
